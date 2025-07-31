@@ -43,6 +43,8 @@ Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
   // Direct flex function - uses Farcaster SDK to create cast in Mini App
   const handleFlex = async () => {
     try {
+      console.log('🎯 Flex Your Card clicked - starting share process...');
+      
       // Check if we're in a Mini App context by testing for SDK capabilities
       let isInMiniApp = false;
       let supportsCompose = false;
@@ -52,34 +54,48 @@ Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
         const capabilities = await sdk.getCapabilities();
         supportsCompose = capabilities.includes('actions.composeCast');
         isInMiniApp = true;
-      } catch {
+        console.log('✅ Mini App context detected, capabilities:', capabilities);
+      } catch (sdkError) {
         // SDK not available, we're in regular web context
         isInMiniApp = false;
+        console.log('🌐 Web context detected, using web fallback');
       }
       
       if (isInMiniApp && supportsCompose) {
+        console.log('📱 Using native composeCast...');
         // Use native composeCast in Mini App context
         const result = await sdk.actions.composeCast({
           text: castText,
           embeds: [frameUrl]
         });
-        // Cast was created successfully or user cancelled
+        console.log('✅ Native composeCast completed');
         return;
       } else if (isInMiniApp) {
+        console.log('🔗 Trying openUrl fallback...');
         // SDK available but composeCast not supported, try openUrl
         try {
           await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`);
+          console.log('✅ OpenUrl completed');
           return;
-        } catch {
+        } catch (urlError) {
+          console.log('❌ OpenUrl failed:', urlError);
           // openUrl also failed, fall through to web fallback
         }
       }
       
+      console.log('🌐 Opening Warpcast in new tab...');
       // Web context fallback
       const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
-      window.open(warpcastUrl, '_blank');
+      const newWindow = window.open(warpcastUrl, '_blank');
+      
+      if (!newWindow) {
+        // Popup blocked, try clipboard fallback
+        console.log('🚫 Popup blocked, using clipboard fallback');
+        throw new Error('Popup blocked');
+      }
       
     } catch (error) {
+      console.log('❌ All methods failed, using clipboard fallback:', error);
       // Final fallback - copy to clipboard
       try {
         await navigator.clipboard.writeText(castText + '\n\n' + frameUrl);
