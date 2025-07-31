@@ -104,6 +104,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.setHeader('Cache-Control', 'public, max-age=31536000');
     res.sendFile(path.join(process.cwd(), 'public', 'icon.png'));
   });
+
+  // Legacy background image for Farcaster frames
+  app.get('/ethos-card-bg.jpg', (req, res) => {
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.sendFile(path.join(process.cwd(), 'public', 'ethos-card-bg.jpg'));
+  });
   
 
   
