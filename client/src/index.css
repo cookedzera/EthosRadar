@@ -132,7 +132,6 @@ html.dark body::after {
 
 /* Light theme background (now has much darker appearance) */
 html.light body, 
-html:not(.dark) body,
 body.light,
 .light body {  
   background: 
@@ -145,7 +144,6 @@ body.light,
 
 /* Fallback for browsers that don't support WebP */
 html.no-webp.light body, 
-html.no-webp:not(.dark) body,
 body.no-webp.light,
 .no-webp.light body {  
   background: 
@@ -157,8 +155,7 @@ body.no-webp.light,
 }
 
 /* Subtle background blur effect for light theme */
-html.light body::after,
-html:not(.dark) body::after {
+html.light body::after {
   content: '';
   position: fixed;
   top: 0;

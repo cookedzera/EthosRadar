@@ -14,7 +14,14 @@
     <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
     <link rel="preload" as="image" href="/logo.png" type="image/png" />
     
-    <!-- WebP support detection and theme initialization -->
+    <!-- Force dark mode immediately - run before any other scripts -->
+    <script>
+      // Force dark mode immediately to prevent flash
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('ethosradar-theme', 'dark');
+    </script>
+    
+    <!-- WebP support detection -->
     <script>
       (function() {
         // WebP support detection
@@ -33,11 +40,6 @@
           }
         });
 
-        // Force dark mode for all users
-        const theme = 'dark';
-        document.documentElement.classList.add(theme);
-        localStorage.setItem('ethosradar-theme', theme);
-        
         // Set theme-color meta tag for dark mode
         const meta = document.createElement('meta');
         meta.name = 'theme-color';
