@@ -697,11 +697,30 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                         <Activity className="w-4 h-4 text-orange-400" />
                         <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Weekly Momentum</span>
                       </div>
-                      <div className="text-2xl font-bold text-white">
-                        <div className="loading-shimmer loading-pulse-soft h-7 w-10 rounded loading-glow"></div>
-                      </div>
-                      <div className="text-xs text-white/50">
-                        <div className="loading-shimmer loading-pulse-soft h-3 w-16 rounded loading-glow"></div>
+                      
+                      <div className="w-full min-h-[70px] px-2 py-3 overflow-hidden">
+                        <div className="grid grid-cols-3 gap-1 items-center">
+                          {/* Streak Days */}
+                          <div className="flex flex-col items-center text-center px-1">
+                            <div className="loading-shimmer loading-pulse-soft h-5 w-10 rounded-lg mb-2 loading-glow bg-gradient-to-r from-white/10 to-white/5"></div>
+                            <div className="text-xs text-white/60 font-medium">🔥 Streak</div>
+                          </div>
+                          
+                          {/* Score Change */}
+                          <div className="flex flex-col items-center text-center px-1">
+                            <div className="space-y-1">
+                              <div className="loading-shimmer loading-pulse-soft h-4 w-12 rounded-lg loading-glow bg-gradient-to-r from-white/10 to-white/5"></div>
+                              <div className="loading-shimmer loading-pulse-soft h-3 w-8 rounded-lg loading-glow bg-gradient-to-r from-white/10 to-white/5 mx-auto"></div>
+                            </div>
+                            <div className="text-xs text-white/60 font-medium mt-2">📈 Score</div>
+                          </div>
+                          
+                          {/* XP Gained */}
+                          <div className="flex flex-col items-center text-center px-1">
+                            <div className="loading-shimmer loading-pulse-soft h-5 w-12 rounded-lg mb-2 loading-glow bg-gradient-to-r from-white/10 to-white/5"></div>
+                            <div className="text-xs text-white/60 font-medium">⚡ XP</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ) : (() => {
@@ -717,16 +736,65 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       const displayXpGain = weeklyXpGain || 0;
                       
                       return (
-                        <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30">
+                        <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30 mb-6">
                           <div className="flex items-center gap-2 mb-2">
                             <Activity className="w-4 h-4 text-orange-400" />
                             <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Weekly Momentum</span>
                           </div>
-                          <div className="text-2xl font-bold text-white">
-                            {displayStreakDays}d
-                          </div>
-                          <div className="text-xs text-white/50">
-                            streak • +{displayXpGain.toLocaleString()} XP
+                          
+                          <div className="w-full min-h-[70px] px-2 py-3 overflow-hidden">
+                            <div className="grid grid-cols-3 gap-1 items-center">
+                              {/* Streak Days */}
+                              <div className="flex flex-col items-center text-center px-1">
+                                <div className="text-base sm:text-lg font-bold text-white whitespace-nowrap">
+                                  {displayStreakDays}d
+                                </div>
+                                <div className="text-xs text-white/60 font-medium">🔥 Streak</div>
+                              </div>
+                              
+                              {/* Score Change */}
+                              <div className="flex flex-col items-center text-center px-1">
+                                <div className="flex flex-col items-center gap-0.5 text-xs sm:text-sm font-bold">
+                                  {summary?.scoreChange > 0 ? (
+                                    <>
+                                      <div className="flex items-center gap-1">
+                                        <ArrowUp className="w-2.5 h-2.5 text-green-400 flex-shrink-0" />
+                                        <span className="text-green-400">+{summary.scoreChange}</span>
+                                      </div>
+                                      <span className="text-[10px] text-white/60">(+{((summary.scoreChange / (user.score || 1)) * 100).toFixed(1)}%)</span>
+                                    </>
+                                  ) : summary?.scoreChange < 0 ? (
+                                    <>
+                                      <div className="flex items-center gap-1">
+                                        <ArrowDown className="w-2.5 h-2.5 text-red-400 flex-shrink-0" />
+                                        <span className="text-red-400">{summary.scoreChange}</span>
+                                      </div>
+                                      <span className="text-[10px] text-white/60">({Math.abs((summary.scoreChange / (user.score || 1)) * 100).toFixed(1)}%)</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <span className="text-white">0</span>
+                                      <span className="text-[10px] text-white/60">(0.0%)</span>
+                                    </>
+                                  )}
+                                </div>
+                                <div className="text-xs text-white/60 font-medium">📈 Score</div>
+                              </div>
+                              
+                              {/* XP Gained */}
+                              <div className="flex flex-col items-center text-center px-1">
+                                <div className="text-base sm:text-lg font-bold text-white whitespace-nowrap">
+                                  {(() => {
+                                    const xp = displayXpGain;
+                                    if (xp >= 1000) {
+                                      return `+${(xp / 1000).toFixed(1)}K`;
+                                    }
+                                    return `+${xp}`;
+                                  })()}
+                                </div>
+                                <div className="text-xs text-white/60 font-medium">⚡ XP</div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       );
@@ -734,13 +802,36 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   
                     // No activity state - more modern
                     return (
-                      <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30 text-center">
+                      <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30 mb-6 text-center">
                         <div className="flex items-center gap-2 mb-2 justify-center">
                           <Activity className="w-4 h-4 text-orange-400" />
                           <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Weekly Momentum</span>
                         </div>
-                        <div className="text-2xl font-bold text-white/40">-</div>
-                        <div className="text-xs text-white/40">No recent activity</div>
+                        
+                        <div className="w-full min-h-[70px] px-2 py-3 overflow-hidden">
+                          <div className="grid grid-cols-3 gap-1 items-center">
+                            {/* Streak Days */}
+                            <div className="flex flex-col items-center text-center px-1">
+                              <div className="text-base sm:text-lg font-bold text-white/40 whitespace-nowrap">0d</div>
+                              <div className="text-xs text-white/40 font-medium">🔥 Streak</div>
+                            </div>
+                            
+                            {/* Score Change */}
+                            <div className="flex flex-col items-center text-center px-1">
+                              <div className="flex flex-col items-center gap-0.5 text-xs sm:text-sm font-bold">
+                                <span className="text-white/40">0</span>
+                                <span className="text-[10px] text-white/40">(0.0%)</span>
+                              </div>
+                              <div className="text-xs text-white/40 font-medium">📈 Score</div>
+                            </div>
+                            
+                            {/* XP Gained */}
+                            <div className="flex flex-col items-center text-center px-1">
+                              <div className="text-base sm:text-lg font-bold text-white/40 whitespace-nowrap">+0</div>
+                              <div className="text-xs text-white/40 font-medium">⚡ XP</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     );
                 })();
