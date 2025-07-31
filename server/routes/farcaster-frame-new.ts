@@ -6,41 +6,25 @@ import { ethosApi } from '../services/ethos-api';
 
 const router = express.Router();
 
-// Dynamic image URLs with second-based versioning for immediate updates
+// Dynamic image URLs with minute-based versioning for faster updates
 const getImageUrl = (userkey: string) => {
-  // Use second-based versioning for immediate cache updates after changes
-  const secondVersion = Math.floor(Date.now() / 1000); // Changes every second
-  return `/farcaster/card/${encodeURIComponent(userkey)}?v=${secondVersion}`;
-};
-
-// Get the correct domain for production deployment
-const getBaseUrl = () => {
-  // For production deployment - use ethosradar.com as primary
-  if (process.env.NODE_ENV === 'production') {
-    return 'https://ethosradar.com';
-  }
-  
-  // For Replit deployment - use the Replit domain
-  if (process.env.REPLIT_DEV_DOMAIN) {
-    return `https://${process.env.REPLIT_DEV_DOMAIN}`;
-  }
-  
-  // Fallback for local development
-  return `http://localhost:${process.env.PORT || 5000}`;
+  // Use minute-based versioning for faster cache updates
+  const minuteVersion = Math.floor(Date.now() / (1000 * 60)); // Changes every minute
+  return `/farcaster/card/${encodeURIComponent(userkey)}?v=${minuteVersion}`;
 };
 
 // Farcaster frame endpoint
 router.get('/frame/:userkey', async (req, res) => {
   const { userkey } = req.params;
-  // Use the appropriate domain for external access (Farcaster needs to fetch the image)
-  const baseUrl = getBaseUrl();
+  // Always use production domain for frames
+  const baseUrl = 'https://ethosradar.com';
 
   // Resolve userkey if it's a username format
   let resolvedUserkey = decodeURIComponent(userkey);
   
   if (!resolvedUserkey.includes('service:') && !resolvedUserkey.includes('address:') && !resolvedUserkey.includes('profileId:')) {
     try {
-      const searchResponse = await fetch(`${baseUrl}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
+      const searchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
       if (searchResponse.ok) {
         const searchResult = await searchResponse.json();
         if (searchResult.success && searchResult.data && searchResult.data.length > 0) {
@@ -57,7 +41,7 @@ router.get('/frame/:userkey', async (req, res) => {
   let frameDescription = 'Generate your personalized trust reputation card';
 
   try {
-    const profileResponse = await fetch(`${baseUrl}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
+    const profileResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
     if (profileResponse.ok) {
       const profileResult = await profileResponse.json();
       if (profileResult.success && profileResult.data) {
@@ -119,13 +103,10 @@ router.get('/card/:userkey', async (req, res) => {
     // STEP 1: Resolve userkey if it's a username format
     let resolvedUserkey = decodeURIComponent(userkey);
     
-    // Use localhost for internal API calls to avoid self-referential issues
-    const baseUrlCard = `http://localhost:${process.env.PORT || 5000}`;
-    
     // If userkey doesn't contain service format, try to resolve it as username
     if (!resolvedUserkey.includes('service:') && !resolvedUserkey.includes('address:') && !resolvedUserkey.includes('profileId:')) {
       try {
-        const searchResponse = await fetch(`${baseUrlCard}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
+        const searchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
         if (searchResponse.ok) {
           const searchResult = await searchResponse.json();
           if (searchResult.success && searchResult.data && searchResult.data.length > 0) {
@@ -144,25 +125,23 @@ router.get('/card/:userkey', async (req, res) => {
     let dashboardData: any = null;
 
     try {
-      const profileResponse = await fetch(`${baseUrlCard}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
+      const profileResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
       if (profileResponse.ok) {
         const profileResult = await profileResponse.json();
-        console.log(`Card gen: Profile API success for ${resolvedUserkey}:`, profileResult.success, profileResult.data?.displayName, profileResult.data?.score);
+        // Profile data successfully loaded
         
         if (profileResult.success && profileResult.data) {
           user = profileResult.data;
           enhancedProfile = profileResult.data;
         }
-      } else {
-        console.log(`Card gen: Profile API failed with status ${profileResponse.status}`);
       }
     } catch (error) {
-      console.log('Card gen: Profile API error:', (error as Error).message);
+      // Error handled silently
     }
 
     // Get dashboard review data
     try {
-      const dashboardResponse = await fetch(`${baseUrlCard}/api/dashboard-reviews/${encodeURIComponent(resolvedUserkey)}`);
+      const dashboardResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/dashboard-reviews/${encodeURIComponent(resolvedUserkey)}`);
       if (dashboardResponse.ok) {
         dashboardData = await dashboardResponse.json();
       }
@@ -173,7 +152,7 @@ router.get('/card/:userkey', async (req, res) => {
     // Get vouch data using our API endpoint
     let vouchData: any = null;
     try {
-      const vouchResponse = await fetch(`${baseUrlCard}/api/user-vouch-activities/${encodeURIComponent(resolvedUserkey)}`);
+      const vouchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/user-vouch-activities/${encodeURIComponent(resolvedUserkey)}`);
       if (vouchResponse.ok) {
         const vouchResult = await vouchResponse.json();
         if (vouchResult.success && vouchResult.data) {
@@ -191,27 +170,16 @@ router.get('/card/:userkey', async (req, res) => {
     const positivePercentage = dashboardData?.data?.positivePercentage || 0;
     const vouchCount = vouchData?.received?.length || 0;
 
-    console.log(`Card gen final data: ${displayName}, score: ${score}, userkey: ${resolvedUserkey}`);
-
     // Generate frame card with optimized rendering
 
     // Use deployed domain for background image
-    const ethosCardBgUrl = 'https://ethosradar.com/unified-bg.png';
+    const ethosCardBgUrl = 'https://ethosradar.com/ethos-card-bg.jpg';
 
     // Create optimized glassmorphism background
     const createGlassmorphismBackground = async () => {
       return new Promise<void>((resolve) => {
         const backgroundImg = new Image();
-        
-        // Add timeout to prevent hanging
-        const timeout = setTimeout(() => {
-          console.log('Background image load timeout, using fallback');
-          resolve();
-        }, 5000);
-        
         backgroundImg.onload = () => {
-          clearTimeout(timeout);
-          console.log('Background image loaded successfully');
           
           // Draw background image
           ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
@@ -416,12 +384,6 @@ router.get('/card/:userkey', async (req, res) => {
           resolve();
         };
         
-        backgroundImg.onerror = () => {
-          clearTimeout(timeout);
-          console.log('Background image failed to load, using fallback');
-          resolve();
-        };
-        
         // Load background image from deployed domain
         backgroundImg.src = ethosCardBgUrl;
       });
@@ -467,20 +429,19 @@ router.get('/card/:userkey', async (req, res) => {
     };
 
     // Create glassmorphism background
-    console.log('Starting background creation...');
     await createGlassmorphismBackground();
-    console.log('Background creation completed');
+    // Background complete
     drawGlassmorphismBorder();
-    console.log('Border drawn, starting text rendering');
+    // Start text rendering
 
-    // Updated quote for all cards
+    // Single standardized quote for all cards
     const standardQuote = '"Having morals in crypto is expensive"';
     
-    // Header section with black text on transparent card background - smaller font to avoid conflict with level
+    // Header section with black text on transparent card background - quote moved down and right
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.font = '11px Arial';
+    ctx.font = '14px Arial';
     ctx.textAlign = 'left';
-    ctx.fillText(standardQuote, 55, 58);
+    ctx.fillText(standardQuote, 55, 60);
 
     // Draw avatar if available - moved up
     const avatarRadius = 25;
@@ -598,11 +559,8 @@ router.get('/card/:userkey', async (req, res) => {
     let boldPart = '';
     let plainPart = '';
     
-    console.log(`Card rendering: displayName="${displayName}", score=${score}`);
-    
     // Clean displayName by removing emojis for splitting logic
     const cleanName = displayName.replace(/[^\w\s]/g, '').trim();
-    console.log(`Card rendering: cleanName="${cleanName}"`);
     // Clean name processed
     
     // Split logic for different username patterns
@@ -815,11 +773,11 @@ router.get('/card/:userkey', async (req, res) => {
     ctx.fillText(`@${userHandle}`, canvas.width - 40, 263);
     ctx.restore();
     
-    // Move attribution to bottom edge inside the border as requested
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    ctx.font = '9px Arial';
+    // Bottom center attribution - positioned well outside card border
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.font = '8px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, canvas.height - 15);
+    ctx.fillText(`Generated using EthosRadar mini app by @cookedzera.eth`, canvas.width / 2, 305);
     ctx.textAlign = 'left'; // Reset alignment for other text
 
     // Optimized headers for production Farcaster frame delivery

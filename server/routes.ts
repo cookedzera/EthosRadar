@@ -5,7 +5,7 @@ import { z } from "zod";
 import { ethosApi } from "./services/ethos-api";
 import { getExtendedAttestations, mapServiceToIcon, formatServiceName } from "./attestations";
 import { r4rAnalyzer } from "./services/r4r-analyzer";
-import farcasterFrameRoutes from "./routes/farcaster-frame-new";
+import farcasterFrameRoutes from "./routes/farcaster-frame-new.js";
 
 // Ethos-style tier system matching official app.ethos.network tiers
 function getTierInfo(score: number) {
