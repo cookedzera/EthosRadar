@@ -38,7 +38,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         version: "1",
         name: "EthosRadar",
         homeUrl: "https://ethosradar.com",
-        iconUrl: "https://ethosradar.com/logo.png",
+        iconUrl: "https://ethosradar.com/icon.png",
         subtitle: "Trust Score Scanner for Web3",
         description: "Generate your personalized trust reputation card on Ethos Protocol",
         buttonTitle: "Scan Your Trust Score",
@@ -79,6 +79,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
   
+  // Serve optimized WebP images with fallback support
+  app.get('/logo.webp', (req, res) => {
+    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.sendFile(path.join(process.cwd(), 'public', 'logo.webp'));
+  });
+
+  app.get('/icon.webp', (req, res) => {
+    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.sendFile(path.join(process.cwd(), 'public', 'icon.webp'));
+  });
+
   // Serve PNG images with correct content type
   app.get('/logo.png', (req, res) => {
     res.setHeader('Content-Type', 'image/png');

@@ -8,9 +8,11 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
     
-    <!-- Preload critical WebP background images for better performance -->
+    <!-- Preload critical WebP images for better performance -->
     <link rel="preload" as="image" href="/unified-bg.webp" type="image/webp" />
     <link rel="preload" as="image" href="/unified-bg.png" type="image/png" />
+    <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
+    <link rel="preload" as="image" href="/logo.png" type="image/png" />
     
     <!-- WebP support detection and theme initialization -->
     <script>
@@ -54,8 +56,9 @@
     <!-- Open Graph Tags -->
     <meta property="og:title" content="EthosRadar - Trust Network Scanner" />
     <meta property="og:description" content="Scan wallet reputations with Ethos Protocol" />
-    <meta property="og:image" content="/logo.png" />
+    <meta property="og:image" content="https://ethosradar.com/logo.png" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ethosradar.com" />
   </head>
   <body>
     <div id="root"></div>

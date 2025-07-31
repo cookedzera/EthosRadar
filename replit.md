@@ -16,6 +16,10 @@ UI preferences: Cloud background image with reduced animations for a serene inte
 **Client-side URLs**: Generated using window.location.origin for automatic domain adaptation
 
 ## Recent Changes (January 2025)
+- **WebP Optimization Implemented**: Converted background and logo images to WebP format, achieving 93-96% file size reduction (1MB → 37-68KB)
+- **Logo Assets Updated**: New radar-style logo properly configured with WebP/PNG fallbacks and optimized for both local and ethosradar.com domain serving
+- **Performance Enhancements**: Added image preloading, WebP support detection, and optimized asset delivery for faster page loads
+- **Asset Domain Configuration**: All logo, background, and Farcaster manifest assets properly configured to use ethosradar.com URLs for production
 - **Deployment Readiness Fixed**: Resolved deployment health check failures by adding explicit `/health`, `/ready`, and `/_status` endpoints for Replit Deployments
 - **Server Initialization Improved**: Enhanced error handling with comprehensive logging, graceful shutdown handling (SIGTERM/SIGINT), and proper async initialization order
 - **Production Build Validated**: Confirmed production build process works correctly with proper environment detection and error handling
@@ -71,6 +75,19 @@ UI preferences: Cloud background image with reduced animations for a serene inte
 - **Ethos Protocol APIs**: Core integration for user trust scores, profiles, vouch data, reviews, and activity history. This includes both V1 and V2 API endpoints.
 - **@farcaster/miniapp-sdk**: For integrating direct Farcaster Mini App functionalities like cast composition and environment detection.
 - **Node.js Canvas API**: Used server-side for generating dynamic Farcaster frame cards as images.
-- **Image Hosting**: Images (e.g., `ethos-card-bg.jpg`, `ethos-logo.png`, `placeholder-avatar.png`) are served from `https://ethosradar.com/`.
+- **Image Hosting**: Optimized WebP/PNG assets served from `https://ethosradar.com/` including:
+  - `unified-bg.webp` (69KB, was 1MB PNG) - Main background image
+  - `logo.webp` (37KB, was 838KB PNG) - Primary logo
+  - `icon.webp` (37KB, was 838KB PNG) - App icon for manifests
+  - PNG fallbacks for older browser compatibility
 - **Warpcast**: Direct integration for sharing Farcaster frames and composing casts.
 - **Third-party Platforms**: APIs for cross-referencing user profiles on platforms like Twitter/X, Discord, and Telegram (though detailed social media account integration appears to be reduced or removed).
+
+## Asset Upload Checklist for ethosradar.com Domain
+**Critical**: These optimized assets must be uploaded to the production domain:
+- ✅ `unified-bg.webp` (69KB) - Background image
+- ✅ `unified-bg.png` (1MB) - Background fallback
+- ✅ `logo.webp` (37KB) - Main logo
+- ✅ `logo.png` (838KB) - Logo fallback  
+- ✅ `icon.webp` (37KB) - App icon
+- ✅ `icon.png` (838KB) - Icon fallback
