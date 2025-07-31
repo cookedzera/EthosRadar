@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
@@ -14,11 +14,11 @@
     <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
     <link rel="preload" as="image" href="/logo.png" type="image/png" />
     
-    <!-- Force dark mode immediately - run before any other scripts -->
+    <!-- Force light mode immediately - run before any other scripts -->
     <script>
-      // Force dark mode immediately to prevent flash
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('ethosradar-theme', 'dark');
+      // Force light mode immediately to prevent flash
+      document.documentElement.classList.add('light');
+      localStorage.setItem('ethosradar-theme', 'light');
     </script>
     
     <!-- WebP support detection -->
@@ -40,10 +40,10 @@
           }
         });
 
-        // Set theme-color meta tag for dark mode
+        // Set theme-color meta tag for light mode
         const meta = document.createElement('meta');
         meta.name = 'theme-color';
-        meta.content = '#111827';
+        meta.content = '#ffffff';
         document.head.appendChild(meta);
       })();
     </script>

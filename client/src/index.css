@@ -84,9 +84,12 @@ button.bolt-icon-button {
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
-/* Default dark theme background */
+/* Default light theme background */
 body {
-  background: url('/unified-bg.webp') center center/cover no-repeat, linear-gradient(135deg, #f1f5f9 0%, #e8f0fe 50%, #f8fafc 100%);
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+    url('/unified-bg.webp') center center/cover no-repeat, 
+    linear-gradient(135deg, #080805 0%, #0f0f0e 25%, #161612 50%, #0f0f0e 75%, #080805 100%);
   background-attachment: fixed;
   min-height: 100vh;
   min-height: 100dvh;
@@ -97,7 +100,7 @@ body {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   transition: background 0.3s ease, color 0.3s ease;
-  color: #1e293b;
+  color: #d1d5db;
 }
 
 /* Dark theme background (now has light appearance) */ 

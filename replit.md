@@ -7,6 +7,7 @@ EthosRadar is a Web3 trust network scanner integrated with the Ethos Protocol. I
 Preferred communication style: Simple, everyday language.
 Prefers calm, muted interfaces with reduced animations.
 UI preferences: Cloud background image with reduced animations for a serene interface.
+Theme preference: Light mode enforced for all users (dark appearance with light overlays).
 
 ## Deployment Configuration
 **Primary Domain**: ethosradar.com  
