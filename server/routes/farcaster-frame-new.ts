@@ -105,10 +105,8 @@ router.get('/card/:userkey', async (req, res) => {
     // STEP 1: Resolve userkey if it's a username format
     let resolvedUserkey = decodeURIComponent(userkey);
     
-    // Base URL for API calls within the card generation
-    const baseUrlCard = process.env.REPLIT_DEV_DOMAIN 
-      ? `https://${process.env.REPLIT_DEV_DOMAIN}` 
-      : `http://localhost:${process.env.PORT || 5000}`;
+    // Use localhost for internal API calls to avoid self-referential issues
+    const baseUrlCard = `http://localhost:${process.env.PORT || 5000}`;
     
     // If userkey doesn't contain service format, try to resolve it as username
     if (!resolvedUserkey.includes('service:') && !resolvedUserkey.includes('address:') && !resolvedUserkey.includes('profileId:')) {
@@ -135,15 +133,17 @@ router.get('/card/:userkey', async (req, res) => {
       const profileResponse = await fetch(`${baseUrlCard}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
       if (profileResponse.ok) {
         const profileResult = await profileResponse.json();
-        // Profile data successfully loaded
+        console.log(`Card gen: Profile API success for ${resolvedUserkey}:`, profileResult.success, profileResult.data?.displayName, profileResult.data?.score);
         
         if (profileResult.success && profileResult.data) {
           user = profileResult.data;
           enhancedProfile = profileResult.data;
         }
+      } else {
+        console.log(`Card gen: Profile API failed with status ${profileResponse.status}`);
       }
     } catch (error) {
-      // Error handled silently
+      console.log('Card gen: Profile API error:', error.message);
     }
 
     // Get dashboard review data
@@ -177,6 +177,8 @@ router.get('/card/:userkey', async (req, res) => {
     const positivePercentage = dashboardData?.data?.positivePercentage || 0;
     const vouchCount = vouchData?.received?.length || 0;
 
+    console.log(`Card gen final data: ${displayName}, score: ${score}, userkey: ${resolvedUserkey}`);
+
     // Generate frame card with optimized rendering
 
     // Use deployed domain for background image
@@ -186,7 +188,16 @@ router.get('/card/:userkey', async (req, res) => {
     const createGlassmorphismBackground = async () => {
       return new Promise<void>((resolve) => {
         const backgroundImg = new Image();
+        
+        // Add timeout to prevent hanging
+        const timeout = setTimeout(() => {
+          console.log('Background image load timeout, using fallback');
+          resolve();
+        }, 5000);
+        
         backgroundImg.onload = () => {
+          clearTimeout(timeout);
+          console.log('Background image loaded successfully');
           
           // Draw background image
           ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
@@ -391,6 +402,12 @@ router.get('/card/:userkey', async (req, res) => {
           resolve();
         };
         
+        backgroundImg.onerror = () => {
+          clearTimeout(timeout);
+          console.log('Background image failed to load, using fallback');
+          resolve();
+        };
+        
         // Load background image from deployed domain
         backgroundImg.src = ethosCardBgUrl;
       });
@@ -436,10 +453,11 @@ router.get('/card/:userkey', async (req, res) => {
     };
 
     // Create glassmorphism background
+    console.log('Starting background creation...');
     await createGlassmorphismBackground();
-    // Background complete
+    console.log('Background creation completed');
     drawGlassmorphismBorder();
-    // Start text rendering
+    console.log('Border drawn, starting text rendering');
 
     // Shorter standardized quote for all cards
     const standardQuote = '"Trust in crypto matters"';
@@ -566,8 +584,11 @@ router.get('/card/:userkey', async (req, res) => {
     let boldPart = '';
     let plainPart = '';
     
+    console.log(`Card rendering: displayName="${displayName}", score=${score}`);
+    
     // Clean displayName by removing emojis for splitting logic
     const cleanName = displayName.replace(/[^\w\s]/g, '').trim();
+    console.log(`Card rendering: cleanName="${cleanName}"`);
     // Clean name processed
     
     // Split logic for different username patterns
@@ -780,11 +801,11 @@ router.get('/card/:userkey', async (req, res) => {
     ctx.fillText(`@${userHandle}`, canvas.width - 40, 263);
     ctx.restore();
     
-    // Bottom center attribution - positioned well outside card border
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-    ctx.font = '8px Arial';
+    // Move attribution to edge/border area as requested - top edge inside the border
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.font = '9px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 305);
+    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 45);
     ctx.textAlign = 'left'; // Reset alignment for other text
 
     // Optimized headers for production Farcaster frame delivery
