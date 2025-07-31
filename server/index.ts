@@ -81,6 +81,31 @@ app.get('/ready', (req, res) => {
   });
 });
 
+// Explicit static asset serving for critical WebP/PNG files
+app.get('/unified-bg.webp', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "unified-bg.webp"));
+});
+
+app.get('/unified-bg.png', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "unified-bg.png"));
+});
+
+app.get('/logo.webp', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "logo.webp"));
+});
+
+app.get('/logo.png', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "logo.png"));
+});
+
+app.get('/icon.webp', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "icon.webp"));
+});
+
+app.get('/icon.png', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "icon.png"));
+});
+
 (async () => {
   try {
     log("Starting server initialization...");
