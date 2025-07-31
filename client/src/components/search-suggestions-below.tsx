@@ -41,19 +41,21 @@ export function SearchSuggestionsBelow({
   const [showDropdown, setShowDropdown] = useState(false);
   // Dark mode only - no theme toggle needed
   
-  // Use appropriate API based on mode
+  // Use appropriate API based on mode with optimized caching
   const globalSuggestions = useQuery({
     queryKey: ['/api/search-suggestions', query],
     queryFn: () => fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`).then(res => res.json()),
     enabled: !farcasterMode && isVisible && query.length >= 3,
-    staleTime: 30000,
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    gcTime: 10 * 60 * 1000, // Keep in memory for 10 minutes
   });
   
   const farcasterSuggestions = useQuery({
     queryKey: ['/api/farcaster-suggestions', query],
     queryFn: () => fetch(`/api/farcaster-suggestions?q=${encodeURIComponent(query)}`).then(res => res.json()),
     enabled: farcasterMode && isVisible && query.length >= 2,
-    staleTime: 30000,
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    gcTime: 10 * 60 * 1000, // Keep in memory for 10 minutes
   });
   
   const { data, isLoading, error } = farcasterMode ? farcasterSuggestions : globalSuggestions;

@@ -39,8 +39,8 @@ export function useTrustScore(userkey: string, enabled = true) {
     queryKey: ["/api/trust-score", userkey],
     queryFn: () => getTrustScore(userkey),
     enabled: enabled && !!userkey,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchInterval: 30 * 1000, // 30 seconds
+    staleTime: 10 * 60 * 1000, // 10 minutes (increased cache time)
+    refetchInterval: false, // Disable auto-refetch to reduce API calls
   });
 }
 
@@ -119,7 +119,8 @@ export function useEnhancedProfile(userkey?: string) {
   return useQuery({
     queryKey: ['/api/enhanced-profile', userkey],
     enabled: !!userkey,
-    refetchInterval: 60000, // Refresh every minute for XP updates
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    refetchInterval: false, // No auto-refresh to improve performance
   });
 }
 

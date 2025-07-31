@@ -240,6 +240,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ success: true, data: [] });
       }
 
+      // Set cache headers for search suggestions
+      res.set({
+        'Cache-Control': 'public, max-age=300', // 5 minutes cache
+        'ETag': `"${query}-${limit}-${offset}"`,
+      });
+
       // Use direct Ethos V1 search API (same as ethos-r4r)
       const ethosUrl = `https://api.ethos.network/api/v1/search?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`;
       
