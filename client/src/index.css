@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force override for bolt icon container and button - must be at top to override Tailwind */
+.bolt-icon-container {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  isolation: auto !important;
+  z-index: 1000 !important;
+}
+
+button.bolt-icon-button,
+button.bolt-icon-button *,
+.bolt-icon-button,
+.bolt-icon-button * {
+  all: unset !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.5s ease-out !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  isolation: auto !important;
+}
+
 /* Enhanced Loading Animations */
 @keyframes shimmer {
   0% {

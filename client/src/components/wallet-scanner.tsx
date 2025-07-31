@@ -332,41 +332,43 @@ export function WalletScanner() {
                   
                   {/* Enhanced Search Bolt Icon with Dynamic Fill Animation */}
                   {!searchMutation.isPending && (
-                    <button
-                      onClick={handleSearch}
-                      disabled={!query.trim()}
-                      className={`
-                        bolt-icon-button absolute right-2 top-1/2 transform -translate-y-1/2
-                        transition-all duration-500 ease-out
-                        ${!query.trim() 
-                          ? 'opacity-40 cursor-not-allowed' 
-                          : 'opacity-90'
-                        }
-                      `}
-                    >
-                      <Zap className={`w-6 h-6 transition-all duration-500 ease-out ${
-                        query.trim() 
-                          ? farcasterMode 
-                            ? 'text-purple-300 drop-shadow-lg animate-pulse fill-purple-300' 
-                            : 'text-yellow-300 drop-shadow-lg animate-pulse fill-yellow-300'
-                          : farcasterMode 
-                            ? 'text-purple-200/50' 
-                            : 'text-gray-300/50 dark:text-white/50'
-                      }`} 
-                      style={{
-                        filter: query.trim() 
-                          ? farcasterMode
-                            ? 'drop-shadow(0 0 8px rgba(147, 51, 234, 0.6))'
-                            : 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.6))'
-                          : 'none',
-                        fill: query.trim() 
-                          ? farcasterMode
-                            ? 'rgba(147, 51, 234, 0.8)'
-                            : 'rgba(234, 179, 8, 0.8)'
-                          : 'transparent'
-                      }}
-                      />
-                    </button>
+                    <div className="bolt-icon-container absolute right-2 top-1/2 transform -translate-y-1/2">
+                      <button
+                        onClick={handleSearch}
+                        disabled={!query.trim()}
+                        className={`
+                          bolt-icon-button
+                          transition-all duration-500 ease-out
+                          ${!query.trim() 
+                            ? 'opacity-40 cursor-not-allowed' 
+                            : 'opacity-90'
+                          }
+                        `}
+                      >
+                        <Zap className={`w-6 h-6 transition-all duration-500 ease-out ${
+                          query.trim() 
+                            ? farcasterMode 
+                              ? 'text-purple-300 drop-shadow-lg animate-pulse fill-purple-300' 
+                              : 'text-yellow-300 drop-shadow-lg animate-pulse fill-yellow-300'
+                            : farcasterMode 
+                              ? 'text-purple-200/50' 
+                              : 'text-gray-300/50 dark:text-white/50'
+                        }`} 
+                        style={{
+                          filter: query.trim() 
+                            ? farcasterMode
+                              ? 'drop-shadow(0 0 8px rgba(147, 51, 234, 0.6))'
+                              : 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.6))'
+                            : 'none',
+                          fill: query.trim() 
+                            ? farcasterMode
+                              ? 'rgba(147, 51, 234, 0.8)'
+                              : 'rgba(234, 179, 8, 0.8)'
+                            : 'transparent'
+                        }}
+                        />
+                      </button>
+                    </div>
                   )}
                 </div>
                 
