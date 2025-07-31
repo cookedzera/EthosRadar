@@ -8,6 +8,22 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
     
+    <!-- Force dark mode by default, prevent flash of light content -->
+    <script>
+      (function() {
+        const stored = localStorage.getItem('ethosradar-theme');
+        // If no stored preference, default to dark mode
+        const theme = stored || 'dark';
+        document.documentElement.classList.add(theme);
+        
+        // Set theme-color meta tag
+        const meta = document.createElement('meta');
+        meta.name = 'theme-color';
+        meta.content = theme === 'dark' ? '#111827' : '#ffffff';
+        document.head.appendChild(meta);
+      })();
+    </script>
+    
     <!-- Farcaster Mini App Embed (no splash screen) -->
     <meta name="fc:miniapp" content='{"version":"1","imageUrl":"https://ethosradar.com/embed-preview.png","button":{"title":"Scan Your Trust Score","action":{"type":"launch_miniapp","name":"EthosRadar","url":"https://ethosradar.com/"}}}' />
     

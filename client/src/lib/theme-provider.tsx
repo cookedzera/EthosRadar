@@ -12,17 +12,13 @@ const ThemeProviderContext = createContext<ThemeProviderContextType | undefined>
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Check localStorage first, then system preference, default to dark
+    // Check localStorage first, default to dark for new users
     const stored = localStorage.getItem('ethosradar-theme') as Theme;
     if (stored && (stored === 'dark' || stored === 'light')) {
       return stored;
     }
     
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
-    }
-    
+    // Force dark mode as default for all new users
     return 'dark';
   });
 
