@@ -25,6 +25,7 @@ UI preferences: Cloud background image with reduced animations for a serene inte
 - **Production Build Validated**: Confirmed production build process works correctly with proper environment detection and error handling
 - **Domain Configuration Updated**: Added support for dual-domain deployment (ethosradar.com + ethosradar.replit.app)
 - **Frame Generation Enhanced**: Updated server-side frame generation to use correct domains based on deployment environment
+- **Farcaster PNG Compliance**: Updated all Farcaster assets to use PNG format for maximum compatibility (logos, frame backgrounds)
 - **TypeScript Errors Fixed**: Resolved error handling type issues in frame generation code
 - **Migration Completed**: Successfully migrated from Replit Agent to standard Replit environment
 
