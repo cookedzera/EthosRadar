@@ -411,12 +411,12 @@ export function WalletScanner() {
 
 
             {/* Compact Farcaster Toggle */}
-            <div className="flex justify-center mb-1">
+            <div className="flex justify-center mb-1 mt-2">
               <button
                 onClick={() => setFarcasterMode(!farcasterMode)}
                 className={`
                   backdrop-blur-xl bg-white/10 dark:bg-white/20 border border-white/20 dark:border-white/30
-                  rounded-xl px-4 py-2 flex items-center gap-2 transition-all duration-300 
+                  rounded-xl px-3 py-1.5 flex items-center gap-2 transition-all duration-300 
                   shadow-lg hover:shadow-xl hover:scale-105
                   ${farcasterMode 
                     ? 'bg-purple-600/80 dark:bg-purple-400/30 border-purple-500/50 dark:border-purple-400/50 shadow-purple-500/25' 
