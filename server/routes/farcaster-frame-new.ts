@@ -6,11 +6,11 @@ import { ethosApi } from '../services/ethos-api';
 
 const router = express.Router();
 
-// Dynamic image URLs with minute-based versioning for faster updates
+// Dynamic image URLs with second-based versioning for immediate updates
 const getImageUrl = (userkey: string) => {
-  // Use minute-based versioning for faster cache updates
-  const minuteVersion = Math.floor(Date.now() / (1000 * 60)); // Changes every minute
-  return `/farcaster/card/${encodeURIComponent(userkey)}?v=${minuteVersion}`;
+  // Use second-based versioning for immediate cache updates after code changes
+  const secondVersion = Math.floor(Date.now() / (1000 * 10)); // Changes every 10 seconds
+  return `/farcaster/card/${encodeURIComponent(userkey)}?v=${secondVersion}`;
 };
 
 // Farcaster frame endpoint
