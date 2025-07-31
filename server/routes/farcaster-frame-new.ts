@@ -801,11 +801,11 @@ router.get('/card/:userkey', async (req, res) => {
     ctx.fillText(`@${userHandle}`, canvas.width - 40, 263);
     ctx.restore();
     
-    // Move attribution to edge/border area as requested - top edge inside the border
+    // Move attribution to bottom edge inside the border as requested
     ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.font = '9px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 45);
+    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, canvas.height - 15);
     ctx.textAlign = 'left'; // Reset alignment for other text
 
     // Optimized headers for production Farcaster frame delivery
