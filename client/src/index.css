@@ -11,20 +11,25 @@
   z-index: 1000 !important;
 }
 
-button.bolt-icon-button,
-button.bolt-icon-button *,
-.bolt-icon-button,
-.bolt-icon-button * {
-  all: unset !important;
+button.bolt-icon-button {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  outline: none !important;
   cursor: pointer !important;
   pointer-events: auto !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   transition: all 0.5s ease-out !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: transparent !important;
+  position: relative !important;
   isolation: auto !important;
 }
 
