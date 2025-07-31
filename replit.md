@@ -55,6 +55,6 @@ UI preferences: Cloud background image with reduced animations for a serene inte
 - **Ethos Protocol APIs**: Core integration for user trust scores, profiles, vouch data, reviews, and activity history. This includes both V1 and V2 API endpoints.
 - **@farcaster/miniapp-sdk**: For integrating direct Farcaster Mini App functionalities like cast composition and environment detection.
 - **Node.js Canvas API**: Used server-side for generating dynamic Farcaster frame cards as images.
-- **Image Hosting**: Background image for OG cards now uses `https://i.ibb.co/1YykPd1T/ETHOSBG.jpg`. Other images (e.g., `ethos-logo.png`, `placeholder-avatar.png`) may still be served from `https://ethosradar.com/`.
+- **Image Hosting**: Images (e.g., `ethos-card-bg.jpg`, `ethos-logo.png`, `placeholder-avatar.png`) are served from `https://ethosradar.com/`.
 - **Warpcast**: Direct integration for sharing Farcaster frames and composing casts.
 - **Third-party Platforms**: APIs for cross-referencing user profiles on platforms like Twitter/X, Discord, and Telegram (though detailed social media account integration appears to be reduced or removed).
