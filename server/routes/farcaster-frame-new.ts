@@ -441,7 +441,7 @@ router.get('/card/:userkey', async (req, res) => {
     
     // Header section with black text on transparent card background - quote moved down and right
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.font = '14px Arial';
+    ctx.font = '12px Arial';
     ctx.textAlign = 'left';
     ctx.fillText(standardQuote, 55, 60);
 
@@ -613,7 +613,7 @@ router.get('/card/:userkey', async (req, res) => {
         case 'Reputable':
           return '#10b981'; // Emerald-500
         case 'Neutral':
-          return '#3b82f6'; // Blue-500
+          return '#1e40af'; // Darker blue for better visibility
         case 'Questionable':
           return '#f59e0b'; // Amber-500
         case 'Untrusted':
@@ -779,7 +779,7 @@ router.get('/card/:userkey', async (req, res) => {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.font = '8px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(`Generated using EthosRadar mini app by @cookedzera.eth`, canvas.width / 2, 305);
+    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 305);
     ctx.textAlign = 'left'; // Reset alignment for other text
 
     // Optimized headers for production Farcaster frame delivery
