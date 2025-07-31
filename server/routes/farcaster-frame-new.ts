@@ -459,14 +459,14 @@ router.get('/card/:userkey', async (req, res) => {
     drawGlassmorphismBorder();
     console.log('Border drawn, starting text rendering');
 
-    // Shorter standardized quote for all cards
-    const standardQuote = '"Trust in crypto matters"';
+    // Updated quote for all cards
+    const standardQuote = '"Having morals in crypto is expensive"';
     
-    // Header section with black text on transparent card background - quote moved down and right
+    // Header section with black text on transparent card background - smaller font to avoid conflict with level
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.font = '14px Arial';
+    ctx.font = '11px Arial';
     ctx.textAlign = 'left';
-    ctx.fillText(standardQuote, 55, 60);
+    ctx.fillText(standardQuote, 55, 58);
 
     // Draw avatar if available - moved up
     const avatarRadius = 25;
