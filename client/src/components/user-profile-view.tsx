@@ -692,149 +692,57 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
                   return isWeeklyActivitiesLoading ? (
                     // Modern loading state with glassmorphism
-                  <div className="relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 overflow-hidden shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500">
-                    {/* Subtle floating orb */}
-                    <div className="absolute top-3 right-4 w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
-                    
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-white/20 rounded-xl">
-                        <Activity className="w-5 h-5 text-white/80" />
+                    <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Activity className="w-4 h-4 text-orange-400" />
+                        <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Weekly Momentum</span>
                       </div>
-                      <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Weekly Momentum</span>
-                    </div>
-                    
-                    <div className="w-full min-h-[70px] px-2 py-3 overflow-hidden">
-                      <div className="grid grid-cols-3 gap-1 items-center">
-                        {/* Streak Days */}
-                        <div className="flex flex-col items-center text-center px-1">
-                          <div className="loading-shimmer loading-pulse-soft h-5 w-10 rounded-lg mb-2 loading-glow bg-gradient-to-r from-white/10 to-white/5"></div>
-                          <div className="text-xs text-white/60 font-medium">🔥 Streak</div>
-                        </div>
-                        
-                        {/* Score Change */}
-                        <div className="flex flex-col items-center text-center px-1">
-                          <div className="space-y-1">
-                            <div className="loading-shimmer loading-pulse-soft h-4 w-12 rounded-lg loading-glow bg-gradient-to-r from-white/10 to-white/5"></div>
-                            <div className="loading-shimmer loading-pulse-soft h-3 w-8 rounded-lg loading-glow bg-gradient-to-r from-white/10 to-white/5 mx-auto"></div>
-                          </div>
-                          <div className="text-xs text-white/60 font-medium mt-2">📈 Score</div>
-                        </div>
-                        
-                        {/* XP Gained */}
-                        <div className="flex flex-col items-center text-center px-1">
-                          <div className="loading-shimmer loading-pulse-soft h-5 w-12 rounded-lg mb-2 loading-glow bg-gradient-to-r from-white/10 to-white/5"></div>
-                          <div className="text-xs text-white/60 font-medium">⚡ XP</div>
-                        </div>
+                      <div className="text-2xl font-bold text-white">
+                        <div className="loading-shimmer loading-pulse-soft h-7 w-10 rounded loading-glow"></div>
+                      </div>
+                      <div className="text-xs text-white/50">
+                        <div className="loading-shimmer loading-pulse-soft h-3 w-16 rounded loading-glow"></div>
                       </div>
                     </div>
-                  </div>
-                ) : (() => {
-                  const weeklyData = (weeklyActivitiesData as any)?.success ? (weeklyActivitiesData as any).data : null;
-                  const summary = weeklyData?.summary;
-                  
-                  // Only show activity if we have valid enhanced profile data
-                  const hasEnhancedData = (xpStreakDays !== null && xpStreakDays > 0) || weeklyXpGain > 0;
-                  
-                  if (hasEnhancedData) {
-                    // Use only enhanced profile data - no fallbacks, strict null checking
-                    const displayStreakDays = xpStreakDays !== null ? xpStreakDays : 0;
-                    const displayXpGain = weeklyXpGain || 0;
+                  ) : (() => {
+                    const weeklyData = (weeklyActivitiesData as any)?.success ? (weeklyActivitiesData as any).data : null;
+                    const summary = weeklyData?.summary;
                     
-                    return (
-                      <div className="relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 overflow-hidden shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500 group">
-                        {/* Floating orbs */}
-                        <div className="absolute top-3 right-4 w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
-                        <div className="absolute bottom-4 left-6 w-1.5 h-1.5 bg-white/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-                        
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        
-                        <div className="relative">
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-white/20 rounded-xl">
-                              <Activity className="w-5 h-5 text-white/80" />
-                            </div>
-                            <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Weekly Momentum</span>
+                    // Only show activity if we have valid enhanced profile data
+                    const hasEnhancedData = (xpStreakDays !== null && xpStreakDays > 0) || weeklyXpGain > 0;
+                    
+                    if (hasEnhancedData) {
+                      // Use only enhanced profile data - no fallbacks, strict null checking
+                      const displayStreakDays = xpStreakDays !== null ? xpStreakDays : 0;
+                      const displayXpGain = weeklyXpGain || 0;
+                      
+                      return (
+                        <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Activity className="w-4 h-4 text-orange-400" />
+                            <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Weekly Momentum</span>
                           </div>
-                          
-                          <div className="w-full min-h-[70px] px-2 py-3 overflow-hidden">
-                            <div className="grid grid-cols-3 gap-1 items-center">
-                              {/* Streak Days */}
-                              <div className="flex flex-col items-center text-center px-1">
-                                <div className="text-base sm:text-lg font-bold text-white whitespace-nowrap">
-                                  {displayStreakDays}d
-                                </div>
-                                <div className="text-xs text-white/60 font-medium">🔥 Streak</div>
-                              </div>
-                              
-                              {/* Score Change */}
-                              <div className="flex flex-col items-center text-center px-1">
-                                <div className="flex flex-col items-center gap-0.5 text-xs sm:text-sm font-bold">
-                                  {summary?.scoreChange > 0 ? (
-                                    <>
-                                      <div className="flex items-center gap-1">
-                                        <ArrowUp className="w-2.5 h-2.5 text-green-400 flex-shrink-0" />
-                                        <span className="text-green-400">+{summary.scoreChange}</span>
-                                      </div>
-                                      <span className="text-[10px] text-white/60">(+{((summary.scoreChange / (user.score || 1)) * 100).toFixed(1)}%)</span>
-                                    </>
-                                  ) : summary?.scoreChange < 0 ? (
-                                    <>
-                                      <div className="flex items-center gap-1">
-                                        <ArrowDown className="w-2.5 h-2.5 text-red-400 flex-shrink-0" />
-                                        <span className="text-red-400">{summary.scoreChange}</span>
-                                      </div>
-                                      <span className="text-[10px] text-white/60">({Math.abs((summary.scoreChange / (user.score || 1)) * 100).toFixed(1)}%)</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <span className="text-white">0</span>
-                                      <span className="text-[10px] text-white/60">(0.0%)</span>
-                                    </>
-                                  )}
-                                </div>
-                                <div className="text-xs text-white/60 font-medium">📈 Score</div>
-                              </div>
-                              
-                              {/* XP Gained */}
-                              <div className="flex flex-col items-center text-center px-1">
-                                <div className="text-base sm:text-lg font-bold text-white whitespace-nowrap">
-                                  {(() => {
-                                    const xp = displayXpGain;
-                                    if (xp >= 1000) {
-                                      return `+${(xp / 1000).toFixed(1)}K`;
-                                    }
-                                    return `+${xp}`;
-                                  })()}
-                                </div>
-                                <div className="text-xs text-white/60 font-medium">⚡ XP</div>
-                              </div>
-                            </div>
+                          <div className="text-2xl font-bold text-white">
+                            {displayStreakDays}d
                           </div>
-                          
-
+                          <div className="text-xs text-white/50">
+                            streak • +{displayXpGain.toLocaleString()} XP
+                          </div>
                         </div>
-                      </div>
-                    );
+                      );
                   }
                   
-                  // No activity state - more modern
-                  return (
-                    <div className="relative backdrop-blur-xl bg-gradient-to-br from-white/8 via-white/5 to-white/3 border border-white/15 rounded-2xl p-6 mb-6 text-center overflow-hidden">
-                      {/* Subtle pattern */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/3 via-transparent to-white/2 rounded-2xl"></div>
-                      
-                      <div className="relative flex flex-col items-center gap-3">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-                          <Clock className="w-6 h-6 text-white/40" />
+                    // No activity state - more modern
+                    return (
+                      <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-orange-400/20 hover:shadow-orange-400/30 text-center">
+                        <div className="flex items-center gap-2 mb-2 justify-center">
+                          <Activity className="w-4 h-4 text-orange-400" />
+                          <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Weekly Momentum</span>
                         </div>
-                        <div>
-                          <div className="text-sm font-semibold text-white/60 mb-1">No Recent Activity</div>
-                          <div className="text-xs text-white/40">Stay active to build your streak</div>
-                        </div>
+                        <div className="text-2xl font-bold text-white/40">-</div>
+                        <div className="text-xs text-white/40">No recent activity</div>
                       </div>
-                    </div>
-                  );
+                    );
                 })();
                 })()}
 
@@ -856,12 +764,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 })()}
 
                 {/* Connected Accounts Section with Loading */}
-                <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-white/20 rounded-xl">
-                      <Network className="w-5 h-5 text-white/80" />
-                    </div>
-                    <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Connected Accounts</span>
+                <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-green-400/20 hover:shadow-green-400/30 mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Network className="w-4 h-4 text-green-400" />
+                    <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Connected Accounts</span>
                   </div>
                   
                   {isAttestationsLoading ? (

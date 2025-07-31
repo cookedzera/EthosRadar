@@ -86,14 +86,12 @@ export function NextRankProgress({ currentScore, className = '' }: NextRankProgr
   const NextIcon = nextTier.icon;
   
   return (
-    <div className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500 ${className}`}>
+    <div className={`backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-purple-400/20 hover:shadow-purple-400/30 ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-white/20 rounded-xl">
-            <TrendingUp className="w-5 h-5 text-white/80" />
-          </div>
-          <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Next Rank</span>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-purple-400" />
+          <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Next Rank</span>
         </div>
         
         <div className="text-xs text-white/60">
