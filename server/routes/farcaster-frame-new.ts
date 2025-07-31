@@ -16,15 +16,17 @@ const getImageUrl = (userkey: string) => {
 // Farcaster frame endpoint
 router.get('/frame/:userkey', async (req, res) => {
   const { userkey } = req.params;
-  // Use local domain for development testing
-  const baseUrl = `http://localhost:${process.env.PORT || 5000}`;
+  // Use public Replit domain for external access (Farcaster needs to fetch the image)
+  const baseUrl = process.env.REPLIT_DEV_DOMAIN 
+    ? `https://${process.env.REPLIT_DEV_DOMAIN}` 
+    : `http://localhost:${process.env.PORT || 5000}`;
 
   // Resolve userkey if it's a username format
   let resolvedUserkey = decodeURIComponent(userkey);
   
   if (!resolvedUserkey.includes('service:') && !resolvedUserkey.includes('address:') && !resolvedUserkey.includes('profileId:')) {
     try {
-      const searchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
+      const searchResponse = await fetch(`${baseUrl}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
       if (searchResponse.ok) {
         const searchResult = await searchResponse.json();
         if (searchResult.success && searchResult.data && searchResult.data.length > 0) {
@@ -41,7 +43,7 @@ router.get('/frame/:userkey', async (req, res) => {
   let frameDescription = 'Generate your personalized trust reputation card';
 
   try {
-    const profileResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
+    const profileResponse = await fetch(`${baseUrl}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
     if (profileResponse.ok) {
       const profileResult = await profileResponse.json();
       if (profileResult.success && profileResult.data) {
@@ -103,10 +105,15 @@ router.get('/card/:userkey', async (req, res) => {
     // STEP 1: Resolve userkey if it's a username format
     let resolvedUserkey = decodeURIComponent(userkey);
     
+    // Base URL for API calls within the card generation
+    const baseUrlCard = process.env.REPLIT_DEV_DOMAIN 
+      ? `https://${process.env.REPLIT_DEV_DOMAIN}` 
+      : `http://localhost:${process.env.PORT || 5000}`;
+    
     // If userkey doesn't contain service format, try to resolve it as username
     if (!resolvedUserkey.includes('service:') && !resolvedUserkey.includes('address:') && !resolvedUserkey.includes('profileId:')) {
       try {
-        const searchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
+        const searchResponse = await fetch(`${baseUrlCard}/api/search-suggestions?q=${encodeURIComponent(resolvedUserkey)}&limit=1`);
         if (searchResponse.ok) {
           const searchResult = await searchResponse.json();
           if (searchResult.success && searchResult.data && searchResult.data.length > 0) {
@@ -125,7 +132,7 @@ router.get('/card/:userkey', async (req, res) => {
     let dashboardData: any = null;
 
     try {
-      const profileResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
+      const profileResponse = await fetch(`${baseUrlCard}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
       if (profileResponse.ok) {
         const profileResult = await profileResponse.json();
         // Profile data successfully loaded
@@ -141,7 +148,7 @@ router.get('/card/:userkey', async (req, res) => {
 
     // Get dashboard review data
     try {
-      const dashboardResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/dashboard-reviews/${encodeURIComponent(resolvedUserkey)}`);
+      const dashboardResponse = await fetch(`${baseUrlCard}/api/dashboard-reviews/${encodeURIComponent(resolvedUserkey)}`);
       if (dashboardResponse.ok) {
         dashboardData = await dashboardResponse.json();
       }
@@ -152,7 +159,7 @@ router.get('/card/:userkey', async (req, res) => {
     // Get vouch data using our API endpoint
     let vouchData: any = null;
     try {
-      const vouchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/user-vouch-activities/${encodeURIComponent(resolvedUserkey)}`);
+      const vouchResponse = await fetch(`${baseUrlCard}/api/user-vouch-activities/${encodeURIComponent(resolvedUserkey)}`);
       if (vouchResponse.ok) {
         const vouchResult = await vouchResponse.json();
         if (vouchResult.success && vouchResult.data) {
