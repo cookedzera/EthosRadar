@@ -214,12 +214,10 @@ export function SearchSuggestionsBelow({
                     tierAnimation === 'good' ? 'ring-emerald-500/50 group-hover:ring-emerald-400/70' : ''
                   }`}>
                     <AvatarImage 
-                      src={suggestion.avatarUrl && suggestion.avatarUrl.includes('pbs.twimg.com') 
-                        ? `/api/avatar-proxy?url=${encodeURIComponent(suggestion.avatarUrl)}`
-                        : suggestion.avatarUrl
-                      } 
+                      src={suggestion.avatarUrl || ''} 
                       alt={suggestion.displayName || suggestion.username}
                       crossOrigin="anonymous"
+                      loading="lazy"
                     />
                     <AvatarFallback className="text-white flex items-center justify-center text-lg font-bold bg-gradient-to-br from-gray-600/80 to-gray-800/70 border border-white/20">
                       {suggestion.displayName ? 
