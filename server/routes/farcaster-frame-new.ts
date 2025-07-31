@@ -434,8 +434,8 @@ router.get('/card/:userkey', async (req, res) => {
     drawGlassmorphismBorder();
     // Start text rendering
 
-    // Single standardized quote for all cards
-    const standardQuote = '"Having morals in crypto is expensive"';
+    // Shorter standardized quote for all cards
+    const standardQuote = '"Trust in crypto matters"';
     
     // Header section with black text on transparent card background - quote moved down and right
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -777,7 +777,7 @@ router.get('/card/:userkey', async (req, res) => {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.font = '8px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(`Generated using EthosRadar mini app by @cookedzera.eth`, canvas.width / 2, 305);
+    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 305);
     ctx.textAlign = 'left'; // Reset alignment for other text
 
     // Optimized headers for production Farcaster frame delivery

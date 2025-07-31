@@ -30,7 +30,7 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
   // Generate concise cast text for better readability
   const castText = `Trust Score: ${score} | ${getScoreLevel(score)} Tier 🏆
 
-Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
+Check yours at ethosradar.com by @cookedzera`;
 
   function getScoreLevel(score: number): string {
     if (score >= 2000) return 'Exemplary';
