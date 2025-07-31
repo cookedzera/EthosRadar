@@ -8,9 +8,30 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
     
-    <!-- Force dark mode by default, prevent flash of light content -->
+    <!-- Preload critical WebP background images for better performance -->
+    <link rel="preload" as="image" href="/unified-bg.webp" type="image/webp" />
+    <link rel="preload" as="image" href="/unified-bg.png" type="image/png" />
+    
+    <!-- WebP support detection and theme initialization -->
     <script>
       (function() {
+        // WebP support detection
+        function supportsWebP(callback) {
+          const webP = new Image();
+          webP.onload = webP.onerror = function () {
+            callback(webP.height === 2);
+          };
+          webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+        }
+
+        // Add no-webp class if WebP is not supported
+        supportsWebP(function(supported) {
+          if (!supported) {
+            document.documentElement.classList.add('no-webp');
+          }
+        });
+
+        // Theme initialization
         const stored = localStorage.getItem('ethosradar-theme');
         // If no stored preference, default to dark mode
         const theme = stored || 'dark';

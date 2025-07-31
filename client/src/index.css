@@ -102,6 +102,15 @@ body {
 html.dark body,
 body.dark,
 .dark body {
+  background: url('/unified-bg.webp') center center/cover no-repeat, linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
+  background-attachment: fixed !important;
+  color: #1e293b !important;
+}
+
+/* Fallback for browsers that don't support WebP */
+html.no-webp.dark body,
+body.no-webp.dark,
+.no-webp.dark body {
   background: url('/unified-bg.png') center center/cover no-repeat, linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
   background-attachment: fixed !important;
   color: #1e293b !important;
@@ -126,6 +135,19 @@ html.light body,
 html:not(.dark) body,
 body.light,
 .light body {  
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+    url('/unified-bg.webp') center center/cover no-repeat, 
+    linear-gradient(135deg, #080805 0%, #0f0f0e 25%, #161612 50%, #0f0f0e 75%, #080805 100%) !important;
+  background-attachment: fixed !important;
+  color: #d1d5db !important;
+}
+
+/* Fallback for browsers that don't support WebP */
+html.no-webp.light body, 
+html.no-webp:not(.dark) body,
+body.no-webp.light,
+.no-webp.light body {  
   background: 
     linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
     url('/unified-bg.png') center center/cover no-repeat, 
