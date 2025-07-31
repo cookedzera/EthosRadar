@@ -1288,37 +1288,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   <span>View on Ethos</span>
                 </button>
                 
-                <button 
-                  onClick={() => {
-                    const baseUrl = window.location.origin;
-                    const userkey = user?.userkeys?.[0] || '';
-                    const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(userkey)}`;
-                    const score = user?.score || 0;
-                    
-                    const getScoreLevel = (score: number): string => {
-                      if (score >= 2000) return 'Exemplary';
-                      if (score >= 1600) return 'Reputable';
-                      if (score >= 1200) return 'Neutral';
-                      if (score >= 800) return 'Questionable';
-                      return 'Untrusted';
-                    };
-                    
-                    const castText = `✨ Flexing my trust reputation on @ethos-protocol! 
-
-🏆 Trust Score: ${score} | ${getScoreLevel(score)} Tier
-🔥 Building credibility in Web3, one interaction at a time
-
-Check out your trust score using this frame built by @cookedzera.eth 👇
-
-${frameUrl}`;
-
-                    const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
-                    window.open(warpcastUrl, '_blank');
-                  }}
-                  className="px-3 py-2 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white hover:bg-white/15 transition-all duration-300 hover:scale-105"
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                </button>
+                <FarcasterShareButton 
+                  user={user}
+                  compact={false}
+                />
               </div>
             )}
           </div>

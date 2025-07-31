@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Share, ExternalLink, Copy } from 'lucide-react';
 import { SiFarcaster } from 'react-icons/si';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,8 @@ interface FarcasterShareButtonProps {
 export function FarcasterShareButton({ user, compact = false }: FarcasterShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sdkReady, setSdkReady] = useState(false);
+  const [sdkCapabilities, setSdkCapabilities] = useState<string[]>([]);
   
   const userkey = user?.userkeys?.[0] || '';
   const displayName = user?.displayName || user?.username || 'Anonymous';
@@ -31,6 +33,50 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
   const castText = `Trust Score: ${score} | ${getScoreLevel(score)} Tier 🏆
 
 Check yours at ethosradar.com by @cookedzera`;
+
+  // Enhanced SDK detection and initialization
+  useEffect(() => {
+    const initializeSDK = async () => {
+      try {
+        console.log('🔍 Initializing Farcaster SDK detection...');
+        
+        // Method 1: Check if SDK is available in window context
+        if (typeof window !== 'undefined' && (window as any).farcaster) {
+          console.log('✅ Farcaster SDK detected in window context');
+          setSdkReady(true);
+        }
+        
+        // Method 2: Test SDK capabilities
+        try {
+          const capabilities = await sdk.getCapabilities();
+          console.log('✅ SDK capabilities detected:', capabilities);
+          setSdkCapabilities(capabilities);
+          setSdkReady(true);
+        } catch (sdkError) {
+          console.log('⚠️ SDK capabilities not available:', sdkError);
+        }
+        
+        // Method 3: Test context access
+        try {
+          const context = await sdk.context;
+          if (context) {
+            console.log('✅ SDK context available:', context);
+            setSdkReady(true);
+          }
+        } catch (contextError) {
+          console.log('⚠️ SDK context not available:', contextError);
+        }
+        
+        // Log final status
+        console.log(`🎯 Final SDK status - Ready: ${sdkReady}, Capabilities: ${sdkCapabilities.length}`);
+        
+      } catch (error) {
+        console.log('❌ SDK initialization failed:', error);
+      }
+    };
+    
+    initializeSDK();
+  }, []);
 
   function getScoreLevel(score: number): string {
     if (score >= 2000) return 'Exemplary';
@@ -155,16 +201,22 @@ Check yours at ethosradar.com by @cookedzera`;
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
-          <Share className="w-4 h-4" />
-          Share on Farcaster
-        </Button>
+        <button className="px-3 py-2 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white hover:bg-white/15 transition-all duration-300 hover:scale-105">
+          <Share className="w-3.5 h-3.5" />
+        </button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogTitle>Share Your Trust Score on Farcaster</DialogTitle>
         <DialogDescription>
           Share your trust reputation card as a Farcaster frame
         </DialogDescription>
+        
+        {/* SDK Status Debug Info */}
+        <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs">
+          <div className="font-semibold mb-1">SDK Status:</div>
+          <div>Ready: {sdkReady ? '✅ Yes' : '❌ No'}</div>
+          <div>Capabilities: {sdkCapabilities.length > 0 ? sdkCapabilities.join(', ') : 'None detected'}</div>
+        </div>
         
         <div className="space-y-4">
           {/* Preview of the frame */}
