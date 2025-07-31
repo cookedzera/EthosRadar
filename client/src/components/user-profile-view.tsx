@@ -999,7 +999,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             {activeView === 'activity' && (
               <div className="space-y-6 mb-6">
                 {/* Compact Vouch Summary */}
-                <div className="bg-white/5 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl border border-white/10 dark:border-gray-700/30 p-5">
+                <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-blue-400/20 hover:shadow-blue-400/30">
                   <div className="grid grid-cols-2 gap-6">
                     {/* Vouches Received */}
                     <div className="space-y-2">
@@ -1063,7 +1063,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
                 {/* Recent Vouches Received */}
                 {vouchData?.success && vouchData.data.received?.length > 0 && (
-                  <div className="bg-gray-900/15 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl p-4 shadow-lg shadow-emerald-400/10 mb-6">
+                  <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-emerald-400/20 hover:shadow-emerald-400/30 mb-6">
                     {/* Enhanced Header with Divider */}
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
