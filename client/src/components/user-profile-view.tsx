@@ -1154,7 +1154,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
                 {/* Recent Vouches Given */}
                 {vouchData?.success && vouchData.data.given?.length > 0 && (
-                  <div className="bg-gray-900/15 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl p-4 shadow-lg shadow-emerald-400/10 mb-6">
+                  <div className="backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-red-400/20 hover:shadow-red-400/30 mb-6">
                     {/* Enhanced Header with Divider */}
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
