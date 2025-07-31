@@ -102,7 +102,7 @@ body {
 html.dark body,
 body.dark,
 .dark body {
-  background: url('/unified-bg.webp') center center/cover no-repeat, linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
+  background: url('/unified-bg.webp') center center/cover no-repeat, linear-gradient(135deg, #f1f5f9 0%, #e8f0fe 50%, #f8fafc 100%) !important;
   background-attachment: fixed !important;
   color: #1e293b !important;
 }
@@ -111,7 +111,7 @@ body.dark,
 html.no-webp.dark body,
 body.no-webp.dark,
 .no-webp.dark body {
-  background: url('/unified-bg.png') center center/cover no-repeat, linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
+  background: url('/unified-bg.png') center center/cover no-repeat, linear-gradient(135deg, #f1f5f9 0%, #e8f0fe 50%, #f8fafc 100%) !important;
   background-attachment: fixed !important;
   color: #1e293b !important;
 }
