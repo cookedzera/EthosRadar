@@ -16,6 +16,9 @@ UI preferences: Cloud background image with reduced animations for a serene inte
 **Client-side URLs**: Generated using window.location.origin for automatic domain adaptation
 
 ## Recent Changes (January 2025)
+- **Deployment Readiness Fixed**: Resolved deployment health check failures by adding explicit `/health`, `/ready`, and `/_status` endpoints for Replit Deployments
+- **Server Initialization Improved**: Enhanced error handling with comprehensive logging, graceful shutdown handling (SIGTERM/SIGINT), and proper async initialization order
+- **Production Build Validated**: Confirmed production build process works correctly with proper environment detection and error handling
 - **Domain Configuration Updated**: Added support for dual-domain deployment (ethosradar.com + ethosradar.replit.app)
 - **Frame Generation Enhanced**: Updated server-side frame generation to use correct domains based on deployment environment
 - **TypeScript Errors Fixed**: Resolved error handling type issues in frame generation code
