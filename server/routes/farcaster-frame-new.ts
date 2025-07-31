@@ -16,8 +16,8 @@ const getImageUrl = (userkey: string) => {
 // Farcaster frame endpoint
 router.get('/frame/:userkey', async (req, res) => {
   const { userkey } = req.params;
-  // Always use production domain for frames
-  const baseUrl = 'https://ethosradar.com';
+  // Use local domain for development testing
+  const baseUrl = `http://localhost:${process.env.PORT || 5000}`;
 
   // Resolve userkey if it's a username format
   let resolvedUserkey = decodeURIComponent(userkey);
