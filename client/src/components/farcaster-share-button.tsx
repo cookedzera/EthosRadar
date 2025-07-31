@@ -40,60 +40,61 @@ Check yours at ethosradar.com by @cookedzera`;
     return 'Untrusted';
   }
 
-  // Direct flex function - uses Farcaster SDK to create cast in Mini App
+  // Enhanced direct cast composition using Farcaster SDK
   const handleFlex = async () => {
     try {
-      console.log('🎯 Flex Your Card clicked - starting share process...');
+      console.log('🎯 Flex Your Card clicked - attempting direct cast composition...');
       
-      // Check if we're in a Mini App context by testing for SDK capabilities
-      let isInMiniApp = false;
-      let supportsCompose = false;
-      
+      // Method 1: Try direct composeCast first (most reliable in Mini App)
       try {
-        // Test if SDK is available and get capabilities
-        const capabilities = await sdk.getCapabilities();
-        supportsCompose = capabilities.includes('actions.composeCast');
-        isInMiniApp = true;
-        console.log('✅ Mini App context detected, capabilities:', capabilities);
-      } catch (sdkError) {
-        // SDK not available, we're in regular web context
-        isInMiniApp = false;
-        console.log('🌐 Web context detected, using web fallback');
-      }
-      
-      if (isInMiniApp && supportsCompose) {
-        console.log('📱 Using native composeCast...');
-        // Use native composeCast in Mini App context
+        console.log('📱 Attempting native composeCast...');
         const result = await sdk.actions.composeCast({
           text: castText,
-          embeds: [frameUrl]
+          embeds: [frameUrl],
+          close: false // Don't close the app after casting
         });
-        console.log('✅ Native composeCast completed');
-        return;
-      } else if (isInMiniApp) {
-        console.log('🔗 Trying openUrl fallback...');
-        // SDK available but composeCast not supported, try openUrl
-        try {
-          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`);
-          console.log('✅ OpenUrl completed');
-          return;
-        } catch (urlError) {
-          console.log('❌ OpenUrl failed:', urlError);
-          // openUrl also failed, fall through to web fallback
+        
+        console.log('✅ Native composeCast completed successfully');
+        if (result?.cast) {
+          console.log(`🎉 Cast created with hash: ${result.cast.hash}`);
         }
+        return;
+      } catch (sdkError) {
+        console.log('⚠️ Native composeCast not available, trying alternatives...');
       }
       
-      console.log('🌐 Opening Warpcast in new tab...');
-      // Web context fallback - simplified URL format
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds%5B%5D=${encodeURIComponent(frameUrl)}`;
-      console.log('📋 Warpcast URL:', warpcastUrl);
+      // Method 2: Check if we're in Mini App context and use openUrl
+      try {
+        const context = await sdk.context;
+        if (context) {
+          console.log('📱 Mini App context detected, using openUrl...');
+          const warpcastIntentUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
+          await sdk.actions.openUrl(warpcastIntentUrl);
+          console.log('✅ OpenUrl completed successfully');
+          return;
+        }
+      } catch (contextError) {
+        console.log('⚠️ No Mini App context, falling back to web methods...');
+      }
       
-      // Try direct window.open first
+      // Method 3: Web browser fallback with intent URL
+      console.log('🌐 Using web browser fallback...');
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
+      
+      // For mobile browsers, try location.href first as it's more reliable
+      if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        console.log('📱 Mobile browser detected, using location redirect...');
+        window.location.href = warpcastUrl;
+        return;
+      }
+      
+      // For desktop, try window.open
+      console.log('💻 Desktop browser detected, using window.open...');
       const newWindow = window.open(warpcastUrl, '_blank', 'noopener,noreferrer');
       
       if (!newWindow || newWindow.closed) {
-        // Popup blocked or failed, try location.href approach
-        console.log('🚫 Popup method failed, trying location approach');
+        // Fallback to location.href if popup blocked
+        console.log('🚫 Popup blocked, redirecting...');
         window.location.href = warpcastUrl;
         return;
       }
@@ -101,13 +102,13 @@ Check yours at ethosradar.com by @cookedzera`;
       console.log('✅ Warpcast opened successfully');
       
     } catch (error) {
-      console.log('❌ All methods failed, using clipboard fallback:', error);
-      // Final fallback - copy to clipboard
+      console.error('❌ All cast methods failed:', error);
+      // Final emergency fallback - copy to clipboard
       try {
-        await navigator.clipboard.writeText(castText + '\n\n' + frameUrl);
+        await navigator.clipboard.writeText(`${castText}\n\n${frameUrl}`);
         alert('Cast text copied to clipboard! Please paste in Warpcast to share.');
       } catch (clipError) {
-        alert(`Copy this text to share on Farcaster:\n\n${castText}\n\n${frameUrl}`);
+        alert(`Please copy this text to share on Farcaster:\n\n${castText}\n\n${frameUrl}`);
       }
     }
   };
@@ -136,23 +137,18 @@ Check yours at ethosradar.com by @cookedzera`;
   };
 
   if (compact) {
-    const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds%5B%5D=${encodeURIComponent(frameUrl)}`;
-    
     return (
-      <a 
-        href={warpcastUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => {
-          // Allow default link behavior, but also log for debugging
-          console.log('🎯 Flex Your Card clicked - opening Warpcast');
-          console.log('📋 URL:', warpcastUrl);
+      <button
+        onClick={async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          await handleFlex();
         }}
         className="flex items-center gap-1.5 px-2 py-1 rounded-lg backdrop-blur-md bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 hover:text-purple-200 transition-all duration-300 text-xs font-medium group ml-2"
       >
         <SiFarcaster className="w-3 h-3 transition-transform group-hover:scale-110" />
-        <span>Flex Your Card</span>
-      </a>
+        <span>Flex</span>
+      </button>
     );
   }
 
