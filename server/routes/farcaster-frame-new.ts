@@ -196,11 +196,7 @@ router.get('/card/:userkey', async (req, res) => {
     // Generate frame card with optimized rendering
 
     // Use deployed domain for background image
-    // Use local assets in development, ethosradar.com in production
-    const baseUrl = getBaseUrl();
-    const ethosCardBgUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://ethosradar.com/ethos-card-bg.jpg'
-      : `${baseUrl}/unified-bg.png`;
+    const ethosCardBgUrl = 'https://ethosradar.com/unified-bg.webp';
 
     // Create optimized glassmorphism background
     const createGlassmorphismBackground = async () => {
