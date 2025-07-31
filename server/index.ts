@@ -106,6 +106,10 @@ app.get('/icon.png', (req, res) => {
   res.sendFile(path.resolve(import.meta.dirname, "..", "public", "icon.png"));
 });
 
+app.get('/embed-preview.png', (req, res) => {
+  res.sendFile(path.resolve(import.meta.dirname, "..", "public", "embed-preview.png"));
+});
+
 (async () => {
   try {
     log("Starting server initialization...");
