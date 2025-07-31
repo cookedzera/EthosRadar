@@ -8,6 +8,19 @@ Preferred communication style: Simple, everyday language.
 Prefers calm, muted interfaces with reduced animations.
 UI preferences: Cloud background image with reduced animations for a serene interface.
 
+## Deployment Configuration
+**Primary Domain**: ethosradar.com  
+**Replit Domain**: ethosradar.replit.app  
+**Frame Generation**: Supports both domains with automatic domain detection
+**Background Images**: Served from https://ethosradar.com/ for consistent asset loading
+**Client-side URLs**: Generated using window.location.origin for automatic domain adaptation
+
+## Recent Changes (January 2025)
+- **Domain Configuration Updated**: Added support for dual-domain deployment (ethosradar.com + ethosradar.replit.app)
+- **Frame Generation Enhanced**: Updated server-side frame generation to use correct domains based on deployment environment
+- **TypeScript Errors Fixed**: Resolved error handling type issues in frame generation code
+- **Migration Completed**: Successfully migrated from Replit Agent to standard Replit environment
+
 ## System Architecture
 
 ### UI/UX Decisions

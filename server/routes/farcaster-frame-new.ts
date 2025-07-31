@@ -13,13 +13,27 @@ const getImageUrl = (userkey: string) => {
   return `/farcaster/card/${encodeURIComponent(userkey)}?v=${secondVersion}`;
 };
 
+// Get the correct domain for production deployment
+const getBaseUrl = () => {
+  // For production deployment - use ethosradar.com as primary
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://ethosradar.com';
+  }
+  
+  // For Replit deployment - use the Replit domain
+  if (process.env.REPLIT_DEV_DOMAIN) {
+    return `https://${process.env.REPLIT_DEV_DOMAIN}`;
+  }
+  
+  // Fallback for local development
+  return `http://localhost:${process.env.PORT || 5000}`;
+};
+
 // Farcaster frame endpoint
 router.get('/frame/:userkey', async (req, res) => {
   const { userkey } = req.params;
-  // Use public Replit domain for external access (Farcaster needs to fetch the image)
-  const baseUrl = process.env.REPLIT_DEV_DOMAIN 
-    ? `https://${process.env.REPLIT_DEV_DOMAIN}` 
-    : `http://localhost:${process.env.PORT || 5000}`;
+  // Use the appropriate domain for external access (Farcaster needs to fetch the image)
+  const baseUrl = getBaseUrl();
 
   // Resolve userkey if it's a username format
   let resolvedUserkey = decodeURIComponent(userkey);
@@ -143,7 +157,7 @@ router.get('/card/:userkey', async (req, res) => {
         console.log(`Card gen: Profile API failed with status ${profileResponse.status}`);
       }
     } catch (error) {
-      console.log('Card gen: Profile API error:', error.message);
+      console.log('Card gen: Profile API error:', (error as Error).message);
     }
 
     // Get dashboard review data
