@@ -692,13 +692,13 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
                   return isWeeklyActivitiesLoading ? (
                     // Modern loading state with glassmorphism
-                  <div className="relative backdrop-blur-xl bg-gradient-to-br from-cyan-500/15 to-blue-500/10 border border-cyan-400/20 rounded-2xl p-5 mb-6 overflow-hidden shadow-xl shadow-cyan-400/20 hover:shadow-cyan-400/30 transition-all duration-500">
+                  <div className="relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 overflow-hidden shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500">
                     {/* Subtle floating orb */}
-                    <div className="absolute top-3 right-4 w-2 h-2 bg-gradient-to-r from-cyan-400/40 to-blue-400/30 rounded-full animate-pulse"></div>
+                    <div className="absolute top-3 right-4 w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
                     
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-cyan-500/20 rounded-xl">
-                        <Activity className="w-5 h-5 text-cyan-400" />
+                      <div className="p-2 bg-white/20 rounded-xl">
+                        <Activity className="w-5 h-5 text-white/80" />
                       </div>
                       <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Weekly Momentum</span>
                     </div>
@@ -741,18 +741,18 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                     const displayXpGain = weeklyXpGain || 0;
                     
                     return (
-                      <div className="relative backdrop-blur-xl bg-gradient-to-br from-cyan-500/15 to-blue-500/10 border border-cyan-400/20 rounded-2xl p-5 mb-6 overflow-hidden shadow-xl shadow-cyan-400/20 hover:shadow-cyan-400/30 transition-all duration-500 group">
+                      <div className="relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 overflow-hidden shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500 group">
                         {/* Floating orbs */}
-                        <div className="absolute top-3 right-4 w-2 h-2 bg-gradient-to-r from-cyan-400/40 to-blue-400/30 rounded-full animate-pulse"></div>
-                        <div className="absolute bottom-4 left-6 w-1.5 h-1.5 bg-gradient-to-r from-emerald-400/40 to-teal-400/30 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                        <div className="absolute top-3 right-4 w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
+                        <div className="absolute bottom-4 left-6 w-1.5 h-1.5 bg-white/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
                         
                         {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
                         <div className="relative">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-cyan-500/20 rounded-xl">
-                              <Activity className="w-5 h-5 text-cyan-400" />
+                            <div className="p-2 bg-white/20 rounded-xl">
+                              <Activity className="w-5 h-5 text-white/80" />
                             </div>
                             <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Weekly Momentum</span>
                           </div>
@@ -856,10 +856,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 })()}
 
                 {/* Connected Accounts Section with Loading */}
-                <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-500/15 to-blue-500/10 border border-cyan-400/20 rounded-2xl p-5 mb-6 shadow-xl shadow-cyan-400/20 hover:shadow-cyan-400/30 transition-all duration-500">
+                <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 shadow-xl shadow-black/20 hover:shadow-black/30 transition-all duration-500">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-cyan-500/20 rounded-xl">
-                      <Network className="w-5 h-5 text-cyan-400" />
+                    <div className="p-2 bg-white/20 rounded-xl">
+                      <Network className="w-5 h-5 text-white/80" />
                     </div>
                     <span className="text-sm text-white/80 font-semibold uppercase tracking-wide">Connected Accounts</span>
                   </div>
