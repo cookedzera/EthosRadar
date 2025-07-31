@@ -84,15 +84,21 @@ Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
       }
       
       console.log('🌐 Opening Warpcast in new tab...');
-      // Web context fallback
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
-      const newWindow = window.open(warpcastUrl, '_blank');
+      // Web context fallback - simplified URL format
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds%5B%5D=${encodeURIComponent(frameUrl)}`;
+      console.log('📋 Warpcast URL:', warpcastUrl);
       
-      if (!newWindow) {
-        // Popup blocked, try clipboard fallback
-        console.log('🚫 Popup blocked, using clipboard fallback');
-        throw new Error('Popup blocked');
+      // Try direct window.open first
+      const newWindow = window.open(warpcastUrl, '_blank', 'noopener,noreferrer');
+      
+      if (!newWindow || newWindow.closed) {
+        // Popup blocked or failed, try location.href approach
+        console.log('🚫 Popup method failed, trying location approach');
+        window.location.href = warpcastUrl;
+        return;
       }
+      
+      console.log('✅ Warpcast opened successfully');
       
     } catch (error) {
       console.log('❌ All methods failed, using clipboard fallback:', error);
@@ -130,14 +136,23 @@ Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
   };
 
   if (compact) {
+    const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds%5B%5D=${encodeURIComponent(frameUrl)}`;
+    
     return (
-      <button 
-        onClick={handleFlex}
+      <a 
+        href={warpcastUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => {
+          // Allow default link behavior, but also log for debugging
+          console.log('🎯 Flex Your Card clicked - opening Warpcast');
+          console.log('📋 URL:', warpcastUrl);
+        }}
         className="flex items-center gap-1.5 px-2 py-1 rounded-lg backdrop-blur-md bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 hover:text-purple-200 transition-all duration-300 text-xs font-medium group ml-2"
       >
         <SiFarcaster className="w-3 h-3 transition-transform group-hover:scale-110" />
         <span>Flex Your Card</span>
-      </button>
+      </a>
     );
   }
 
