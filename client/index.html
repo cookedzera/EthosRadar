@@ -33,16 +33,15 @@
           }
         });
 
-        // Theme initialization
-        const stored = localStorage.getItem('ethosradar-theme');
-        // If no stored preference, default to dark mode
-        const theme = stored || 'dark';
+        // Force dark mode for all users
+        const theme = 'dark';
         document.documentElement.classList.add(theme);
+        localStorage.setItem('ethosradar-theme', theme);
         
-        // Set theme-color meta tag
+        // Set theme-color meta tag for dark mode
         const meta = document.createElement('meta');
         meta.name = 'theme-color';
-        meta.content = theme === 'dark' ? '#111827' : '#ffffff';
+        meta.content = '#111827';
         document.head.appendChild(meta);
       })();
     </script>
