@@ -609,15 +609,15 @@ router.get('/card/:userkey', async (req, res) => {
       
       switch (level) {
         case 'Exemplary':
-          return '#8b5cf6'; // Purple-500
+          return '#7c3aed'; // Darker purple for better visibility
         case 'Reputable':
-          return '#10b981'; // Emerald-500
+          return '#059669'; // Darker emerald for better visibility
         case 'Neutral':
           return '#1e40af'; // Darker blue for better visibility
         case 'Questionable':
-          return '#f59e0b'; // Amber-500
+          return '#d97706'; // Darker amber for better visibility
         case 'Untrusted':
-          return '#6b7280'; // Gray-500
+          return '#4b5563'; // Darker gray for better visibility
         default:
           switch (status) {
             case 'ACTIVE':
