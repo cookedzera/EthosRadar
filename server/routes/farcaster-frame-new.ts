@@ -181,8 +181,8 @@ router.get('/card/:userkey', async (req, res) => {
 
     // Generate frame card with optimized rendering
 
-    // Use deployed domain for background image
-    const ethosCardBgUrl = 'https://ethosradar.com/ethos-card-bg.jpg';
+    // Use new background image URL as requested
+    const ethosCardBgUrl = 'https://i.ibb.co/1YykPd1T/ETHOSBG.jpg';
 
     // Create optimized glassmorphism background
     const createGlassmorphismBackground = async () => {
@@ -801,11 +801,11 @@ router.get('/card/:userkey', async (req, res) => {
     ctx.fillText(`@${userHandle}`, canvas.width - 40, 263);
     ctx.restore();
     
-    // Move attribution to edge/border area as requested - top edge inside the border
+    // Move attribution to bottom edge as requested
     ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.font = '9px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 45);
+    ctx.fillText(`EthosRadar by @cookedzera`, canvas.width / 2, 305);
     ctx.textAlign = 'left'; // Reset alignment for other text
 
     // Optimized headers for production Farcaster frame delivery
