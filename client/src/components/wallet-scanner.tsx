@@ -337,9 +337,8 @@ export function WalletScanner() {
                       disabled={!query.trim()}
                       className={`
                         absolute right-2 top-1/2 transform -translate-y-1/2
-                        p-2 rounded-xl 
                         transition-all duration-500 ease-out
-                        bg-transparent border-none shadow-none
+                        bg-transparent border-none shadow-none p-0
                         ${!query.trim() 
                           ? 'opacity-40 cursor-not-allowed' 
                           : 'opacity-90'
