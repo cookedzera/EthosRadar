@@ -300,13 +300,13 @@ export function WalletScanner() {
                     autoCapitalize="off"
                     spellCheck="false"
                     style={{
-                      background: 'transparent',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
-                      textShadow: document.documentElement.classList.contains('dark') ? 'none' : '1px 1px 3px rgba(0,0,0,0.7)'
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      backdropFilter: 'none',
+                      WebkitBackdropFilter: 'none',
+                      textShadow: document.documentElement.classList.contains('dark') ? 'none' : '1px 1px 2px rgba(0,0,0,0.5)'
                     }}
                     className={`
-                      w-full px-4 py-3 pr-16 border-none 
+                      w-full px-4 py-3 pr-14 border-none 
                       text-white dark:text-slate-900 light:text-gray-300 text-lg font-medium dark:font-extrabold light:font-normal
                       placeholder:font-medium placeholder-gray-400 dark:placeholder:text-slate-600 dark:placeholder:font-semibold
                       focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none
@@ -332,18 +332,21 @@ export function WalletScanner() {
                   
                   {/* Enhanced Search Bolt Icon with Dynamic Fill Animation */}
                   {!searchMutation.isPending && (
-                    <div className="bolt-icon-container absolute right-2 top-1/2 transform -translate-y-1/2">
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-50">
                       <button
                         onClick={handleSearch}
                         disabled={!query.trim()}
                         className={`
-                          bolt-icon-button
-                          transition-all duration-500 ease-out
+                          p-1 rounded-md transition-all duration-300 ease-out
                           ${!query.trim() 
                             ? 'opacity-40 cursor-not-allowed' 
-                            : 'opacity-90'
+                            : 'opacity-100 hover:scale-110'
                           }
                         `}
+                        style={{
+                          background: 'transparent',
+                          border: 'none'
+                        }}
                       >
                         <Zap className={`w-6 h-6 transition-all duration-500 ease-out ${
                           query.trim() 

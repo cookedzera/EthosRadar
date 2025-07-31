@@ -9,6 +9,8 @@
   background: transparent !important;
   isolation: auto !important;
   z-index: 1000 !important;
+  right: 8px !important;
+  padding: 4px !important;
 }
 
 button.bolt-icon-button {
@@ -31,6 +33,13 @@ button.bolt-icon-button {
   transition: all 0.5s ease-out !important;
   position: relative !important;
   isolation: auto !important;
+}
+
+/* Fix search input to prevent blur effects from interfering with text visibility */
+.search-input-no-blur {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Enhanced Loading Animations */
