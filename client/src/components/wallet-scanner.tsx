@@ -336,7 +336,7 @@ export function WalletScanner() {
                       onClick={handleSearch}
                       disabled={!query.trim()}
                       className={`
-                        absolute right-2 top-1/2 transform -translate-y-1/2
+                        bolt-icon-button absolute right-2 top-1/2 transform -translate-y-1/2
                         transition-all duration-500 ease-out
                         bg-transparent border-none shadow-none p-0
                         ${!query.trim() 

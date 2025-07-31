@@ -302,6 +302,17 @@ body::before {
   z-index: 20;
 }
 
+/* Override for bolt icon button - remove all background styling */
+.bolt-icon-button {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 .glass-search-button:hover {
   background: linear-gradient(135deg, #2563eb, #1e40af);
   transform: translateY(-50%) scale(1.05);
