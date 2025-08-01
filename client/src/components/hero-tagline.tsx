@@ -8,7 +8,7 @@ export function HeroTagline() {
         {/* Main Tagline */}
         <div className="relative mb-4 z-0">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
-            <span className="hero-title-text drop-shadow-2xl">
+            <span className="hero-title-text">
               Who's Who?
             </span>
             <br />
