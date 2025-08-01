@@ -117,169 +117,19 @@ button.bolt-icon-button {
   --shadow-intensity: 0 4px 6px rgba(0, 0, 0, 0.1);
   
   /* Light theme specific text shadows for better visibility */
-  --text-shadow-light: 
-    2px 2px 0px rgba(255, 255, 255, 1),
-    -2px -2px 0px rgba(255, 255, 255, 1),
-    2px -2px 0px rgba(255, 255, 255, 1),
-    -2px 2px 0px rgba(255, 255, 255, 1),
-    0px 2px 4px rgba(0, 0, 0, 0.8),
-    0px 0px 8px rgba(255, 255, 255, 0.9);
-  --subtitle-shadow-light: 
-    1px 1px 0px rgba(255, 255, 255, 1),
-    -1px -1px 0px rgba(255, 255, 255, 1),
-    1px -1px 0px rgba(255, 255, 255, 1),
-    -1px 1px 0px rgba(255, 255, 255, 1),
-    0px 1px 3px rgba(0, 0, 0, 0.7),
-    0px 0px 6px rgba(255, 255, 255, 0.8);
-  --badge-shadow-light: 
-    1px 1px 0px rgba(255, 255, 255, 1),
-    -1px -1px 0px rgba(255, 255, 255, 1),
-    1px -1px 0px rgba(255, 255, 255, 1),
-    -1px 1px 0px rgba(255, 255, 255, 1),
-    0px 1px 2px rgba(0, 0, 0, 0.6);
+  --text-shadow-light: 2px 2px 4px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(0, 0, 0, 0.3);
+  --subtitle-shadow-light: 1px 1px 3px rgba(255, 255, 255, 0.6), 0 0 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Hero text styling - completely clean for dark theme */
-.hero-title-text {
-  color: white;
-  font-weight: bold;
-  text-shadow: none !important;
-  -webkit-text-stroke: none !important;
-  filter: none !important;
+/* Enhanced light theme support for better text visibility */
+.light {
+  --text-shadow-main: var(--text-shadow-light);
+  --subtitle-shadow: var(--subtitle-shadow-light);
 }
 
-.hero-subtitle-text {
-  color: rgb(147 197 253); /* blue-300 */
-  font-weight: normal;
-  text-shadow: none !important;
-  -webkit-text-stroke: none !important;
-  filter: none !important;
-}
-
-.hero-badge-text {
-  color: white;
-  font-weight: 600;
-  text-shadow: none !important;
-  -webkit-text-stroke: none !important;
-  filter: none !important;
-}
-
-/* Explicit dark theme override to ensure clean text - highest specificity */
-html.dark .hero-title-text,
-body.dark .hero-title-text,
-html:not(.light) .hero-title-text,
-body:not(.light) .hero-title-text {
-  color: white !important;
-  font-weight: bold !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: none !important;
-  -webkit-text-stroke-width: 0 !important;
-  -webkit-text-stroke-color: transparent !important;
-  filter: none !important;
-  outline: none !important;
-  border: none !important;
-}
-
-html.dark .hero-subtitle-text,
-body.dark .hero-subtitle-text,
-html:not(.light) .hero-subtitle-text,
-body:not(.light) .hero-subtitle-text {
-  color: rgb(147 197 253) !important; /* blue-300 */
-  font-weight: normal !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: none !important;
-  -webkit-text-stroke-width: 0 !important;
-  -webkit-text-stroke-color: transparent !important;
-  filter: none !important;
-  outline: none !important;
-  border: none !important;
-}
-
-html.dark .hero-badge-text,
-body.dark .hero-badge-text,
-html:not(.light) .hero-badge-text,
-body:not(.light) .hero-badge-text {
-  color: white !important;
-  font-weight: 600 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: none !important;
-  -webkit-text-stroke-width: 0 !important;
-  -webkit-text-stroke-color: transparent !important;
-  filter: none !important;
-  outline: none !important;
-  border: none !important;
-  background: none !important;
-}
-
-/* Light theme overrides for better visibility - only applies to .light class */
-html.light .hero-title-text,
-body.light .hero-title-text {
-  color: rgb(17 24 39) !important; /* gray-900 */
-  font-weight: 800 !important; /* extrabold */
-  text-shadow: 
-    2px 2px 0px rgba(255, 255, 255, 1),
-    -2px -2px 0px rgba(255, 255, 255, 1),
-    2px -2px 0px rgba(255, 255, 255, 1),
-    -2px 2px 0px rgba(255, 255, 255, 1),
-    0px 2px 4px rgba(0, 0, 0, 0.8),
-    0px 0px 8px rgba(255, 255, 255, 0.9) !important;
-}
-
-html.light .hero-subtitle-text,
-body.light .hero-subtitle-text {
-  color: rgb(30 58 138) !important; /* blue-900 */
-  font-weight: 700 !important; /* bold */
-  text-shadow: 
-    1px 1px 0px rgba(255, 255, 255, 1),
-    -1px -1px 0px rgba(255, 255, 255, 1),
-    1px -1px 0px rgba(255, 255, 255, 1),
-    -1px 1px 0px rgba(255, 255, 255, 1),
-    0px 1px 3px rgba(0, 0, 0, 0.7),
-    0px 0px 6px rgba(255, 255, 255, 0.8) !important;
-}
-
-html.light .hero-badge-text,
-body.light .hero-badge-text {
-  color: rgb(17 24 39) !important; /* gray-900 */
-  font-weight: 900 !important; /* black */
-  text-shadow: 
-    1px 1px 0px rgba(255, 255, 255, 1),
-    -1px -1px 0px rgba(255, 255, 255, 1),
-    1px -1px 0px rgba(255, 255, 255, 1),
-    -1px 1px 0px rgba(255, 255, 255, 1),
-    0px 1px 2px rgba(0, 0, 0, 0.6) !important;
-}
-
-/* Mobile light mode text enhancement */
-@media (max-width: 768px) {
-  .light .hero-title-text {
-    text-shadow: 
-      3px 3px 0px rgba(255, 255, 255, 1),
-      -3px -3px 0px rgba(255, 255, 255, 1),
-      3px -3px 0px rgba(255, 255, 255, 1),
-      -3px 3px 0px rgba(255, 255, 255, 1),
-      0px 3px 6px rgba(0, 0, 0, 0.9),
-      0px 0px 12px rgba(255, 255, 255, 1);
-  }
-  
-  .light .hero-subtitle-text {
-    text-shadow: 
-      2px 2px 0px rgba(255, 255, 255, 1),
-      -2px -2px 0px rgba(255, 255, 255, 1),
-      2px -2px 0px rgba(255, 255, 255, 1),
-      -2px 2px 0px rgba(255, 255, 255, 1),
-      0px 2px 4px rgba(0, 0, 0, 0.8),
-      0px 0px 8px rgba(255, 255, 255, 1);
-  }
-  
-  .light .hero-badge-text {
-    text-shadow:
-      1px 1px 0px rgba(255, 255, 255, 1),
-      -1px -1px 0px rgba(255, 255, 255, 1),
-      1px -1px 0px rgba(255, 255, 255, 1),
-      -1px 1px 0px rgba(255, 255, 255, 1),
-      0px 1px 3px rgba(0, 0, 0, 0.7);
-  }
+.dark {
+  --text-shadow-main: 2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
+  --subtitle-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5);
 }
 
 @media (max-width: 430px) {

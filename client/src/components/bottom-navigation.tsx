@@ -53,17 +53,18 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
       }
       
       if (isInMiniApp && supportsCompose) {
-        // Use native composeCast WITH frame embed to show trust score card
+        // Use native composeCast in Mini App context WITHOUT embeds to prevent card display
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
         const result = await sdk.actions.composeCast({
-          text: castText,
-          embeds: [frameUrl]
+          text: castTextWithUrl
         });
         // Cast was created successfully or user cancelled
         return;
       } else if (isInMiniApp) {
         // SDK available but composeCast not supported, try openUrl
         try {
-          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`);
+          const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`);
           return;
         } catch {
           // openUrl also failed, fall through to web fallback
@@ -71,18 +72,19 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
       }
       
       // Web context fallback
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
+      const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
       window.open(warpcastUrl, '_blank');
       
     } catch (error) {
       // Final fallback - copy to clipboard
       try {
-        const fullMessage = `${castText}\n\nFrame: ${frameUrl}`;
-        await navigator.clipboard.writeText(fullMessage);
-        alert('Cast text copied to clipboard! Please paste in Warpcast and add the frame URL as an embed.');
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        await navigator.clipboard.writeText(castTextWithUrl);
+        alert('Cast text copied to clipboard! Please paste in Warpcast to share.');
       } catch (clipError) {
-        const fullMessage = `${castText}\n\nFrame: ${frameUrl}`;
-        alert(`Copy this text to share on Farcaster:\n\n${fullMessage}`);
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        alert(`Copy this text to share on Farcaster:\n\n${castTextWithUrl}`);
       }
     }
   };
