@@ -874,11 +874,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/enhanced-profile/:userkey", async (req, res) => {
     try {
       const userkey = decodeURIComponent(req.params.userkey);
+      const { refresh } = req.query; // Add refresh parameter support
       
-      // Check cache first
+      // Check cache first (skip if refresh=true)
       const cacheKey = `profile-${userkey}`;
       const cached = profileCache.get(cacheKey);
-      if (cached && Date.now() - cached.timestamp < PROFILE_CACHE_TTL) {
+      if (!refresh && cached && Date.now() - cached.timestamp < PROFILE_CACHE_TTL) {
         return res.json({ success: true, data: cached.data, cached: true });
       }
       
@@ -1297,6 +1298,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard reviews using accurate user stats data (authentic sentiment breakdown)
   app.get("/api/dashboard-reviews/:userkey", async (req, res) => {
     const userkey = decodeURIComponent(req.params.userkey);
+    const { refresh } = req.query; // Add refresh parameter support
     
     try {
       // Dashboard Reviews API - Fetching for user
@@ -1728,6 +1730,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/user-vouch-activities/:userkey", async (req, res) => {
     try {
       const { userkey } = req.params;
+      const { refresh } = req.query; // Add refresh parameter support
       
       // Get authentic user stats first for amount calculations
       let userStats = null;

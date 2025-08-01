@@ -25,6 +25,7 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 - **Cache Strategy Optimized**: Search (30s), Profiles (1min), R4R Analysis (10min), Frame Generation (10min) - balancing speed with data freshness
 - **Memory Management Implemented**: Added automatic cache cleanup system running every 5 minutes to prevent memory leaks
 - **Data Freshness Indicators Added**: Subtle timestamps at bottom of profile components without impacting UI design or blur effects
+- **Refresh Button Cache Bypass**: Added ?refresh=true parameter support to force fresh data in Farcaster cast cards, bypassing all caching layers
 - **Protocol References Updated**: Changed "Ethos Protocol" to "Ethos Network" across all cast text for brand consistency
 - **URGENT: Farcaster Logo Upload Required**: New logo1.png (128KB blue radar design) created for Farcaster Mini App but needs manual upload to ethosradar.com domain (currently returns 404)
 - **Background Configuration**: Website uses unified-bg background, Farcaster frame cards use cloud-bg for distinct visual identity

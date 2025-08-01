@@ -111,12 +111,14 @@ router.get('/frame/:userkey', async (req, res) => {
 // Card image generation endpoint - EXACT COPY from working component
 router.get('/card/:userkey', async (req, res) => {
   const { userkey } = req.params;
+  const { refresh } = req.query; // Add refresh parameter support
   const resolvedUserkey = decodeURIComponent(userkey);
   
   // Check cache first for faster response (10x speed improvement)
+  // Skip cache if refresh=true is requested
   const cacheKey = `frame-${resolvedUserkey}`;
   const cached = frameCache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < FRAME_CACHE_TTL) {
+  if (!refresh && cached && Date.now() - cached.timestamp < FRAME_CACHE_TTL) {
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
     res.setHeader('ETag', cached.etag);
@@ -152,7 +154,9 @@ router.get('/card/:userkey', async (req, res) => {
     let dashboardData: any = null;
 
     try {
-      const profileResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}`);
+      // Add cache bypass for refresh requests
+      const profileUrl = `http://localhost:${process.env.PORT || 5000}/api/enhanced-profile/${encodeURIComponent(resolvedUserkey)}${refresh ? '?refresh=true' : ''}`;
+      const profileResponse = await fetch(profileUrl);
       if (profileResponse.ok) {
         const profileResult = await profileResponse.json();
         // Profile data successfully loaded
@@ -168,7 +172,8 @@ router.get('/card/:userkey', async (req, res) => {
 
     // Get dashboard review data
     try {
-      const dashboardResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/dashboard-reviews/${encodeURIComponent(resolvedUserkey)}`);
+      const dashboardUrl = `http://localhost:${process.env.PORT || 5000}/api/dashboard-reviews/${encodeURIComponent(resolvedUserkey)}${refresh ? '?refresh=true' : ''}`;
+      const dashboardResponse = await fetch(dashboardUrl);
       if (dashboardResponse.ok) {
         dashboardData = await dashboardResponse.json();
       }
@@ -179,7 +184,8 @@ router.get('/card/:userkey', async (req, res) => {
     // Get vouch data using our API endpoint
     let vouchData: any = null;
     try {
-      const vouchResponse = await fetch(`http://localhost:${process.env.PORT || 5000}/api/user-vouch-activities/${encodeURIComponent(resolvedUserkey)}`);
+      const vouchUrl = `http://localhost:${process.env.PORT || 5000}/api/user-vouch-activities/${encodeURIComponent(resolvedUserkey)}${refresh ? '?refresh=true' : ''}`;
+      const vouchResponse = await fetch(vouchUrl);
       if (vouchResponse.ok) {
         const vouchResult = await vouchResponse.json();
         if (vouchResult.success && vouchResult.data) {
