@@ -38,7 +38,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         version: "1",
         name: "EthosRadar",
         homeUrl: "https://ethosradar.com",
-        iconUrl: "https://ethosradar.com/icon.png",
+        iconUrl: "https://ethosradar.com/logo1.png",
         subtitle: "Trust Score Scanner for Web3",
         description: "Generate your personalized trust reputation card on Ethos Protocol",
         buttonTitle: "Scan Your Trust Score",
@@ -103,6 +103,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Cache-Control', 'public, max-age=31536000');
     res.sendFile(path.join(process.cwd(), 'public', 'icon.png'));
+  });
+  
+  // Serve logo1.png explicitly
+  app.get('/logo1.png', (req, res) => {
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.sendFile(path.join(process.cwd(), 'public', 'logo1.png'));
   });
   
 
@@ -2308,7 +2315,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "version": "1",
         "name": "EthosRadar",
         "homeUrl": "https://ethosradar.com",
-        "iconUrl": "https://ethosradar.com/icon.png",
+        "iconUrl": "https://ethosradar.com/logo1.png",
         "subtitle": "Trust Score Scanner for Web3",
         "description": "Generate your personalized trust reputation card on Ethos Protocol",
         "buttonTitle": "Scan Your Trust Score",
