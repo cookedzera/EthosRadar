@@ -199,79 +199,15 @@ Check yours at ethosradar.com by @cookedzera`;
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <button className="px-3 py-2 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white hover:bg-white/15 transition-all duration-300 hover:scale-105">
-          <Share className="w-3.5 h-3.5" />
-        </button>
-      </DialogTrigger>
-      <DialogContent className="max-w-md">
-        <DialogTitle>Share Your Trust Score on Farcaster</DialogTitle>
-        <DialogDescription>
-          Share your trust reputation card as a Farcaster frame
-        </DialogDescription>
-        
-        {/* SDK Status Debug Info */}
-        <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs">
-          <div className="font-semibold mb-1">SDK Status:</div>
-          <div>Ready: {sdkReady ? '✅ Yes' : '❌ No'}</div>
-          <div>Capabilities: {sdkCapabilities && sdkCapabilities.length > 0 ? sdkCapabilities.join(', ') : 'None detected'}</div>
-        </div>
-        
-        <div className="space-y-4">
-          {/* Preview of the frame */}
-          <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Frame Preview:</div>
-            <div className="bg-white dark:bg-gray-700 rounded-md p-3 border">
-              <div className="text-lg font-semibold">{displayName}'s Trust Score</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Trust Score: {score} | Check out their reputation on Ethos Protocol
-              </div>
-              <div className="mt-2 flex gap-2">
-                <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs">
-                  Check Your Score
-                </div>
-                <div className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-xs">
-                  View Profile
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div className="flex flex-col gap-2">
-            <Button 
-              onClick={openWarpcast}
-              className="flex items-center justify-center gap-2 w-full"
-            >
-              <Share className="w-4 h-4" />
-              Cast on Warpcast
-            </Button>
-            
-            <Button 
-              variant="outline"
-              onClick={openFarcaster}
-              className="flex items-center justify-center gap-2 w-full"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Preview Frame
-            </Button>
-            
-            <Button 
-              variant="outline"
-              onClick={copyFrameUrl}
-              className="flex items-center justify-center gap-2 w-full"
-            >
-              <Copy className="w-4 h-4" />
-              {copied ? 'Copied!' : 'Copy Frame URL'}
-            </Button>
-          </div>
-
-          <div className="text-xs text-gray-500 text-center">
-            Frame URL: {frameUrl}
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <button 
+      onClick={async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        await handleFlex();
+      }}
+      className="px-3 py-2 rounded-lg backdrop-blur-md bg-white/10 border border-white/20 text-white hover:bg-white/15 transition-all duration-300 hover:scale-105"
+    >
+      <Share className="w-3.5 h-3.5" />
+    </button>
   );
 }
