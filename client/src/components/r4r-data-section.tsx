@@ -38,9 +38,20 @@ export function R4RDataSection({ userkey, userProfile: passedUserProfile }: R4RD
           <Network className="w-4 h-4 text-purple-400" />
           <span className="text-sm text-white/70 font-medium">R4R Analysis</span>
         </div>
-        <div className="flex items-center justify-center py-8">
+        <div className="flex flex-col items-center justify-center py-8 space-y-3">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-400"></div>
-          <span className="ml-3 text-white/70">Analyzing review patterns...</span>
+          <div className="text-center space-y-1">
+            <div className="text-white/70 text-sm">Analyzing review patterns...</div>
+            <div className="text-white/50 text-xs">This may take up to 30 seconds for users with many reviews</div>
+          </div>
+          {/* Progress indicator */}
+          <div className="w-full max-w-xs">
+            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-purple-400 to-blue-400 rounded-full animate-pulse" style={{
+                animation: 'loading-progress 10s ease-in-out infinite'
+              }}></div>
+            </div>
+          </div>
         </div>
       </div>
     );

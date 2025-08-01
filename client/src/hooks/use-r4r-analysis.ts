@@ -123,22 +123,41 @@ export function useR4RAnalysis(userkey: string | undefined) {
     queryFn: async () => {
       if (!userkey) return null;
       
-      const response = await fetch(`/api/r4r-analysis/${encodeURIComponent(userkey)}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch R4R analysis');
-      }
+      // Create AbortController for proper timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
       
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.error || 'R4R analysis failed');
+      try {
+        const response = await fetch(`/api/r4r-analysis/${encodeURIComponent(userkey)}`, {
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch R4R analysis');
+        }
+        
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.error || 'R4R analysis failed');
+        }
+        
+        return result.data as R4RAnalysis;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        if (error instanceof Error && error.name === 'AbortError') {
+          throw new Error('R4R analysis timed out - please try again');
+        }
+        throw error;
       }
-      
-      return result.data as R4RAnalysis;
     },
     enabled: !!userkey,
-    staleTime: 30 * 1000, // 30 seconds for faster loading
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
     refetchInterval: false,
-    retry: 0,
+    retry: 1,
+    retryDelay: 2000,
     networkMode: 'online',
   });
 }
