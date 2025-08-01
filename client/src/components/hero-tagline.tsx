@@ -18,10 +18,10 @@ export function HeroTagline() {
           </h2>
           
           {/* Verification Badge */}
-          <div className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 backdrop-blur-sm bg-white/15 border border-amber-900/25 rounded-full shadow-lg hover:bg-white/20 transition-all duration-300">
-            <Shield className="w-3 h-3 text-green-400 dark:text-green-600" />
+          <div className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 backdrop-blur-sm bg-white/15 dark:bg-white/10 border border-amber-900/25 dark:border-white/20 rounded-full shadow-lg hover:bg-white/20 transition-all duration-300">
+            <Shield className="w-3 h-3 text-green-400 dark:text-green-400" />
             <span className="hero-badge-text text-xs">Verified on Ethos</span>
-            <CheckCircle2 className="w-3 h-3 text-green-400 dark:text-green-600" />
+            <CheckCircle2 className="w-3 h-3 text-green-400 dark:text-green-400" />
           </div>
           
           {/* API Status - positioned below verification badge in a new line */}

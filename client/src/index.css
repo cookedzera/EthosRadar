@@ -187,6 +187,8 @@ button.bolt-icon-button {
   text-shadow: none !important;
   -webkit-text-stroke: none !important;
   filter: none !important;
+  background: none !important;
+  border: none !important;
 }
 
 /* Light theme overrides for better visibility */
