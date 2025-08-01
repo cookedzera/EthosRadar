@@ -29,11 +29,13 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
   const baseUrl = window.location.origin;
   const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(userkey)}`;
   
-  // Generate eye-catching cast text with proper attribution
-  const castText = `🎯 TRUST SCORE REVEALED: ${score}
-${getScoreLevel(score)} Tier ${getTierEmoji(score)}
+  // Generate aesthetic cast text with engaging copy
+  const castText = `✨ TRUST RADAR SCAN COMPLETE ✨
 
-Built by @cookedzera.eth on @ethos_network`;
+🎯 Score: ${score} | ${getScoreLevel(score)} ${getTierEmoji(score)}
+📊 On-chain reputation verified via Ethos Network
+
+Crafted by @cookedzera.eth on @ethos_network`;
 
   // Enhanced SDK detection and initialization
   useEffect(() => {
@@ -88,11 +90,11 @@ Built by @cookedzera.eth on @ethos_network`;
   }
 
   function getTierEmoji(score: number): string {
-    if (score >= 1500) return '👑'; // Exemplary - Crown
-    if (score >= 1000) return '🏆'; // Advanced - Trophy
-    if (score >= 500) return '⭐'; // Intermediate - Star
-    if (score >= 100) return '🔥'; // Beginner - Fire
-    return '⚡'; // Untrusted - Lightning
+    if (score >= 2000) return '👑'; // Exemplary (2000-2800)
+    if (score >= 1600) return '🏆'; // Reputable (1600-1999)
+    if (score >= 1200) return '⭐'; // Neutral (1200-1599) - Default tier
+    if (score >= 800) return '🔥'; // Questionable (800-1199)
+    return '⚡'; // Untrusted (0-799)
   }
 
   // Enhanced direct cast composition using Farcaster SDK

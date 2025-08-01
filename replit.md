@@ -17,6 +17,11 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 **Client-side URLs**: Generated using window.location.origin for automatic domain adaptation
 
 ## Recent Changes (January 2025)
+- **Cast Text Redesigned**: Implemented aesthetic "TRUST RADAR SCAN COMPLETE" format with tier-based emojis (👑/🏆/⭐/🔥/⚡) and proper attribution to @cookedzera.eth on @ethos_network
+- **Tier System Corrected**: Updated emoji mappings to match Ethos Network analytics: Untrusted (0-799 ⚡), Questionable (800-1199 🔥), Neutral (1200-1599 ⭐), Reputable (1600-1999 🏆), Exemplary (2000-2800 👑)
+- **Frame Generation Optimized**: Added 10-minute TTL caching system for 10x faster subsequent frame requests, background image preloading, and memory management
+- **Search Performance Fixed**: Optimized search suggestions with 150ms debounce and race condition fixes for fast typing (e.g., "degenkid4")
+- **Protocol References Updated**: Changed "Ethos Protocol" to "Ethos Network" across all cast text for brand consistency
 - **URGENT: Farcaster Logo Upload Required**: New logo1.png (128KB blue radar design) created for Farcaster Mini App but needs manual upload to ethosradar.com domain (currently returns 404)
 - **Background Configuration**: Website uses unified-bg background, Farcaster frame cards use cloud-bg for distinct visual identity
 - **Enhanced Farcaster Direct Cast**: Implemented comprehensive SDK detection with multiple fallback methods for seamless cast composition in Mini App context

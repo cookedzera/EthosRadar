@@ -25,11 +25,11 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
   };
 
   const getTierEmoji = (score: number): string => {
-    if (score >= 1500) return '👑'; // Exemplary - Crown
-    if (score >= 1000) return '🏆'; // Advanced - Trophy
-    if (score >= 500) return '⭐'; // Intermediate - Star
-    if (score >= 100) return '🔥'; // Beginner - Fire
-    return '⚡'; // Untrusted - Lightning
+    if (score >= 2000) return '👑'; // Exemplary (2000-2800)
+    if (score >= 1600) return '🏆'; // Reputable (1600-1999)
+    if (score >= 1200) return '⭐'; // Neutral (1200-1599) - Default tier
+    if (score >= 800) return '🔥'; // Questionable (800-1199)
+    return '⚡'; // Untrusted (0-799)
   };
 
   const handleShareClick = async () => {
@@ -38,10 +38,12 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
     const baseUrl = window.location.origin;
     const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(currentUser.userkey)}`;
     
-    const castText = `🎯 TRUST SCORE REVEALED: ${currentUser.score}
-${getScoreLevel(currentUser.score)} Tier ${getTierEmoji(currentUser.score)}
+    const castText = `✨ TRUST RADAR SCAN COMPLETE ✨
 
-Built by @cookedzera.eth on @ethos_network`;
+🎯 Score: ${currentUser.score} | ${getScoreLevel(currentUser.score)} ${getTierEmoji(currentUser.score)}
+📊 On-chain reputation verified via Ethos Network
+
+Crafted by @cookedzera.eth on @ethos_network`;
 
     try {
       // Check if we're in a Mini App context by testing for SDK capabilities

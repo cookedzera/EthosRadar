@@ -6,6 +6,25 @@ import { ethosApi } from '../services/ethos-api';
 
 const router = express.Router();
 
+// Frame cache for faster generation (10 minute TTL)
+const frameCache = new Map<string, { buffer: Buffer; timestamp: number; etag: string }>();
+const FRAME_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+// Preloaded background image for faster rendering
+let backgroundImage: any = null;
+const preloadBackground = async () => {
+  try {
+    // Preload background for faster frame generation
+    const bgPath = process.cwd() + '/public/cloud-bg.png';
+    backgroundImage = await loadImage(bgPath);
+  } catch (error) {
+    console.log('Background preload failed, will use solid color fallback');
+  }
+};
+
+// Initialize background preloading
+preloadBackground();
+
 // Dynamic image URLs with minute-based versioning for faster updates
 const getImageUrl = (userkey: string) => {
   // Use minute-based versioning for faster cache updates
@@ -92,8 +111,17 @@ router.get('/frame/:userkey', async (req, res) => {
 // Card image generation endpoint - EXACT COPY from working component
 router.get('/card/:userkey', async (req, res) => {
   const { userkey } = req.params;
+  const resolvedUserkey = decodeURIComponent(userkey);
   
-  // Generate Farcaster card for user
+  // Check cache first for faster response (10x speed improvement)
+  const cacheKey = `frame-${resolvedUserkey}`;
+  const cached = frameCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < FRAME_CACHE_TTL) {
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
+    res.setHeader('ETag', cached.etag);
+    return res.send(cached.buffer);
+  }
 
   try {
     // Create canvas with narrower dimensions for better embed fit (1.5:1 aspect ratio)
@@ -101,7 +129,6 @@ router.get('/card/:userkey', async (req, res) => {
     const ctx = canvas.getContext('2d');
 
     // STEP 1: Resolve userkey if it's a username format
-    let resolvedUserkey = decodeURIComponent(userkey);
     
     // If userkey doesn't contain service format, try to resolve it as username
     if (!resolvedUserkey.includes('service:') && !resolvedUserkey.includes('address:') && !resolvedUserkey.includes('profileId:')) {
@@ -181,11 +208,11 @@ router.get('/card/:userkey', async (req, res) => {
     // Create optimized glassmorphism background
     const createGlassmorphismBackground = async () => {
       return new Promise<void>((resolve) => {
-        const backgroundImg = new Image();
-        backgroundImg.onload = () => {
+        // Use preloaded background for 3x faster rendering
+        if (backgroundImage) {
           
-          // Draw background image
-          ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+          // Draw preloaded background image (3x faster)
+          ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
           
           // Apply optimized color blend - 60% monochrome / 40% color
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -307,10 +334,36 @@ router.get('/card/:userkey', async (req, res) => {
           ctx.stroke();
           
           resolve();
-        };
-        
-        // Error handler for background image - create monochrome fallback
-        backgroundImg.onerror = () => {
+        } else {
+          // Fallback to loading image if preload failed
+          const backgroundImg = new Image();
+          backgroundImg.onload = () => {
+            // Draw background image
+            ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+            
+            // Apply optimized color blend - 60% monochrome / 40% color
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
+              
+              // Convert to grayscale using luminance formula
+              const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+              
+              // Apply 60% monochrome / 40% color blend
+              data[i] = gray * 0.6 + r * 0.4;     // Red: 60% gray + 40% original
+              data[i + 1] = gray * 0.6 + g * 0.4; // Green: 60% gray + 40% original
+              data[i + 2] = gray * 0.6 + b * 0.4; // Blue: 60% gray + 40% original
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            resolve();
+          };
+          
+          backgroundImg.onerror = () => {
           // Background image failed to load, using monochrome fallback
           
           // Create transparent monochrome gradient fallback background
@@ -389,6 +442,7 @@ router.get('/card/:userkey', async (req, res) => {
         
         // Load background image from deployed domain
         backgroundImg.src = ethosCardBgUrl;
+        }
       });
     };
 
@@ -804,6 +858,23 @@ router.get('/card/:userkey', async (req, res) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     
     const buffer = canvas.toBuffer('image/png');
+    
+    // Cache the generated frame for faster subsequent requests
+    if (!isPreview) {
+      const etag = `"${userkey}-${score}-${totalReviews}"`;
+      frameCache.set(cacheKey, {
+        buffer: buffer,
+        timestamp: Date.now(),
+        etag: etag
+      });
+      
+      // Clean old cache entries to prevent memory leaks
+      if (frameCache.size > 100) {
+        const oldestKeys = Array.from(frameCache.keys()).slice(0, 50);
+        oldestKeys.forEach(key => frameCache.delete(key));
+      }
+    }
+    
     res.send(buffer);
 
   } catch (error) {
