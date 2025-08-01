@@ -112,7 +112,7 @@ router.get('/frame/:userkey', async (req, res) => {
 router.get('/card/:userkey', async (req, res) => {
   const { userkey } = req.params;
   const { refresh } = req.query; // Add refresh parameter support
-  const resolvedUserkey = decodeURIComponent(userkey);
+  let resolvedUserkey = decodeURIComponent(userkey);
   
   // Check cache first for faster response (10x speed improvement)
   // Skip cache if refresh=true is requested
