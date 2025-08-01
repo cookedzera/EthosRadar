@@ -29,10 +29,13 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
   const baseUrl = window.location.origin;
   const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(userkey)}`;
   
-  // Generate concise cast text for better readability
-  const castText = `Trust Score: ${score} | ${getScoreLevel(score)} Tier 🏆
+  // Generate eye-catching cast text with better formatting
+  const castText = `🎯 Trust Score: ${score} | ${getScoreLevel(score)} Tier 🏆
 
-Check yours at ethosradar.com by @cookedzera`;
+🔍 Scan your reputation on EthosRadar 
+✨ Created by @cookedzera.eth on @ethos-network
+
+🚀 Your trust score awaits...`;
 
   // Enhanced SDK detection and initialization
   useEffect(() => {

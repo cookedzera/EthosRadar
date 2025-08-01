@@ -30,9 +30,12 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
     const baseUrl = window.location.origin;
     const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(currentUser.userkey)}`;
     
-    const castText = `Trust Score: ${currentUser.score} | ${getScoreLevel(currentUser.score)} Tier 🏆
+    const castText = `🎯 Trust Score: ${currentUser.score} | ${getScoreLevel(currentUser.score)} Tier 🏆
 
-Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
+🔍 Scan your reputation on EthosRadar 
+✨ Created by @cookedzera.eth on @ethos-network
+
+🚀 Your trust score awaits...`;
 
     try {
       // Check if we're in a Mini App context by testing for SDK capabilities

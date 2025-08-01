@@ -115,6 +115,21 @@ button.bolt-icon-button {
   --blur-amount: 12px;
   --animation-duration: 0.3s;
   --shadow-intensity: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* Light theme specific text shadows for better visibility */
+  --text-shadow-light: 2px 2px 4px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(0, 0, 0, 0.3);
+  --subtitle-shadow-light: 1px 1px 3px rgba(255, 255, 255, 0.6), 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhanced light theme support for better text visibility */
+.light {
+  --text-shadow-main: var(--text-shadow-light);
+  --subtitle-shadow: var(--subtitle-shadow-light);
+}
+
+.dark {
+  --text-shadow-main: 2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
+  --subtitle-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5);
 }
 
 @media (max-width: 430px) {
