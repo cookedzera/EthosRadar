@@ -8,15 +8,11 @@ export function HeroTagline() {
         {/* Main Tagline */}
         <div className="relative mb-4 z-0">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
-            <span className="text-white dark:text-white light:text-gray-900 drop-shadow-2xl dark:font-bold light:font-extrabold" style={{ 
-              textShadow: 'var(--text-shadow-main)'
-            }}>
+            <span className="hero-title-text drop-shadow-2xl">
               Who's Who?
             </span>
             <br />
-            <span className="text-blue-300 dark:text-blue-300 light:text-blue-900 dark:font-normal light:font-bold" style={{ 
-              textShadow: 'var(--subtitle-shadow)'
-            }}>
+            <span className="hero-subtitle-text">
               The Network Knows.
             </span>
           </h2>
@@ -24,9 +20,7 @@ export function HeroTagline() {
           {/* Verification Badge */}
           <div className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 backdrop-blur-sm bg-white/15 border border-amber-900/25 rounded-full shadow-lg hover:bg-white/20 transition-all duration-300">
             <Shield className="w-3 h-3 text-green-400 dark:text-green-600" />
-            <span className="text-white dark:text-white light:text-gray-900 text-xs dark:font-semibold light:font-black" style={{ 
-              textShadow: 'var(--badge-shadow)'
-            }}>Verified on Ethos</span>
+            <span className="hero-badge-text text-xs">Verified on Ethos</span>
             <CheckCircle2 className="w-3 h-3 text-green-400 dark:text-green-600" />
           </div>
           

@@ -139,37 +139,85 @@ button.bolt-icon-button {
     0px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* Enhanced light theme support for better text visibility */
-.light {
-  --text-shadow-main: var(--text-shadow-light);
-  --subtitle-shadow: var(--subtitle-shadow-light);
-  --badge-shadow: var(--badge-shadow-light);
+/* Hero text styling - separate for dark and light themes */
+.hero-title-text {
+  color: white;
+  font-weight: bold;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
 }
 
-.dark {
-  --text-shadow-main: 2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
-  --subtitle-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5);
-  --badge-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+.hero-subtitle-text {
+  color: rgb(147 197 253); /* blue-300 */
+  font-weight: normal;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5);
+}
+
+.hero-badge-text {
+  color: white;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Light theme overrides for better visibility */
+.light .hero-title-text {
+  color: rgb(17 24 39); /* gray-900 */
+  font-weight: 800; /* extrabold */
+  text-shadow: 
+    2px 2px 0px rgba(255, 255, 255, 1),
+    -2px -2px 0px rgba(255, 255, 255, 1),
+    2px -2px 0px rgba(255, 255, 255, 1),
+    -2px 2px 0px rgba(255, 255, 255, 1),
+    0px 2px 4px rgba(0, 0, 0, 0.8),
+    0px 0px 8px rgba(255, 255, 255, 0.9);
+}
+
+.light .hero-subtitle-text {
+  color: rgb(30 58 138); /* blue-900 */
+  font-weight: 700; /* bold */
+  text-shadow: 
+    1px 1px 0px rgba(255, 255, 255, 1),
+    -1px -1px 0px rgba(255, 255, 255, 1),
+    1px -1px 0px rgba(255, 255, 255, 1),
+    -1px 1px 0px rgba(255, 255, 255, 1),
+    0px 1px 3px rgba(0, 0, 0, 0.7),
+    0px 0px 6px rgba(255, 255, 255, 0.8);
+}
+
+.light .hero-badge-text {
+  color: rgb(17 24 39); /* gray-900 */
+  font-weight: 900; /* black */
+  text-shadow: 
+    1px 1px 0px rgba(255, 255, 255, 1),
+    -1px -1px 0px rgba(255, 255, 255, 1),
+    1px -1px 0px rgba(255, 255, 255, 1),
+    -1px 1px 0px rgba(255, 255, 255, 1),
+    0px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 /* Mobile light mode text enhancement */
 @media (max-width: 768px) {
-  .light {
-    --text-shadow-main: 
+  .light .hero-title-text {
+    text-shadow: 
       3px 3px 0px rgba(255, 255, 255, 1),
       -3px -3px 0px rgba(255, 255, 255, 1),
       3px -3px 0px rgba(255, 255, 255, 1),
       -3px 3px 0px rgba(255, 255, 255, 1),
       0px 3px 6px rgba(0, 0, 0, 0.9),
       0px 0px 12px rgba(255, 255, 255, 1);
-    --subtitle-shadow: 
+  }
+  
+  .light .hero-subtitle-text {
+    text-shadow: 
       2px 2px 0px rgba(255, 255, 255, 1),
       -2px -2px 0px rgba(255, 255, 255, 1),
       2px -2px 0px rgba(255, 255, 255, 1),
       -2px 2px 0px rgba(255, 255, 255, 1),
       0px 2px 4px rgba(0, 0, 0, 0.8),
       0px 0px 8px rgba(255, 255, 255, 1);
-    --badge-shadow:
+  }
+  
+  .light .hero-badge-text {
+    text-shadow:
       1px 1px 0px rgba(255, 255, 255, 1),
       -1px -1px 0px rgba(255, 255, 255, 1),
       1px -1px 0px rgba(255, 255, 255, 1),
