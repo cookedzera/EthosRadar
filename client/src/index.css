@@ -131,17 +131,25 @@ button.bolt-icon-button {
     -1px 1px 0px rgba(255, 255, 255, 1),
     0px 1px 3px rgba(0, 0, 0, 0.7),
     0px 0px 6px rgba(255, 255, 255, 0.8);
+  --badge-shadow-light: 
+    1px 1px 0px rgba(255, 255, 255, 1),
+    -1px -1px 0px rgba(255, 255, 255, 1),
+    1px -1px 0px rgba(255, 255, 255, 1),
+    -1px 1px 0px rgba(255, 255, 255, 1),
+    0px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 /* Enhanced light theme support for better text visibility */
 .light {
   --text-shadow-main: var(--text-shadow-light);
   --subtitle-shadow: var(--subtitle-shadow-light);
+  --badge-shadow: var(--badge-shadow-light);
 }
 
 .dark {
   --text-shadow-main: 2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
   --subtitle-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5);
+  --badge-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 /* Mobile light mode text enhancement */
@@ -161,6 +169,12 @@ button.bolt-icon-button {
       -2px 2px 0px rgba(255, 255, 255, 1),
       0px 2px 4px rgba(0, 0, 0, 0.8),
       0px 0px 8px rgba(255, 255, 255, 1);
+    --badge-shadow:
+      1px 1px 0px rgba(255, 255, 255, 1),
+      -1px -1px 0px rgba(255, 255, 255, 1),
+      1px -1px 0px rgba(255, 255, 255, 1),
+      -1px 1px 0px rgba(255, 255, 255, 1),
+      0px 1px 3px rgba(0, 0, 0, 0.7);
   }
 }
 
