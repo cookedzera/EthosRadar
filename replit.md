@@ -96,3 +96,4 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 - ✅ `logo.png` (838KB) - Logo fallback  
 - ✅ `icon.webp` (37KB) - App icon
 - ✅ `icon.png` (838KB) - Icon fallback
+- ❌ `logo1.png` (128KB) - **NEW Farcaster Mini App logo** - NEEDS UPLOAD
