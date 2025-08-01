@@ -68,7 +68,7 @@ Check yours at ethosradar.com by @cookedzera`;
         }
         
         // Log final status
-        console.log(`🎯 Final SDK status - Ready: ${sdkReady}, Capabilities: ${sdkCapabilities.length}`);
+        console.log(`🎯 Final SDK status - Ready: ${sdkReady}, Capabilities: ${sdkCapabilities?.length || 0}`);
         
       } catch (error) {
         console.log('❌ SDK initialization failed:', error);
@@ -215,7 +215,7 @@ Check yours at ethosradar.com by @cookedzera`;
         <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs">
           <div className="font-semibold mb-1">SDK Status:</div>
           <div>Ready: {sdkReady ? '✅ Yes' : '❌ No'}</div>
-          <div>Capabilities: {sdkCapabilities.length > 0 ? sdkCapabilities.join(', ') : 'None detected'}</div>
+          <div>Capabilities: {sdkCapabilities && sdkCapabilities.length > 0 ? sdkCapabilities.join(', ') : 'None detected'}</div>
         </div>
         
         <div className="space-y-4">
