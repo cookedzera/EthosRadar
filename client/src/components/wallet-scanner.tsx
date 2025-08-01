@@ -141,8 +141,8 @@ export function WalletScanner() {
       clearTimeout(searchTimeoutRef.current);
     }
     
-    // Show suggestions based on mode and minimum length
-    const minLength = farcasterMode ? 2 : MIN_SEARCH_LENGTH;
+    // Show suggestions based on mode and minimum length - reduced for faster response
+    const minLength = farcasterMode ? 1 : 2; // Reduced from MIN_SEARCH_LENGTH for faster suggestions
     if (value.length >= minLength) {
       setShowSuggestions(true);
     } else {

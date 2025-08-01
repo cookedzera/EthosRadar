@@ -19,7 +19,8 @@ export function useAttestations(userkey: string, enabled = true) {
   return useQuery({
     queryKey: ['/api/attestations', userkey],
     enabled: enabled && !!userkey,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: 2,
+    staleTime: 30 * 1000, // 30 seconds for faster loading
+    retry: 0,
+    networkMode: 'online',
   });
 }

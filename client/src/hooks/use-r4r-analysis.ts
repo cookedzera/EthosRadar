@@ -110,8 +110,10 @@ export function useR4RSummary(userkey: string | undefined) {
       return result.data;
     },
     enabled: !!userkey,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 30 * 1000, // 30 seconds for faster loading
     refetchInterval: false,
+    retry: 0,
+    networkMode: 'online',
   });
 }
 
@@ -134,8 +136,10 @@ export function useR4RAnalysis(userkey: string | undefined) {
       return result.data as R4RAnalysis;
     },
     enabled: !!userkey,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchInterval: false, // Don't auto-refetch since analysis is computationally expensive
+    staleTime: 30 * 1000, // 30 seconds for faster loading
+    refetchInterval: false,
+    retry: 0,
+    networkMode: 'online',
   });
 }
 

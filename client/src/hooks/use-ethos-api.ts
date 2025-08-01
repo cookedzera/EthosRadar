@@ -39,8 +39,10 @@ export function useTrustScore(userkey: string, enabled = true) {
     queryKey: ["/api/trust-score", userkey],
     queryFn: () => getTrustScore(userkey),
     enabled: enabled && !!userkey,
-    staleTime: 10 * 60 * 1000, // 10 minutes (increased cache time)
-    refetchInterval: false, // Disable auto-refetch to reduce API calls
+    staleTime: 30 * 1000, // 30 seconds for faster loading
+    refetchInterval: false,
+    retry: 0, // Fail fast
+    networkMode: 'online',
   });
 }
 
@@ -105,32 +107,38 @@ export function useUserProfile() {
   };
 }
 
-// Hook to fetch real user statistics
+// Hook to fetch real user statistics - optimized
 export function useUserStats(userkey: string | undefined) {
   return useQuery({
     queryKey: ["/api/user-stats", userkey],
     enabled: !!userkey,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 30 * 1000, // 30 seconds for faster loading
+    retry: 0,
+    networkMode: 'online',
   });
 }
 
-// Hook for getting enhanced user profile with XP data
+// Hook for getting enhanced user profile with XP data - optimized
 export function useEnhancedProfile(userkey?: string) {
   return useQuery({
     queryKey: ['/api/enhanced-profile', userkey],
     enabled: !!userkey,
-    staleTime: 5 * 60 * 1000, // 5 minutes cache
-    refetchInterval: false, // No auto-refresh to improve performance
+    staleTime: 30 * 1000, // 30 seconds for faster loading
+    refetchInterval: false,
+    retry: 0,
+    networkMode: 'online',
   });
 }
 
-// Hook for getting detailed vouch activities
+// Hook for getting detailed vouch activities - optimized
 export function useVouchActivities(userkey: string) {
   return useQuery({
     queryKey: ["/api/user-vouch-activities", userkey],
     queryFn: () => fetch(`/api/user-vouch-activities/${encodeURIComponent(userkey)}`).then(res => res.json()),
     enabled: !!userkey,
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 30 * 1000, // 30 seconds for faster loading
+    retry: 0,
+    networkMode: 'online',
   });
 }
 

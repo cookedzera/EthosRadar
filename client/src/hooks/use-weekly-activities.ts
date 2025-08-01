@@ -38,7 +38,9 @@ export function useWeeklyActivities(userkey: string | undefined) {
       return response.json();
     },
     enabled: !!userkey,
-    staleTime: 2 * 60 * 1000, // 2 minutes cache
+    staleTime: 30 * 1000, // 30 seconds for faster loading
     refetchOnWindowFocus: false,
+    retry: 0,
+    networkMode: 'online',
   });
 }
