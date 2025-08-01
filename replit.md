@@ -17,6 +17,8 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 **Client-side URLs**: Generated using window.location.origin for automatic domain adaptation
 
 ## Recent Changes (January 2025)
+- **Background Image Updated**: Switched from unified-bg.png to cloud-bg.png across all components including Farcaster frames and main website
+- **Enhanced Farcaster Direct Cast**: Implemented comprehensive SDK detection with multiple fallback methods for seamless cast composition in Mini App context
 - **WebP Optimization Implemented**: Converted background and logo images to WebP format, achieving 93-96% file size reduction (1MB → 37-68KB)
 - **Logo Assets Updated**: New radar-style logo properly configured with WebP/PNG fallbacks and optimized for both local and ethosradar.com domain serving
 - **Performance Enhancements**: Added image preloading, WebP support detection, and optimized asset delivery for faster page loads
@@ -78,7 +80,7 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 - **@farcaster/miniapp-sdk**: For integrating direct Farcaster Mini App functionalities like cast composition and environment detection.
 - **Node.js Canvas API**: Used server-side for generating dynamic Farcaster frame cards as images.
 - **Image Hosting**: Optimized WebP/PNG assets served from `https://ethosradar.com/` including:
-  - `unified-bg.webp` (69KB, was 1MB PNG) - Main background image
+  - `cloud-bg.webp` (optimized) - Main background image for website and Farcaster frames
   - `logo.webp` (37KB, was 838KB PNG) - Primary logo
   - `icon.webp` (37KB, was 838KB PNG) - App icon for manifests
   - PNG fallbacks for older browser compatibility
@@ -87,8 +89,8 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 
 ## Asset Upload Checklist for ethosradar.com Domain
 **Critical**: These optimized assets must be uploaded to the production domain:
-- ✅ `unified-bg.webp` (69KB) - Background image
-- ✅ `unified-bg.png` (1MB) - Background fallback
+- ✅ `cloud-bg.webp` (optimized) - Main background image
+- ✅ `cloud-bg.png` (updated) - Background fallback
 - ✅ `logo.webp` (37KB) - Main logo
 - ✅ `logo.png` (838KB) - Logo fallback  
 - ✅ `icon.webp` (37KB) - App icon
