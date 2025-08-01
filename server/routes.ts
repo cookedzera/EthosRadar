@@ -2023,8 +2023,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const searchCache = new Map<string, { data: any; timestamp: number }>();
   
   const R4R_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
-  const PROFILE_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-  const SEARCH_CACHE_TTL = 2 * 60 * 1000; // 2 minutes
+  const PROFILE_CACHE_TTL = 1 * 60 * 1000; // 1 minute - faster refresh for user profiles
+  const SEARCH_CACHE_TTL = 30 * 1000; // 30 seconds - faster refresh for search suggestions
 
   // Cache cleanup function to prevent memory leaks
   function cleanupCaches() {
