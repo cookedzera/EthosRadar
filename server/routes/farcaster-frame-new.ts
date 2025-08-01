@@ -120,7 +120,8 @@ router.get('/card/:userkey', async (req, res) => {
   const cached = frameCache.get(cacheKey);
   if (!refresh && cached && Date.now() - cached.timestamp < FRAME_CACHE_TTL) {
     res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
+    // Short cache enables Farcaster "Refresh metadata" functionality
+    res.setHeader('Cache-Control', 'public, max-age=60, no-transform');
     res.setHeader('ETag', cached.etag);
     return res.send(cached.buffer);
   }
@@ -847,14 +848,15 @@ router.get('/card/:userkey', async (req, res) => {
     const isPreview = req.query.preview === 'true';
     res.setHeader('Content-Type', 'image/png');
     
-    if (isPreview) {
-      // Preview mode: immediate updates for development
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    if (isPreview || refresh) {
+      // Preview or refresh mode: immediate updates for development/refresh
+      res.setHeader('Cache-Control', 'public, max-age=0, no-cache, no-store, must-revalidate');
       res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       res.setHeader('X-Preview-Mode', 'true');
     } else {
-      // Production mode: optimized caching for Farcaster performance
-      res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600'); // 5min browser, 1hr CDN
+      // Production mode: short cache enables Farcaster "Refresh metadata" button
+      res.setHeader('Cache-Control', 'public, max-age=60, no-transform'); // 1 minute cache
       res.setHeader('ETag', `"${userkey}-${score}-${totalReviews}"`);
     }
     
@@ -865,8 +867,8 @@ router.get('/card/:userkey', async (req, res) => {
     
     const buffer = canvas.toBuffer('image/png');
     
-    // Cache the generated frame for faster subsequent requests
-    if (!isPreview) {
+    // Cache the generated frame for faster subsequent requests (skip if refresh requested)
+    if (!isPreview && !refresh) {
       const etag = `"${userkey}-${score}-${totalReviews}"`;
       frameCache.set(cacheKey, {
         buffer: buffer,
