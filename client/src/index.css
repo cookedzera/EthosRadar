@@ -103,6 +103,33 @@ body {
   color: #d1d5db;
 }
 
+/* Mobile-like layout for all screen sizes */
+#root {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+}
+
+/* Ensure content container respects the mobile layout */
+.container {
+  max-width: 100% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Force mobile-like padding and spacing on larger screens */
+@media (min-width: 431px) {
+  body {
+    padding: 0;
+  }
+  
+  #root {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
 /* Dark theme background (now has light appearance) */ 
 html.dark body,
 body.dark,

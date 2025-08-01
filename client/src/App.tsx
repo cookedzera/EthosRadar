@@ -27,7 +27,7 @@ import NotFound from "@/pages/not-found";
 function AppHeader() {
   return (
     <header className="relative">
-      <div className="max-w-6xl mx-auto px-3 py-2">
+      <div className="container mx-auto px-3 py-2">
         <div className="flex items-center justify-between backdrop-blur-sm bg-white/15 border border-amber-900/25 rounded-xl px-6 py-3 shadow-lg hover:bg-white/20 transition-all duration-300">
           <div className="flex items-center space-x-3">
             <SimpleRadarLogo className="w-6 h-6 text-white dark:text-gray-800" />
