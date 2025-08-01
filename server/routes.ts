@@ -2116,9 +2116,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userkey = decodeURIComponent(req.params.userkey);
       
-      // Check cache first
+      // Check cache first (skip cache if refresh parameter is provided)
+      const skipCache = req.query.refresh === 'true';
+      
+      if (skipCache) {
+        console.log(`🔄 Cache bypass requested for ${userkey}, forcing fresh analysis...`);
+        r4rCache.delete(userkey); // Clear cache for this user
+      }
+      
       const cached = r4rCache.get(userkey);
-      if (cached && Date.now() - cached.timestamp < R4R_CACHE_TTL) {
+      if (!skipCache && cached && Date.now() - cached.timestamp < R4R_CACHE_TTL) {
         return res.json({
           success: true,
           data: cached.data,
@@ -2284,16 +2291,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // R4R Analysis endpoint  
-  app.get("/api/r4r-analysis/:userkey", async (req, res) => {
+  // Test pagination endpoint for debugging
+  app.get("/api/test-serpin-pagination", async (req, res) => {
     try {
-      const userkey = decodeURIComponent(req.params.userkey);
-      const result = await r4rAnalyzer.getR4RAnalysis(userkey);
-      res.json({ success: true, data: result });
+      const userkey = 'service:x.com:1479691003607060490';
+      console.log('🔍 Testing Serpin pagination directly...');
+      
+      const batches = [];
+      let totalFound = 0;
+      
+      for (let offset = 0; offset < 2000; offset += 500) {
+        console.log(`📊 Fetching batch at offset ${offset}...`);
+        
+        const result = await ethosApi.getReviewsReceived(userkey, 500, offset);
+        if (result.success && result.data?.values) {
+          const count = result.data.values.length;
+          console.log(`📈 Batch ${offset/500 + 1}: ${count} reviews`);
+          totalFound += count;
+          batches.push({ offset, count, hasData: count > 0 });
+          
+          if (count === 0) break;
+        } else {
+          break;
+        }
+        
+        // Small delay to prevent rate limiting
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      console.log(`✅ Total reviews found across all batches: ${totalFound}`);
+      
+      res.json({
+        success: true,
+        data: {
+          totalReviews: totalFound,
+          batches,
+          hasMoreThan500: totalFound > 500
+        }
+      });
     } catch (error) {
-      res.status(500).json({ 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Internal server error' 
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Test failed'
       });
     }
   });

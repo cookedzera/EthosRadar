@@ -530,28 +530,68 @@ export class R4RAnalyzer {
       if (!userResult.success || !userResult.data) return null;
 
       const userProfile = userResult.data;
-      // Try to get comprehensive review data with pagination if needed
-      const getAllReviews = async (getFunction: (userkey: string, limit: number, offset: number) => Promise<any>, maxReviews = 2000) => {
+      // Enhanced pagination to fetch ALL reviews beyond 500 limit
+      const getAllReviews = async (getFunction: (userkey: string, limit: number, offset: number) => Promise<any>, maxReviews = 5000) => {
         let allReviews: any[] = [];
         let offset = 0;
-        const batchSize = 500; // API limit per request
+        const batchSize = 500; // Maximum API allows per request
+        let consecutiveEmptyResults = 0;
         
-        while (allReviews.length < maxReviews) {
+        console.log(`📊 Fetching reviews for ${userkey}...`);
+        
+        while (allReviews.length < maxReviews && consecutiveEmptyResults < 2) {
           const result = await getFunction(userkey, batchSize, offset);
-          if (!result.success || !result.data?.values || result.data.values.length === 0) {
+          
+          if (!result.success || !result.data?.values) {
+            consecutiveEmptyResults++;
             break;
           }
           
-          allReviews = allReviews.concat(result.data.values);
+          const newReviews = result.data.values;
           
-          // If we got less than the batch size, we've reached the end
-          if (result.data.values.length < batchSize) {
+          if (newReviews.length === 0) {
+            consecutiveEmptyResults++;
+            if (consecutiveEmptyResults >= 2) break;
+            offset += batchSize;
+            continue;
+          }
+          
+          // Reset counter on successful batch
+          consecutiveEmptyResults = 0;
+          
+          // Add unique reviews only (prevent duplicates)
+          const uniqueNewReviews = newReviews.filter((newReview: any) => 
+            !allReviews.some(existingReview => existingReview.id === newReview.id)
+          );
+          
+          allReviews = allReviews.concat(uniqueNewReviews);
+          
+          console.log(`📈 Batch ${Math.floor(offset/batchSize) + 1}: +${uniqueNewReviews.length} reviews (total: ${allReviews.length})`);
+          
+          // If we got less than the batch size, we might be at the end
+          if (newReviews.length < batchSize) {
+            // Try one more batch with increased offset
+            offset += batchSize;
+            const finalResult = await getFunction(userkey, batchSize, offset);
+            if (finalResult.success && finalResult.data?.values?.length > 0) {
+              const finalUnique = finalResult.data.values.filter((newReview: any) => 
+                !allReviews.some(existingReview => existingReview.id === newReview.id)
+              );
+              allReviews = allReviews.concat(finalUnique);
+              console.log(`📈 Final batch: +${finalUnique.length} reviews (total: ${allReviews.length})`);
+            }
             break;
           }
           
           offset += batchSize;
+          
+          // Small delay to prevent rate limiting
+          if (offset > 0) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
         }
         
+        console.log(`✅ Total reviews fetched: ${allReviews.length}`);
         return { success: true, data: { values: allReviews } };
       };
 
