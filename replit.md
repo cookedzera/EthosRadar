@@ -17,6 +17,7 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 **Client-side URLs**: Generated using window.location.origin for automatic domain adaptation
 
 ## Recent Changes (January 2025)
+- **URGENT: Farcaster Logo Upload Required**: New logo1.png (128KB blue radar design) created for Farcaster Mini App but needs manual upload to ethosradar.com domain (currently returns 404)
 - **Background Configuration**: Website uses unified-bg background, Farcaster frame cards use cloud-bg for distinct visual identity
 - **Enhanced Farcaster Direct Cast**: Implemented comprehensive SDK detection with multiple fallback methods for seamless cast composition in Mini App context
 - **WebP Optimization Implemented**: Converted background and logo images to WebP format, achieving 93-96% file size reduction (1MB → 37-68KB)
@@ -96,4 +97,4 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 - ✅ `logo.png` (838KB) - Logo fallback  
 - ✅ `icon.webp` (37KB) - App icon
 - ✅ `icon.png` (838KB) - Icon fallback
-- ❌ `logo1.png` (128KB) - **NEW Farcaster Mini App logo** - NEEDS UPLOAD
+- ❌ `logo1.png` (128KB) - **CRITICAL: NEW Farcaster Mini App logo** - MUST BE UPLOADED (Currently 404 on production)
