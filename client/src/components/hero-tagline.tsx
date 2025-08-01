@@ -8,11 +8,17 @@ export function HeroTagline() {
         {/* Main Tagline */}
         <div className="relative mb-4 z-0">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
-            <span className="text-white dark:text-gray-900 light:text-gray-800 drop-shadow-2xl" style={{ textShadow: 'var(--text-shadow-main)' }}>
+            <span className="text-white dark:text-gray-100 light:text-gray-900 drop-shadow-2xl font-extrabold" style={{ 
+              textShadow: 'var(--text-shadow-main)',
+              WebkitTextStroke: '1px rgba(0,0,0,0.3)'
+            }}>
               Who's Who?
             </span>
             <br />
-            <span className="text-blue-300 dark:text-blue-600 light:text-blue-700" style={{ textShadow: 'var(--subtitle-shadow)' }}>
+            <span className="text-blue-300 dark:text-blue-500 light:text-blue-900 font-bold" style={{ 
+              textShadow: 'var(--subtitle-shadow)',
+              WebkitTextStroke: '0.5px rgba(0,0,0,0.2)'
+            }}>
               The Network Knows.
             </span>
           </h2>
@@ -20,7 +26,10 @@ export function HeroTagline() {
           {/* Verification Badge */}
           <div className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 backdrop-blur-sm bg-white/15 border border-amber-900/25 rounded-full shadow-lg hover:bg-white/20 transition-all duration-300">
             <Shield className="w-3 h-3 text-green-400 dark:text-green-600" />
-            <span className="text-white dark:text-gray-800 light:text-gray-900 text-xs font-semibold dark:font-medium light:font-bold" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Verified on Ethos</span>
+            <span className="text-white dark:text-gray-800 light:text-gray-900 text-xs font-semibold dark:font-medium light:font-black" style={{ 
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5), 0 0 4px rgba(255,255,255,0.8)',
+              WebkitTextStroke: '0.3px rgba(0,0,0,0.3)'
+            }}>Verified on Ethos</span>
             <CheckCircle2 className="w-3 h-3 text-green-400 dark:text-green-600" />
           </div>
           
