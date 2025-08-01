@@ -2291,6 +2291,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Farcaster manifest endpoint (ensure proper CORS and content-type)
+  app.get("/.well-known/farcaster.json", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    
+    const manifest = {
+      "accountAssociation": {
+        "header": "eyJmaWQiOjE5MDUyMiwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDk5RjZGZTYwZTJCYTM0MzI1MTI5ZEJEMmNEZGM0NTdEMjk3MzY4RjgifQ",
+        "payload": "eyJkb21haW4iOiJldGhvc3JhZGFyLmNvbSJ9",
+        "signature": "Ap2jpG3Hb7ifpde/kd56Hr6Z8e4mOnSi7tQZU25LYsVtsveU1T2LyfqQmB1oy0w1Mwm31IDlQlWKuAoOIquj0Bs="
+      },
+      "miniapp": {
+        "version": "1",
+        "name": "EthosRadar",
+        "homeUrl": "https://ethosradar.com",
+        "iconUrl": "https://ethosradar.com/icon-192.png",
+        "splashImageUrl": "https://ethosradar.com/splash-200x200.png",
+        "splashBackgroundColor": "#1a1b23",
+        "subtitle": "Trust Score Scanner for Web3",
+        "description": "Generate your personalized trust reputation card on Ethos Protocol",
+        "buttonTitle": "Scan Your Trust Score",
+        "primaryCategory": "utility",
+        "tags": [
+          "trust",
+          "reputation",
+          "ethos", 
+          "crypto",
+          "web3"
+        ]
+      }
+    };
+    
+    res.json(manifest);
+  });
+
   // Test pagination endpoint for debugging
   app.get("/api/test-serpin-pagination", async (req, res) => {
     try {
