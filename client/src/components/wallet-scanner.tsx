@@ -250,8 +250,8 @@ export function WalletScanner() {
   // Full modern search interface for initial state
   return (
     <>
-      <div className="w-full">
-        <div className="search-container relative backdrop-blur-md bg-white/12 light:bg-white/15 dark:bg-white/12 border border-white/18 light:border-white/25 dark:border-white/18 rounded-3xl p-6 md:p-6 px-5 transition-all duration-500 w-full pb-7 shadow-2xl shadow-black/20 light:shadow-black/30 dark:shadow-black/15 space-y-4 z-50">
+      <div className="w-full max-w-full">
+        <div className="search-container relative backdrop-blur-md bg-white/12 light:bg-white/15 dark:bg-white/12 border border-white/18 light:border-white/25 dark:border-white/18 rounded-3xl p-6 md:p-6 px-5 transition-all duration-500 w-full max-w-full pb-7 shadow-2xl shadow-black/20 light:shadow-black/30 dark:shadow-black/15 space-y-4 z-50">
           {/* Enhanced floating background elements */}
           <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-br from-blue-400/15 to-cyan-400/12 light:from-gray-600/12 light:to-gray-700/10 rounded-full blur-xl animate-pulse"></div>
           <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-gradient-to-br from-purple-400/12 to-pink-400/10 light:from-gray-500/12 light:to-gray-600/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
