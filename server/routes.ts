@@ -260,6 +260,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ success: true, data: [] });
       }
 
+      // Check cache first
+      const cacheKey = `search-${query}-${limit}-${offset}`;
+      const cached = searchCache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < SEARCH_CACHE_TTL) {
+        return res.json({ success: true, data: cached.data, cached: true });
+      }
+
       // Set cache headers for search suggestions
       res.set({
         'Cache-Control': 'public, max-age=300', // 5 minutes cache
@@ -289,6 +296,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: user.description || ''
         }));
         
+        // Cache the results
+        searchCache.set(cacheKey, { data: suggestions, timestamp: Date.now() });
+        
         return res.json({ success: true, data: suggestions });
       }
       
@@ -313,6 +323,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const searchQuery = query.trim().toLowerCase();
+      
+      // Check cache first
+      const cacheKey = `farcaster-${searchQuery}-${limit}`;
+      const cached = searchCache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < SEARCH_CACHE_TTL) {
+        return res.json({ success: true, data: cached.data, cached: true });
+      }
       
       // Enhanced Farcaster mode: try common partial matches first
       const possibleUsernames = [
@@ -421,6 +438,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           continue;
         }
       }
+      
+      // Cache the results
+      searchCache.set(cacheKey, { data: suggestions, timestamp: Date.now() });
       
       return res.json({ success: true, data: suggestions });
     } catch (error) {
@@ -855,6 +875,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userkey = decodeURIComponent(req.params.userkey);
       
+      // Check cache first
+      const cacheKey = `profile-${userkey}`;
+      const cached = profileCache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < PROFILE_CACHE_TTL) {
+        return res.json({ success: true, data: cached.data, cached: true });
+      }
+      
       // Fast status detection using optimized V2 API calls
       let userResult;
       
@@ -965,29 +992,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
         
+        const profileData = {
+          id: userResult.id,
+          profileId: userResult.profileId,
+          displayName: userResult.displayName,
+          username: userResult.username,
+          avatarUrl: userResult.avatarUrl,
+          description: userResult.description,
+          score: userResult.score,
+          status: userResult.status,
+          userkeys: userResult.userkeys,
+          xpTotal: userResult.xpTotal,
+          xpStreakDays: userResult.xpStreakDays,
+          leaderboardPosition: leaderboardPosition || null,
+          weeklyXpGain: weeklyXpGain,
+          links: userResult.links || {
+            profile: `https://app.ethos.network/profile/${userkey}`,
+            scoreBreakdown: `https://app.ethos.network/profile/${userkey}/score`
+          },
+          stats: userResult.stats,
+          connectedAccounts: (userResult as any).connectedAccounts || null
+        };
+        
+        // Cache the result
+        profileCache.set(cacheKey, { data: profileData, timestamp: Date.now() });
+        
         return res.json({
           success: true,
-          data: {
-            id: userResult.id,
-            profileId: userResult.profileId,
-            displayName: userResult.displayName,
-            username: userResult.username,
-            avatarUrl: userResult.avatarUrl,
-            description: userResult.description,
-            score: userResult.score,
-            status: userResult.status,
-            userkeys: userResult.userkeys,
-            xpTotal: userResult.xpTotal,
-            xpStreakDays: userResult.xpStreakDays,
-            leaderboardPosition: leaderboardPosition || null,
-            weeklyXpGain: weeklyXpGain,
-            links: userResult.links || {
-              profile: `https://app.ethos.network/profile/${userkey}`,
-              scoreBreakdown: `https://app.ethos.network/profile/${userkey}/score`
-            },
-            stats: userResult.stats,
-            connectedAccounts: (userResult as any).connectedAccounts || null
-          }
+          data: profileData
         });
       }
 
@@ -1984,10 +2016,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return 'neutral';
   }
 
-  // Simple in-memory cache for R4R analysis (5 minute TTL)
+  // Enhanced caching system for performance optimization
   const r4rCache = new Map<string, { data: any; timestamp: number }>();
   const r4rSummaryCache = new Map<string, { data: any; timestamp: number }>();
-  const R4R_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  const profileCache = new Map<string, { data: any; timestamp: number }>();
+  const searchCache = new Map<string, { data: any; timestamp: number }>();
+  
+  const R4R_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+  const PROFILE_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  const SEARCH_CACHE_TTL = 2 * 60 * 1000; // 2 minutes
+
+  // Cache cleanup function to prevent memory leaks
+  function cleanupCaches() {
+    const now = Date.now();
+    
+    // Clean R4R cache
+    for (const [key, value] of r4rCache.entries()) {
+      if (now - value.timestamp > R4R_CACHE_TTL) {
+        r4rCache.delete(key);
+      }
+    }
+    
+    // Clean profile cache
+    for (const [key, value] of profileCache.entries()) {
+      if (now - value.timestamp > PROFILE_CACHE_TTL) {
+        profileCache.delete(key);
+      }
+    }
+    
+    // Clean search cache
+    for (const [key, value] of searchCache.entries()) {
+      if (now - value.timestamp > SEARCH_CACHE_TTL) {
+        searchCache.delete(key);
+      }
+    }
+    
+    // Clean R4R summary cache
+    for (const [key, value] of r4rSummaryCache.entries()) {
+      if (now - value.timestamp > R4R_CACHE_TTL) {
+        r4rSummaryCache.delete(key);
+      }
+    }
+  }
+
+  // Run cache cleanup every 5 minutes
+  setInterval(cleanupCaches, 5 * 60 * 1000);
 
   // Fast Review Summary - Ultra-fast endpoint for dashboard (bypasses heavy R4R processing)
   app.get("/api/review-summary/:userkey", async (req, res) => {
