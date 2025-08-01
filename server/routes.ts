@@ -2307,7 +2307,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "version": "1",
         "name": "EthosRadar",
         "homeUrl": "https://ethosradar.com",
-        "iconUrl": "https://ethosradar.com/icon-192.png",
+        "iconUrl": "https://ethosradar.com/logo1.png",
         "splashImageUrl": "https://ethosradar.com/splash-200x200.png",
         "splashBackgroundColor": "#1a1b23",
         "subtitle": "Trust Score Scanner for Web3",
