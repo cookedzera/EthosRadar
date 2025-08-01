@@ -2031,32 +2031,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const now = Date.now();
     
     // Clean R4R cache
-    for (const [key, value] of r4rCache.entries()) {
+    r4rCache.forEach((value, key) => {
       if (now - value.timestamp > R4R_CACHE_TTL) {
         r4rCache.delete(key);
       }
-    }
+    });
     
     // Clean profile cache
-    for (const [key, value] of profileCache.entries()) {
+    profileCache.forEach((value, key) => {
       if (now - value.timestamp > PROFILE_CACHE_TTL) {
         profileCache.delete(key);
       }
-    }
+    });
     
     // Clean search cache
-    for (const [key, value] of searchCache.entries()) {
+    searchCache.forEach((value, key) => {
       if (now - value.timestamp > SEARCH_CACHE_TTL) {
         searchCache.delete(key);
       }
-    }
+    });
     
     // Clean R4R summary cache
-    for (const [key, value] of r4rSummaryCache.entries()) {
+    r4rSummaryCache.forEach((value, key) => {
       if (now - value.timestamp > R4R_CACHE_TTL) {
         r4rSummaryCache.delete(key);
       }
-    }
+    });
   }
 
   // Run cache cleanup every 5 minutes

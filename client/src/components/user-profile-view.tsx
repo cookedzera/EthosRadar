@@ -1294,6 +1294,13 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 />
               </div>
             )}
+
+            {/* Subtle data freshness indicator */}
+            <div className="mt-4 flex justify-center">
+              <div className="text-xs text-white/30 font-mono">
+                Data refreshed at {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+              </div>
+            </div>
           </div>
         </div>
       </div>
