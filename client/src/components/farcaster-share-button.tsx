@@ -29,10 +29,11 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
   const baseUrl = window.location.origin;
   const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(userkey)}`;
   
-  // Generate concise cast text for better readability
-  const castText = `Trust Score: ${score} | ${getScoreLevel(score)} Tier 🏆
+  // Generate eye-catching cast text with proper attribution
+  const castText = `🎯 TRUST SCORE REVEALED: ${score}
+${getScoreLevel(score)} Tier ${getTierEmoji(score)}
 
-Check yours at ethosradar.com by @cookedzera`;
+Built by @cookedzera.eth on @ethos_network`;
 
   // Enhanced SDK detection and initialization
   useEffect(() => {
@@ -84,6 +85,14 @@ Check yours at ethosradar.com by @cookedzera`;
     if (score >= 1200) return 'Neutral';
     if (score >= 800) return 'Questionable';
     return 'Untrusted';
+  }
+
+  function getTierEmoji(score: number): string {
+    if (score >= 1500) return '👑'; // Exemplary - Crown
+    if (score >= 1000) return '🏆'; // Advanced - Trophy
+    if (score >= 500) return '⭐'; // Intermediate - Star
+    if (score >= 100) return '🔥'; // Beginner - Fire
+    return '⚡'; // Untrusted - Lightning
   }
 
   // Enhanced direct cast composition using Farcaster SDK

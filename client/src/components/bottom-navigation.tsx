@@ -24,15 +24,24 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
     return 'Untrusted';
   };
 
+  const getTierEmoji = (score: number): string => {
+    if (score >= 1500) return '👑'; // Exemplary - Crown
+    if (score >= 1000) return '🏆'; // Advanced - Trophy
+    if (score >= 500) return '⭐'; // Intermediate - Star
+    if (score >= 100) return '🔥'; // Beginner - Fire
+    return '⚡'; // Untrusted - Lightning
+  };
+
   const handleShareClick = async () => {
     if (!currentUser) return;
     
     const baseUrl = window.location.origin;
     const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(currentUser.userkey)}`;
     
-    const castText = `Trust Score: ${currentUser.score} | ${getScoreLevel(currentUser.score)} Tier 🏆
+    const castText = `🎯 TRUST SCORE REVEALED: ${currentUser.score}
+${getScoreLevel(currentUser.score)} Tier ${getTierEmoji(currentUser.score)}
 
-Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
+Built by @cookedzera.eth on @ethos_network`;
 
     try {
       // Check if we're in a Mini App context by testing for SDK capabilities
