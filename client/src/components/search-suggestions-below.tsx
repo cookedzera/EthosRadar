@@ -41,21 +41,27 @@ export function SearchSuggestionsBelow({
   const [showDropdown, setShowDropdown] = useState(false);
   // Dark mode only - no theme toggle needed
   
-  // Use appropriate API based on mode with optimized caching
+  // Use appropriate API based on mode with optimized caching and fast retry
   const globalSuggestions = useQuery({
     queryKey: ['/api/search-suggestions', query],
     queryFn: () => fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`).then(res => res.json()),
-    enabled: !farcasterMode && isVisible && query.length >= 3,
-    staleTime: 5 * 60 * 1000, // 5 minutes cache
-    gcTime: 10 * 60 * 1000, // Keep in memory for 10 minutes
+    enabled: !farcasterMode && isVisible && query.length >= 2, // Reduced from 3 to 2 for faster suggestions
+    staleTime: 2 * 60 * 1000, // Reduced to 2 minutes for fresher data
+    gcTime: 5 * 60 * 1000, // Reduced memory cache
+    retry: 1, // Quick retry instead of multiple attempts
+    retryDelay: 100, // Fast retry delay
+    refetchOnWindowFocus: false, // Prevent unnecessary refetches
   });
   
   const farcasterSuggestions = useQuery({
     queryKey: ['/api/farcaster-suggestions', query],
     queryFn: () => fetch(`/api/farcaster-suggestions?q=${encodeURIComponent(query)}`).then(res => res.json()),
-    enabled: farcasterMode && isVisible && query.length >= 2,
-    staleTime: 5 * 60 * 1000, // 5 minutes cache
-    gcTime: 10 * 60 * 1000, // Keep in memory for 10 minutes
+    enabled: farcasterMode && isVisible && query.length >= 1, // Reduced from 2 to 1 for faster response
+    staleTime: 2 * 60 * 1000, // Reduced to 2 minutes for fresher data  
+    gcTime: 5 * 60 * 1000, // Reduced memory cache
+    retry: 1, // Quick retry instead of multiple attempts
+    retryDelay: 100, // Fast retry delay
+    refetchOnWindowFocus: false, // Prevent unnecessary refetches
   });
   
   const { data, isLoading, error } = farcasterMode ? farcasterSuggestions : globalSuggestions;
@@ -63,21 +69,15 @@ export function SearchSuggestionsBelow({
   // Mobile detection
   const isMobile = () => window.innerWidth < 768;
 
-  // Show/hide logic
+  // Show/hide logic - faster display with immediate response
   useEffect(() => {
     if (!isVisible) {
       setShowDropdown(false);
       return;
     }
 
-    const timer = setTimeout(() => {
-      setShowDropdown(true);
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      setShowDropdown(false);
-    };
+    // Show immediately for fast typing scenarios
+    setShowDropdown(true);
   }, [isVisible, query]);
 
   // Click outside to close
@@ -104,7 +104,7 @@ export function SearchSuggestionsBelow({
   };
 
   const suggestions = data?.data || [];
-  const minLength = farcasterMode ? 2 : 3;
+  const minLength = farcasterMode ? 1 : 2; // Reduced minimum lengths for faster response
   
   if (!isVisible || query.length < minLength || !showDropdown) {
     return null;

@@ -131,7 +131,7 @@ export function WalletScanner() {
     setUser(userData, searchMode);
   };
 
-  // Debounced input handler (ethos-r4r approach)
+  // Optimized input handler for fast typing scenarios
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
@@ -141,18 +141,18 @@ export function WalletScanner() {
       clearTimeout(searchTimeoutRef.current);
     }
     
-    // Show suggestions based on mode and minimum length - reduced for faster response
-    const minLength = farcasterMode ? 1 : 2; // Reduced from MIN_SEARCH_LENGTH for faster suggestions
+    // Show suggestions immediately for responsive typing experience
+    const minLength = farcasterMode ? 1 : 2; // Reduced minimum for faster suggestions
     if (value.length >= minLength) {
       setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
     }
-  }, [MIN_SEARCH_LENGTH, farcasterMode]);
+  }, [farcasterMode]);
 
   const handleInputFocus = () => {
     setIsFocused(true);
-    const minLength = farcasterMode ? 2 : MIN_SEARCH_LENGTH;
+    const minLength = farcasterMode ? 1 : 2; // Reduced for faster response
     if (query.length >= minLength) setShowSuggestions(true);
   };
 

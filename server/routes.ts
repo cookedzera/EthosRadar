@@ -256,7 +256,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const limit = req.query.limit || "8";
       const offset = req.query.offset || "0";
 
-      if (!query || typeof query !== 'string' || query.length < 3) {
+      if (!query || typeof query !== 'string' || query.length < 2) {
         return res.json({ success: true, data: [] });
       }
 
@@ -308,7 +308,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const query = req.query.q;
       const limit = parseInt(req.query.limit as string) || 8;
 
-      if (!query || typeof query !== 'string' || query.length < 2) {
+      if (!query || typeof query !== 'string' || query.length < 1) {
         return res.json({ success: true, data: [] });
       }
 
