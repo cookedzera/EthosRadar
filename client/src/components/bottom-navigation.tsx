@@ -30,12 +30,9 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
     const baseUrl = window.location.origin;
     const frameUrl = `${baseUrl}/farcaster/frame/${encodeURIComponent(currentUser.userkey)}`;
     
-    const castText = `🎯 Trust Score: ${currentUser.score} | ${getScoreLevel(currentUser.score)} Tier 🏆
+    const castText = `Trust Score: ${currentUser.score} | ${getScoreLevel(currentUser.score)} Tier 🏆
 
-🔍 Scan your reputation on EthosRadar 
-✨ Created by @cookedzera.eth on @ethos-network
-
-🚀 Your trust score awaits...`;
+Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
 
     try {
       // Check if we're in a Mini App context by testing for SDK capabilities
@@ -53,18 +50,17 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
       }
       
       if (isInMiniApp && supportsCompose) {
-        // Use native composeCast in Mini App context WITHOUT embeds to prevent card display
-        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        // Use native composeCast in Mini App context
         const result = await sdk.actions.composeCast({
-          text: castTextWithUrl
+          text: castText,
+          embeds: [frameUrl]
         });
         // Cast was created successfully or user cancelled
         return;
       } else if (isInMiniApp) {
         // SDK available but composeCast not supported, try openUrl
         try {
-          const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`);
+          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`);
           return;
         } catch {
           // openUrl also failed, fall through to web fallback
@@ -72,19 +68,16 @@ export function BottomNavigation({ onHomeClick, currentUser }: BottomNavigationP
       }
       
       // Web context fallback
-      const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
       window.open(warpcastUrl, '_blank');
       
     } catch (error) {
       // Final fallback - copy to clipboard
       try {
-        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-        await navigator.clipboard.writeText(castTextWithUrl);
+        await navigator.clipboard.writeText(castText + '\n\n' + frameUrl);
         alert('Cast text copied to clipboard! Please paste in Warpcast to share.');
       } catch (clipError) {
-        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-        alert(`Copy this text to share on Farcaster:\n\n${castTextWithUrl}`);
+        alert(`Copy this text to share on Farcaster:\n\n${castText}\n\n${frameUrl}`);
       }
     }
   };
