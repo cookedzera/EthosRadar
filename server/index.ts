@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import path from "path";
+import fs from "fs";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
@@ -73,15 +74,18 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Simple fallback for cloud-bg.png - serve unified-bg.png temporarily
+// Route for cloud-bg.png with proper fallback
 app.get('/cloud-bg.png', (req, res) => {
-  const fallbackPath = path.join(process.cwd(), 'public', 'unified-bg.png');
-  res.sendFile(fallbackPath, (err) => {
-    if (err) {
-      console.log('Error serving fallback background:', err);
-      res.status(404).send('Background image not found');
-    }
-  });
+  const cloudBgPath = path.join(process.cwd(), 'public', 'cloud-bg.png');
+  const unifiedBgPath = path.join(process.cwd(), 'public', 'unified-bg.png');
+  
+  // Try cloud-bg.png first, fallback to unified-bg.png
+  if (fs.existsSync(cloudBgPath)) {
+    res.sendFile(cloudBgPath);
+  } else {
+    console.log('cloud-bg.png not found, serving unified-bg.png');
+    res.sendFile(unifiedBgPath);
+  }
 });
 
 // Readiness check endpoint
