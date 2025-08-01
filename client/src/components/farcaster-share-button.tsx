@@ -91,12 +91,12 @@ Check yours at ethosradar.com by @cookedzera`;
     try {
       console.log('🎯 Flex Your Card clicked - attempting direct cast composition...');
       
-      // Method 1: Try direct composeCast first (most reliable in Mini App)
+      // Method 1: Try direct composeCast WITHOUT embeds first (prevents card display)
       try {
-        console.log('📱 Attempting native composeCast...');
+        console.log('📱 Attempting native composeCast without embeds...');
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
         const result = await sdk.actions.composeCast({
-          text: castText,
-          embeds: [frameUrl],
+          text: castTextWithUrl, // Include URL in text instead of embeds
           close: false // Don't close the app after casting
         });
         
@@ -114,7 +114,9 @@ Check yours at ethosradar.com by @cookedzera`;
         const context = await sdk.context;
         if (context) {
           console.log('📱 Mini App context detected, using openUrl...');
-          const warpcastIntentUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
+          // Include URL in text instead of embeds to prevent card display
+          const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+          const warpcastIntentUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
           await sdk.actions.openUrl(warpcastIntentUrl);
           console.log('✅ OpenUrl completed successfully');
           return;
@@ -125,7 +127,9 @@ Check yours at ethosradar.com by @cookedzera`;
       
       // Method 3: Web browser fallback with intent URL
       console.log('🌐 Using web browser fallback...');
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
+      // Include URL in text instead of embeds to prevent card display
+      const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
       
       // For mobile browsers, try location.href first as it's more reliable
       if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -151,10 +155,12 @@ Check yours at ethosradar.com by @cookedzera`;
       console.error('❌ All cast methods failed:', error);
       // Final emergency fallback - copy to clipboard
       try {
-        await navigator.clipboard.writeText(`${castText}\n\n${frameUrl}`);
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        await navigator.clipboard.writeText(castTextWithUrl);
         alert('Cast text copied to clipboard! Please paste in Warpcast to share.');
       } catch (clipError) {
-        alert(`Please copy this text to share on Farcaster:\n\n${castText}\n\n${frameUrl}`);
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        alert(`Please copy this text to share on Farcaster:\n\n${castTextWithUrl}`);
       }
     }
   };

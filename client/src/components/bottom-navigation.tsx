@@ -50,17 +50,18 @@ Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
       }
       
       if (isInMiniApp && supportsCompose) {
-        // Use native composeCast in Mini App context
+        // Use native composeCast in Mini App context WITHOUT embeds to prevent card display
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
         const result = await sdk.actions.composeCast({
-          text: castText,
-          embeds: [frameUrl]
+          text: castTextWithUrl
         });
         // Cast was created successfully or user cancelled
         return;
       } else if (isInMiniApp) {
         // SDK available but composeCast not supported, try openUrl
         try {
-          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`);
+          const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+          await sdk.actions.openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`);
           return;
         } catch {
           // openUrl also failed, fall through to web fallback
@@ -68,16 +69,19 @@ Check yours at ethosradar.com built by @cookedzera.eth on @ethos-network`;
       }
       
       // Web context fallback
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
+      const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
       window.open(warpcastUrl, '_blank');
       
     } catch (error) {
       // Final fallback - copy to clipboard
       try {
-        await navigator.clipboard.writeText(castText + '\n\n' + frameUrl);
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        await navigator.clipboard.writeText(castTextWithUrl);
         alert('Cast text copied to clipboard! Please paste in Warpcast to share.');
       } catch (clipError) {
-        alert(`Copy this text to share on Farcaster:\n\n${castText}\n\n${frameUrl}`);
+        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        alert(`Copy this text to share on Farcaster:\n\n${castTextWithUrl}`);
       }
     }
   };
