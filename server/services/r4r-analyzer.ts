@@ -530,9 +530,34 @@ export class R4RAnalyzer {
       if (!userResult.success || !userResult.data) return null;
 
       const userProfile = userResult.data;
+      // Try to get comprehensive review data with pagination if needed
+      const getAllReviews = async (getFunction: (userkey: string, limit: number, offset: number) => Promise<any>, maxReviews = 2000) => {
+        let allReviews: any[] = [];
+        let offset = 0;
+        const batchSize = 500; // API limit per request
+        
+        while (allReviews.length < maxReviews) {
+          const result = await getFunction(userkey, batchSize, offset);
+          if (!result.success || !result.data?.values || result.data.values.length === 0) {
+            break;
+          }
+          
+          allReviews = allReviews.concat(result.data.values);
+          
+          // If we got less than the batch size, we've reached the end
+          if (result.data.values.length < batchSize) {
+            break;
+          }
+          
+          offset += batchSize;
+        }
+        
+        return { success: true, data: { values: allReviews } };
+      };
+
       const [reviewsReceivedResult, reviewsGivenResult] = await Promise.all([
-        ethosApi.getReviewsReceived(userkey, 100), // Limit for performance
-        ethosApi.getReviewsGiven(userkey, 100)
+        getAllReviews((uk, limit, offset) => ethosApi.getReviewsReceived(uk, limit, offset)),
+        getAllReviews((uk, limit, offset) => ethosApi.getReviewsGiven(uk, limit, offset))
       ]);
       
       const reviewsReceived = (reviewsReceivedResult.success && reviewsReceivedResult.data?.values) ? reviewsReceivedResult.data.values : [];

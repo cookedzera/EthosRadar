@@ -579,8 +579,8 @@ export class EthosApiClient {
     });
   }
 
-  // Get reviews received by a user for R4R analysis - OFFICIAL API FORMAT
-  async getReviewsReceived(userkey: string, limit: number = 500): Promise<EthosApiResponse<any>> {
+  // Get reviews received by a user for R4R analysis - OFFICIAL API FORMAT with pagination support
+  async getReviewsReceived(userkey: string, limit: number = 500, offset: number = 0): Promise<EthosApiResponse<any>> {
     return this.makeRequest('/api/v2/activities/profile/received', {
       method: 'POST',
       body: JSON.stringify({
@@ -588,14 +588,14 @@ export class EthosApiClient {
         filter: ['review'],
         excludeHistorical: false, // Include all reviews like official ethos-r4r.deno.dev
         limit,
-        offset: 0,
+        offset,
         orderBy: { field: 'timestamp', direction: 'desc' }
       }),
     });
   }
 
-  // Get reviews given by a user for R4R analysis - OFFICIAL API FORMAT  
-  async getReviewsGiven(userkey: string, limit: number = 500): Promise<EthosApiResponse<any>> {
+  // Get reviews given by a user for R4R analysis - OFFICIAL API FORMAT with pagination support
+  async getReviewsGiven(userkey: string, limit: number = 500, offset: number = 0): Promise<EthosApiResponse<any>> {
     return this.makeRequest('/api/v2/activities/profile/given', {
       method: 'POST',
       body: JSON.stringify({
@@ -603,7 +603,7 @@ export class EthosApiClient {
         filter: ['review'], 
         excludeHistorical: false, // Include all reviews like official ethos-r4r.deno.dev
         limit,
-        offset: 0,
+        offset,
         orderBy: { field: 'timestamp', direction: 'desc' }
       }),
     });
