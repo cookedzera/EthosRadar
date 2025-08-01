@@ -120,8 +120,8 @@ router.get('/card/:userkey', async (req, res) => {
   const cached = frameCache.get(cacheKey);
   if (!refresh && cached && Date.now() - cached.timestamp < FRAME_CACHE_TTL) {
     res.setHeader('Content-Type', 'image/png');
-    // Short cache enables Farcaster "Refresh metadata" functionality
-    res.setHeader('Cache-Control', 'public, max-age=60, no-transform');
+    // Longer cache reduces server load, refresh button for updates
+    res.setHeader('Cache-Control', 'public, max-age=3600, no-transform');
     res.setHeader('ETag', cached.etag);
     return res.send(cached.buffer);
   }
@@ -855,8 +855,8 @@ router.get('/card/:userkey', async (req, res) => {
       res.setHeader('Expires', '0');
       res.setHeader('X-Preview-Mode', 'true');
     } else {
-      // Production mode: short cache enables Farcaster "Refresh metadata" button
-      res.setHeader('Cache-Control', 'public, max-age=60, no-transform'); // 1 minute cache
+      // Production mode: longer cache reduces server load, refresh button for updates
+      res.setHeader('Cache-Control', 'public, max-age=3600, no-transform'); // 1 hour cache
       res.setHeader('ETag', `"${userkey}-${score}-${totalReviews}"`);
     }
     
