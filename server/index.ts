@@ -88,6 +88,33 @@ app.get('/cloud-bg.png', (req, res) => {
   }
 });
 
+// Route for unified-bg images
+app.get('/unified-bg.webp', (req, res) => {
+  const webpPath = path.join(process.cwd(), 'public', 'unified-bg.webp');
+  const pngPath = path.join(process.cwd(), 'public', 'unified-bg.png');
+  
+  if (fs.existsSync(webpPath)) {
+    res.sendFile(webpPath);
+  } else if (fs.existsSync(pngPath)) {
+    console.log('unified-bg.webp not found, serving unified-bg.png');
+    res.sendFile(pngPath);
+  } else {
+    console.log('No unified background images found');
+    res.status(404).send('Background image not found');
+  }
+});
+
+app.get('/unified-bg.png', (req, res) => {
+  const pngPath = path.join(process.cwd(), 'public', 'unified-bg.png');
+  
+  if (fs.existsSync(pngPath)) {
+    res.sendFile(pngPath);
+  } else {
+    console.log('unified-bg.png not found');
+    res.status(404).send('Background image not found');
+  }
+});
+
 // Readiness check endpoint
 app.get('/ready', (req, res) => {
   res.status(200).json({ 
