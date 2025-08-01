@@ -94,12 +94,12 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
     try {
       console.log('🎯 Flex Your Card clicked - attempting direct cast composition...');
       
-      // Method 1: Try direct composeCast WITHOUT embeds first (prevents card display)
+      // Method 1: Try direct composeCast WITH frame embed (shows card, not Mini App preview)
       try {
-        console.log('📱 Attempting native composeCast without embeds...');
-        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
+        console.log('📱 Attempting native composeCast with frame embed...');
         const result = await sdk.actions.composeCast({
-          text: castTextWithUrl, // Include URL in text instead of embeds
+          text: castText, // Just the text, no URL
+          embeds: [frameUrl], // Frame URL as embed to show trust score card
           close: false // Don't close the app after casting
         });
         
@@ -117,9 +117,8 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
         const context = await sdk.context;
         if (context) {
           console.log('📱 Mini App context detected, using openUrl...');
-          // Include URL in text instead of embeds to prevent card display
-          const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-          const warpcastIntentUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
+          // Use embeds parameter to show frame card, not Mini App preview
+          const warpcastIntentUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
           await sdk.actions.openUrl(warpcastIntentUrl);
           console.log('✅ OpenUrl completed successfully');
           return;
@@ -130,9 +129,8 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
       
       // Method 3: Web browser fallback with intent URL
       console.log('🌐 Using web browser fallback...');
-      // Include URL in text instead of embeds to prevent card display
-      const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castTextWithUrl)}`;
+      // Use embeds parameter to show frame card
+      const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(castText)}&embeds[]=${encodeURIComponent(frameUrl)}`;
       
       // For mobile browsers, try location.href first as it's more reliable
       if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -158,12 +156,12 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
       console.error('❌ All cast methods failed:', error);
       // Final emergency fallback - copy to clipboard
       try {
-        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-        await navigator.clipboard.writeText(castTextWithUrl);
-        alert('Cast text copied to clipboard! Please paste in Warpcast to share.');
+        const fullMessage = `${castText}\n\nFrame: ${frameUrl}`;
+        await navigator.clipboard.writeText(fullMessage);
+        alert('Cast text copied to clipboard! Please paste in Warpcast and add the frame URL as an embed.');
       } catch (clipError) {
-        const castTextWithUrl = `${castText}\n\n🔗 ${frameUrl}`;
-        alert(`Please copy this text to share on Farcaster:\n\n${castTextWithUrl}`);
+        const fullMessage = `${castText}\n\nFrame: ${frameUrl}`;
+        alert(`Copy this text to share on Farcaster:\n\n${fullMessage}`);
       }
     }
   };
