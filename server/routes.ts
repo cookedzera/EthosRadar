@@ -2293,9 +2293,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Farcaster manifest endpoint (ensure proper CORS and content-type)
   app.get("/.well-known/farcaster.json", (req, res) => {
+    console.log('🎯 Serving Farcaster manifest from server route');
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    res.setHeader('Cache-Control', 'no-cache'); // Disable cache for testing
     
     const manifest = {
       "accountAssociation": {
