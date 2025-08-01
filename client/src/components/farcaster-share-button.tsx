@@ -32,7 +32,7 @@ export function FarcasterShareButton({ user, compact = false }: FarcasterShareBu
   // Generate eye-catching cast text with better formatting
   const castText = `🎯 Trust Score: ${score} | ${getScoreLevel(score)} Tier 🏆
 
-🔍 Scan your reputation on EthosRadar 
+🔍 Scan your reputation with EthosRadar 
 ✨ Created by @cookedzera.eth on @ethos-network
 
 🚀 Your trust score awaits...`;
