@@ -73,6 +73,29 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Explicit route for cloud-bg.png to ensure it's served
+app.get('/cloud-bg.png', (req, res) => {
+  const filePath = path.join(process.cwd(), 'public', 'cloud-bg.png');
+  console.log('Attempting to serve cloud-bg.png from:', filePath);
+  
+  // Check if file exists
+  const fs = require('fs');
+  if (!fs.existsSync(filePath)) {
+    console.log('cloud-bg.png not found, falling back to unified-bg.png');
+    const fallbackPath = path.join(process.cwd(), 'public', 'unified-bg.png');
+    return res.sendFile(fallbackPath);
+  }
+  
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.log('Error serving cloud-bg.png:', err);
+      // Fallback to unified-bg.png
+      const fallbackPath = path.join(process.cwd(), 'public', 'unified-bg.png');
+      res.sendFile(fallbackPath);
+    }
+  });
+});
+
 // Readiness check endpoint
 app.get('/ready', (req, res) => {
   res.status(200).json({ 
