@@ -42,7 +42,7 @@ button.bolt-icon-button {
   background: rgba(255, 255, 255, 0.05) !important;
 }
 
-/* Enhanced Loading Animations */
+/* Enhanced Loading Animations - optimized for performance */
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
@@ -70,6 +70,61 @@ button.bolt-icon-button {
   }
 }
 
+/* Performance optimizations */
+* {
+  /* Enable hardware acceleration for transforms and opacity */
+  will-change: auto;
+}
+
+/* Optimize animations on mobile devices */
+@media (max-width: 430px) {
+  .loading-shimmer {
+    animation-duration: 2s; /* Slower animation on mobile */
+  }
+  
+  .loading-glow {
+    animation: none; /* Disable glow on mobile for performance */
+  }
+  
+  /* Reduce expensive box-shadows on mobile */
+  [class*="shadow-"] {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Optimize transitions for mobile */
+  .transition-all {
+    transition-duration: 0.15s !important;
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.02) !important; /* Reduce scale effect on mobile */
+  }
+  
+  /* Reduce backdrop blur intensity on mobile */
+  .backdrop-blur-lg {
+    backdrop-filter: blur(8px) !important;
+  }
+  
+  .backdrop-blur-xl {
+    backdrop-filter: blur(12px) !important;
+  }
+}
+
+/* Use CSS custom properties for dynamic performance adjustments */
+:root {
+  --blur-amount: 12px;
+  --animation-duration: 0.3s;
+  --shadow-intensity: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 430px) {
+  :root {
+    --blur-amount: 6px;
+    --animation-duration: 0.15s;
+    --shadow-intensity: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .loading-shimmer {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%);
   background-size: 200px 100%;
@@ -84,13 +139,14 @@ button.bolt-icon-button {
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
-/* Default light theme background */
+/* Default light theme background - optimized for mobile */
 body {
   background: 
     linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
     url('/unified-bg.webp') center center/cover no-repeat, 
     linear-gradient(135deg, #080805 0%, #0f0f0e 25%, #161612 50%, #0f0f0e 75%, #080805 100%);
-  background-attachment: fixed;
+  /* Use scroll for mobile performance instead of fixed */
+  background-attachment: scroll;
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0;
@@ -99,8 +155,11 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  transition: background 0.3s ease, color 0.3s ease;
+  /* Reduce transition duration for faster responsiveness */
+  transition: background 0.15s ease, color 0.15s ease;
   color: #d1d5db;
+  /* Add content-visibility for better rendering performance */
+  content-visibility: auto;
 }
 
 /* Mobile-like layout for all screen sizes */
@@ -139,7 +198,7 @@ html {
   overflow-x: hidden;
 }
 
-/* Desktop-specific adjustments */
+/* Desktop-specific adjustments - keep fixed background for desktop only */
 @media (min-width: 431px) {
   body {
     padding: 0;
@@ -154,22 +213,56 @@ html {
   }
 }
 
-/* Dark theme background (now has light appearance) */ 
+/* Mobile-specific optimizations */
+@media (max-width: 430px) {
+  body {
+    background-attachment: scroll;
+  }
+  
+  /* Reduce expensive effects on mobile */
+  .backdrop-blur-md {
+    backdrop-filter: blur(8px) !important;
+  }
+  
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px) !important;
+  }
+}
+
+/* Dark theme background (now has light appearance) - mobile optimized */ 
 html.dark body,
 body.dark,
 .dark body {
   background: url('/unified-bg.webp') center center/cover no-repeat, linear-gradient(135deg, #f1f5f9 0%, #e8f0fe 50%, #f8fafc 100%) !important;
-  background-attachment: fixed !important;
+  background-attachment: scroll !important;
   color: #1e293b !important;
 }
 
-/* Fallback for browsers that don't support WebP */
+/* Desktop gets fixed background for dark theme */
+@media (min-width: 431px) {
+  html.dark body,
+  body.dark,
+  .dark body {
+    background-attachment: fixed !important;
+  }
+}
+
+/* Fallback for browsers that don't support WebP - mobile optimized */
 html.no-webp.dark body,
 body.no-webp.dark,
 .no-webp.dark body {
   background: url('/unified-bg.png') center center/cover no-repeat, linear-gradient(135deg, #f1f5f9 0%, #e8f0fe 50%, #f8fafc 100%) !important;
-  background-attachment: fixed !important;
+  background-attachment: scroll !important;
   color: #1e293b !important;
+}
+
+/* Desktop gets fixed background for fallback */
+@media (min-width: 431px) {
+  html.no-webp.dark body,
+  body.no-webp.dark,
+  .no-webp.dark body {
+    background-attachment: fixed !important;
+  }
 }
 
 /* Default fallback if webp fails */

@@ -2,6 +2,9 @@
 import { useEffect } from "react";
 import { Switch, Route } from "wouter";
 
+// Performance utilities
+import { initPerformanceOptimizations } from "@/utils/performance";
+
 // Farcaster SDK
 import { sdk } from "@farcaster/miniapp-sdk";
 
@@ -64,13 +67,18 @@ function AppContent() {
 }
 
 function App() {
-  // Initialize Farcaster SDK
+  // Initialize performance optimizations
+  useEffect(() => {
+    initPerformanceOptimizations();
+  }, []);
+
+  // Initialize Farcaster SDK - optimized for faster loading
   useEffect(() => {
     // Initialize Farcaster Mini App SDK
     const initializeSdk = async () => {
       try {
-        // Wait for the app to be fully rendered
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Reduce initialization delay for faster startup
+        await new Promise(resolve => setTimeout(resolve, 50));
         
         // Signal to Farcaster that the app is ready
         await sdk.actions.ready();

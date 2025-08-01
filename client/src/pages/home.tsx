@@ -40,6 +40,7 @@ export default function Home() {
         // DEMO MODE: For testing purposes, we can simulate a detected user
         // Remove this in production or when testing in actual Farcaster environment
         if (window.location.hostname.includes('replit')) {
+          // Reduce demo delay for faster loading perception
           setTimeout(() => {
             setDetectedUser({
               fid: 123456,
@@ -47,7 +48,7 @@ export default function Home() {
               displayName: 'CookedZera',
               pfpUrl: 'https://i.imgur.com/example.jpg' // This will fail and show fallback
             });
-          }, 2000); // Show after 2 seconds to simulate detection
+          }, 500); // Reduced from 2000ms to 500ms
         }
       }
     };
