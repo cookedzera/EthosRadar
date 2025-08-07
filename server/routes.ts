@@ -736,6 +736,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Parse the userkey to determine search strategy
       const parsed = ethosApi.parseUserkey(query);
       
+      console.log('Searching for:', query, 'Parsed as:', parsed);
+      
       if (parsed.type === 'address') {
         // For addresses, search using V1 API which can find Ethereum addresses
         const searchResult = await ethosApi.searchUsersV1(query, 50);
@@ -776,9 +778,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           result = { success: false, error: 'Address not found' };
         }
       } else if (parsed.type === 'twitter') {
-        // For Twitter, try the dedicated Twitter search first to get real status
+        // For Twitter userkeys, try the dedicated Twitter search first to get real status
         const twitterId = query.replace('service:x.com:', '');
+        console.log('Searching Twitter ID:', twitterId);
         const twitterResult = await ethosApi.getUsersByTwitter([twitterId]);
+        console.log('Twitter API result:', twitterResult);
         if (twitterResult.success && twitterResult.data?.length) {
           result = { success: true, data: twitterResult.data[0] };
         } else {

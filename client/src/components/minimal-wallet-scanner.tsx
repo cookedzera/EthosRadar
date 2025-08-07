@@ -48,8 +48,11 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
       return await response.json();
     },
     onSuccess: (data) => {
-      if (data && onUserFound) {
-        onUserFound(data, 'global');
+      console.log('Search result received:', data);
+      if (data && data.success && data.data && onUserFound) {
+        onUserFound(data.data, 'global');
+      } else if (data && !data.success) {
+        console.error('Search failed:', data.error);
       }
       queryClient.invalidateQueries({ queryKey: ['/api/search-suggestions'] });
     },
@@ -63,9 +66,10 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   };
 
   const handleSuggestionSelect = (suggestion: Suggestion) => {
-    setQuery(suggestion.username);
+    setQuery(suggestion.display_name || suggestion.username);
     setShowSuggestions(false);
-    searchMutation.mutate(suggestion.username);
+    // Use the userkey for accurate search
+    searchMutation.mutate(suggestion.userkey);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
