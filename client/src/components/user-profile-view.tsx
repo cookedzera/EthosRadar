@@ -465,7 +465,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
                 </div>
                 <div className="space-y-4">
-                  {((weeklyActivitiesData as any).data.slice(0, 5) || []).map((activity: any, index: number) => (
+                  {(Array.isArray((weeklyActivitiesData as any).data) ? (weeklyActivitiesData as any).data.slice(0, 5) : []).map((activity: any, index: number) => (
                     <div key={index} className="flex items-center justify-between p-4 bg-white/60 rounded-2xl border border-white/30 hover:bg-white/80 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg"></div>
@@ -476,7 +476,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       </span>
                     </div>
                   ))}
-                  {((weeklyActivitiesData as any).data || []).length === 0 && (
+                  {(!Array.isArray((weeklyActivitiesData as any).data) || (weeklyActivitiesData as any).data.length === 0) && (
                     <div className="text-center py-8 text-gray-500">
                       <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
                       <p className="font-medium">No recent activity found</p>
