@@ -252,7 +252,7 @@ export function WalletScanner() {
   return (
     <>
       <div className="w-full max-w-full">
-        <div className="warp-card p-8 transition-all duration-500 w-full max-w-full space-y-6 z-50 hover-scale"
+        <div className="warp-card p-8 transition-all duration-500 w-full max-w-full space-y-6 z-50 hover-scale">
           {/* Warpcast-style floating elements */}
           <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-full blur-2xl pulse-accent"></div>
           <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-cyan-500/15 to-blue-500/10 rounded-full blur-xl pulse-accent" style={{ animationDelay: '1s' }}></div>
