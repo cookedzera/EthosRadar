@@ -95,6 +95,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
   const { data: enhancedData, isLoading: isEnhancedQueryLoading } = useEnhancedProfile(user?.userkeys?.[0]);
   const { data: vouchData } = useVouchActivities(user?.userkeys?.[0] || '');
   const { data: weeklyActivitiesData, isLoading: isWeeklyActivitiesLoading } = useWeeklyActivities(user?.userkeys?.[0]);
+  const { data: r4rData, isLoading: isR4RLoading, error: r4rError } = useR4RAnalysis(user?.userkeys?.[0]);
 
   const score = (scoreData as any)?.success ? (scoreData as any).data?.score || user?.score || 0 : user?.score || 0;
   const realStats = (statsData as any)?.success ? (statsData as any).data : user?.stats;
@@ -420,27 +421,107 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
         {activeTab === 'r4r-analysis' && (
           <div className="bg-white rounded-3xl p-8 shadow-md border-0">
-            <h3 className="font-semibold text-gray-900 mb-4">R4R Analysis</h3>
-            <div className="space-y-4">
-              <div>
-                <span className="text-sm text-gray-500">Reviews Received:</span>
-                <p className="text-gray-900 font-semibold">
-                  {(realStats?.review?.received?.positive || 0) + 
-                   (realStats?.review?.received?.neutral || 0) + 
-                   (realStats?.review?.received?.negative || 0)}
-                </p>
+            <h3 className="font-semibold text-gray-900 mb-6">R4R Analysis</h3>
+            
+            {isR4RLoading && (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <span className="ml-3 text-gray-500">Analyzing review patterns...</span>
               </div>
-              <div>
-                <span className="text-sm text-gray-500">Positive Reviews:</span>
-                <p className="text-gray-900 font-semibold text-green-600">
-                  {realStats?.review?.received?.positive || 0}
-                </p>
+            )}
+
+            {r4rError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-red-600" />
+                  <span className="text-red-800 text-sm">Unable to load R4R analysis</span>
+                </div>
               </div>
-              <div>
-                <span className="text-sm text-gray-500">Trust Score:</span>
-                <p className="text-gray-900 font-semibold">{score}</p>
+            )}
+
+            {r4rData && !isR4RLoading && (
+              <div className="space-y-6">
+                {/* R4R Score */}
+                <div className="bg-gray-50 rounded-xl p-6 border">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-gray-900">R4R Risk Score</h4>
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      r4rData.riskLevel === 'Low' ? 'bg-green-100 text-green-700' :
+                      r4rData.riskLevel === 'Moderate' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {r4rData.riskLevel} Risk
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                    {r4rData.r4rScore.toFixed(1)}%
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Likelihood of reputation farming activity
+                  </p>
+                </div>
+
+                {/* Key Metrics */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-xl p-4 border">
+                    <div className="text-sm text-gray-500">Reviews Received</div>
+                    <div className="text-xl font-bold text-gray-900">
+                      {r4rData.totalReviewsReceived || 0}
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl p-4 border">
+                    <div className="text-sm text-gray-500">Reciprocal Reviews</div>
+                    <div className="text-xl font-bold text-gray-900">
+                      {r4rData.reciprocalReviews || 0}
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl p-4 border">
+                    <div className="text-sm text-gray-500">Positive Reviews</div>
+                    <div className="text-xl font-bold text-green-600">
+                      {realStats?.review?.received?.positive || 0}
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl p-4 border">
+                    <div className="text-sm text-gray-500">Quick Reciprocals</div>
+                    <div className="text-xl font-bold text-orange-600">
+                      {r4rData.quickReciprocalCount || 0}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Risk Breakdown */}
+                {r4rData.scoreBreakdown && (
+                  <div className="bg-gray-50 rounded-xl p-6 border">
+                    <h4 className="font-semibold text-gray-900 mb-4">Score Breakdown</h4>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Base Score:</span>
+                        <span className="font-medium">{r4rData.scoreBreakdown.baseScore?.toFixed(1)}%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Volume Multiplier:</span>
+                        <span className="font-medium">{r4rData.scoreBreakdown.volumeMultiplier?.toFixed(2)}x</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Account Age Factor:</span>
+                        <span className="font-medium">{r4rData.scoreBreakdown.accountAgeMultiplier?.toFixed(2)}x</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Time Penalty:</span>
+                        <span className="font-medium">+{r4rData.scoreBreakdown.timePenalty || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
+
+            {!r4rData && !isR4RLoading && !r4rError && (
+              <div className="text-center py-8 text-gray-500">
+                <Network className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>No R4R analysis data available</p>
+              </div>
+            )}
           </div>
         )}
 
