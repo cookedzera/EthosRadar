@@ -1,5 +1,5 @@
 // Core React and routing
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Switch, Route } from "wouter";
 
 // Performance utilities
@@ -27,7 +27,9 @@ import NotFound from "@/pages/not-found";
 
 
 
-function AppHeader() {
+function AppHeader({ show = true }: { show?: boolean }) {
+  if (!show) return null;
+  
   return (
     <header className="absolute top-0 left-0 right-0 z-10">
       <div className="flex items-center justify-between p-8">
@@ -51,9 +53,20 @@ function Router() {
 }
 
 function AppContent() {
+  const [showHeader, setShowHeader] = useState(true);
+
+  useEffect(() => {
+    const handleShowHeader = (event: any) => {
+      setShowHeader(event.detail);
+    };
+
+    window.addEventListener('showHeader', handleShowHeader);
+    return () => window.removeEventListener('showHeader', handleShowHeader);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#c7c8c9] transition-colors duration-200">
-      <AppHeader />
+      <AppHeader show={showHeader} />
       <main>
         <Router />
       </main>

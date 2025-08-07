@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MinimalWalletScanner } from '@/components/minimal-wallet-scanner';
 import { UserProfileView } from '@/components/user-profile-view';
 
@@ -15,6 +15,13 @@ export function HomePage() {
   const handleBackToSearch = () => {
     setUser(null);
   };
+
+  // Communicate with parent about header visibility
+  useEffect(() => {
+    // Set a custom event to notify parent about header visibility
+    const event = new CustomEvent('showHeader', { detail: !user });
+    window.dispatchEvent(event);
+  }, [user]);
 
   if (user) {
     return (
