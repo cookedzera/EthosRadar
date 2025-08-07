@@ -64,7 +64,7 @@ function Router() {
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-transparent transition-colors duration-200">
+    <div className="min-h-screen transition-colors duration-200" style={{ background: '#000000' }}>
       <AppHeader />
       <main>
         <Router />

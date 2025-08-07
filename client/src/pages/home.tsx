@@ -119,7 +119,6 @@ export default function Home() {
     <div className="min-h-screen relative overflow-hidden" style={{ background: '#000000' }}>
       {/* Premium Background with Floating Particles */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/50"></div>
         
         {/* Premium Floating Orbs */}
         <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-full blur-3xl float-bounce"></div>
