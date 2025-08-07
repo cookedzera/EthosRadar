@@ -22,32 +22,20 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SimpleRadarLogo } from "@/components/holographic-logo";
 
 // Pages
-import Home from "@/pages/home";
+import { HomePage } from "@/pages/home";
 import NotFound from "@/pages/not-found";
 
 
 
 function AppHeader() {
   return (
-    <header className="relative z-10">
-      <div className="container mx-auto px-4 py-4">
-        <div className="neo-card flex items-center justify-between px-6 py-4 floating-animation">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <SimpleRadarLogo className="w-8 h-8 text-blue-400 rotating-slow" />
-              <div className="absolute inset-0 w-8 h-8 bg-blue-400/20 rounded-full blur-lg"></div>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                EthosRadar
-              </h1>
-              <p className="text-xs text-slate-400 font-medium">Trust Network Scanner</p>
-            </div>
-          </div>
-          <div className="neo-card p-2 bg-opacity-50">
-            <ThemeToggle />
-          </div>
+    <header className="absolute top-0 left-0 right-0 z-10">
+      <div className="flex items-center justify-between p-6">
+        <div className="flex items-center space-x-3">
+          <SimpleRadarLogo className="w-6 h-6 text-gray-900" />
+          <span className="text-lg font-medium text-gray-900">EthosRadar</span>
         </div>
+        <ThemeToggle />
       </div>
     </header>
   );
@@ -56,7 +44,7 @@ function AppHeader() {
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={HomePage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -64,7 +52,7 @@ function Router() {
 
 function AppContent() {
   return (
-    <div className="min-h-screen transition-colors duration-200" style={{ background: '#000000' }}>
+    <div className="min-h-screen bg-gray-50 transition-colors duration-200">
       <AppHeader />
       <main>
         <Router />
