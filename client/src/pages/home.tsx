@@ -116,10 +116,10 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Modern Warpcast Background Elements */}
+    <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a0b' }}>
+      {/* Premium Background Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Floating Base Chain Orbs */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
         <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-full blur-3xl float-bounce"></div>
         <div className="absolute top-60 right-16 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-cyan-500/15 rounded-full blur-2xl float-bounce" style={{ animationDelay: '2s' }}></div>
         <div className="absolute bottom-40 left-20 w-48 h-48 bg-gradient-to-br from-cyan-500/12 to-blue-600/8 rounded-full blur-3xl float-bounce" style={{ animationDelay: '4s' }}></div>
@@ -138,47 +138,199 @@ export default function Home() {
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto space-y-12">
           
-          {/* Hero Section - Warpcast Style */}
-          <div className="text-center space-y-8 slide-up-fade">
-            <div className="relative">
-              <h1 className="text-6xl md:text-8xl font-black gradient-warp mb-6 font-display">
-                TrustRadar
-              </h1>
-              <div className="absolute -inset-8 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 rounded-full blur-3xl pulse-accent"></div>
+          {/* TOP PRIORITY: SEARCH BAR - Premium Glass Design */}
+          <div className="glass-search-container mb-12">
+            <div className="glass-card search-hero">
+              <div className="search-header mb-6">
+                <h2 className="text-white text-2xl font-semibold mb-2">Search Web3 Trust Scores</h2>
+                <p className="text-white/70">Enter @username or wallet address</p>
+              </div>
+              <WalletScanner />
+              
+              {/* Quick suggestion chips */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {['vitalik.eth', 'cookedzera', 'dwr.eth', 'jessepollak'].map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    className="glass-pill px-4 py-2 text-sm text-white/80 hover:text-white transition-all hover-scale"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* WELCOME SECTION - Premium Glass Card */}
+          <div className="glass-card welcome-card mb-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  Discover Web3 Trust Scores
+                </h1>
+                <p className="text-white/70 text-lg">
+                  Powered by Ethos Network
+                </p>
+              </div>
+              <div className="glass-badge">
+                <img 
+                  src="https://i.ibb.co/jPDG2NX5/ethos-network1719934757538-removebg-preview.png" 
+                  alt="Ethos Logo" 
+                  className="w-8 h-8 opacity-80"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* FEATURE CARDS GRID - 2x2 Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Network Stats Card */}
+            <div className="glass-card feature-card">
+              <div className="flex items-center mb-4">
+                <div className="glass-icon-container mr-4">
+                  <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                  </svg>
+                </div>
+                <h3 className="text-white font-semibold text-lg">Network Stats</h3>
+              </div>
+              <div className="space-y-2">
+                <div className="text-2xl font-bold text-white">125,847</div>
+                <div className="text-white/60 text-sm">Active Users</div>
+                <div className="glass-trend-indicator">
+                  <span className="text-green-400 text-sm">↗ +2.4%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust Levels Card */}
+            <div className="glass-card feature-card">
+              <div className="flex items-center mb-4">
+                <div className="glass-icon-container mr-4">
+                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-white font-semibold text-lg">Trust Levels</h3>
+              </div>
+              <div className="space-y-2">
+                <div className="text-2xl font-bold text-white">1,847</div>
+                <div className="text-white/60 text-sm">Average Score</div>
+                <div className="trust-level-indicator">
+                  <span className="text-blue-400 text-sm">● Reputable</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Activity Card */}
+            <div className="glass-card feature-card">
+              <div className="flex items-center mb-4">
+                <div className="glass-icon-container mr-4">
+                  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <h3 className="text-white font-semibold text-lg">Recent Activity</h3>
+              </div>
+              <div className="space-y-2">
+                <div className="text-2xl font-bold text-white">3,429</div>
+                <div className="text-white/60 text-sm">Scans Today</div>
+                <div className="mini-chart">
+                  <div className="flex items-end space-x-1 h-8">
+                    {[40, 60, 30, 80, 50, 90, 70].map((height, i) => (
+                      <div
+                        key={i}
+                        className="bg-purple-400/50 rounded-sm w-2"
+                        style={{ height: `${height}%` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions Card */}
+            <div className="glass-card feature-card">
+              <div className="flex items-center mb-4">
+                <div className="glass-icon-container mr-4">
+                  <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-white font-semibold text-lg">Quick Actions</h3>
+              </div>
+              <div className="space-y-3">
+                <button className="glass-action-button w-full">
+                  Scan Profile
+                </button>
+                <button className="glass-action-button w-full">
+                  View Leaderboard
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* RECENT/TRENDING SECTION */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Recently Searched */}
+            <div className="glass-card">
+              <h3 className="text-white font-semibold text-lg mb-4">Recently Searched</h3>
+              <div className="space-y-3">
+                {['vitalik.eth', 'cookedzera.eth', 'dwr.eth'].map((user) => (
+                  <div key={user} className="glass-mini-card">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/80">{user}</span>
+                      <span className="text-white/60 text-sm">2h ago</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Trending Profiles */}
+            <div className="glass-card">
+              <h3 className="text-white font-semibold text-lg mb-4">Trending Profiles</h3>
+              <div className="space-y-3">
+                {[
+                  { user: 'jessepollak', score: '2,847', badge: '👑' },
+                  { user: 'dwr.eth', score: '2,654', badge: '🏆' },
+                  { user: 'vitalik.eth', score: '2,543', badge: '⭐' }
+                ].map((profile) => (
+                  <div key={profile.user} className="glass-mini-card">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg">{profile.badge}</span>
+                        <span className="text-white/80">{profile.user}</span>
+                      </div>
+                      <span className="text-white/60 text-sm">{profile.score}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* BOTTOM STATUS */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="glass-status-badge">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full pulse"></div>
+                <span className="text-white/80 text-sm">All Systems Operational</span>
+              </div>
             </div>
             
-            <p className="text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed font-medium">
-              The most advanced trust network scanner for <span className="gradient-base font-bold">Warpcast</span> and <span className="gradient-base font-bold">Base</span> users
-            </p>
-            
-            {/* Modern Feature Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-              {[
-                { icon: '🔍', text: 'Smart Search', color: 'from-purple-500/20 to-pink-500/20' },
-                { icon: '⚡', text: 'Instant Results', color: 'from-cyan-500/20 to-blue-500/20' },
-                { icon: '🛡️', text: 'Trust Verified', color: 'from-green-500/20 to-emerald-500/20' },
-                { icon: '📊', text: 'Deep Analytics', color: 'from-orange-500/20 to-red-500/20' }
-              ].map((feature, index) => (
-                <div
-                  key={feature.text}
-                  className={`warp-card p-4 text-center hover-scale scale-in bg-gradient-to-br ${feature.color}`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="text-2xl mb-2">{feature.icon}</div>
-                  <div className="text-white font-semibold text-sm">{feature.text}</div>
+            <div className="flex space-x-3">
+              {['API', 'Database', 'Network'].map((service) => (
+                <div key={service} className="glass-chip">
+                  <span className="text-white/70 text-xs">{service}</span>
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full ml-2"></div>
                 </div>
               ))}
             </div>
-          </div>
-          
-          {/* Enhanced Hero Tagline */}
-          <div className="slide-up-fade" style={{ animationDelay: '0.3s' }}>
-            <HeroTagline />
-          </div>
-          
-          {/* Main Scanner - Warpcast Design */}
-          <div className="slide-up-fade" style={{ animationDelay: '0.5s' }}>
-            <WalletScanner />
+
+            <button className="glass-secondary-button">
+              Switch to Farcaster
+            </button>
           </div>
           
         </div>
