@@ -251,28 +251,27 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </h1>
         </div>
 
-        {/* Mobile-Optimized Shareable Profile Card */}
-        <div className="max-w-md mx-auto bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-xl rounded-3xl p-6 mb-8 shadow-[0_20px_40px_-8px_rgba(0,0,0,0.15)] border border-white/50 relative overflow-hidden">
-          {/* Background Accent */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5"></div>
+        {/* Apple-Inspired Widget Card */}
+        <div className="max-w-sm mx-auto bg-white/90 backdrop-blur-xl rounded-[2.5rem] p-8 mb-8 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.2)] border border-gray-200/50 relative overflow-hidden">
+          {/* Subtle Background Pattern */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50/80 via-white/60 to-gray-100/80"></div>
           
           <div className="relative z-10">
-            {/* Header Row */}
-            <div className="flex justify-between items-center mb-6">
+            {/* Header Row - Minimal */}
+            <div className="flex justify-between items-center mb-8">
               <button
                 onClick={onBackToSearch}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-all shadow-md text-sm"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 transition-all text-sm font-medium"
                 data-testid="button-back"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back</span>
               </button>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <button
                   onClick={handleViewOnEthos}
-                  className="flex items-center gap-1 px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-all shadow-md text-sm font-medium"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all text-sm font-medium shadow-lg"
                 >
                   <ExternalLink className="w-3 h-3" />
                   <span>Ethos</span>
@@ -281,97 +280,94 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             </div>
 
-            {/* Profile Content - Vertical Layout */}
-            <div className="text-center space-y-6">
-              {/* Avatar with Glow */}
-              <div className="relative inline-block">
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-md opacity-60 animate-pulse"></div>
-                <Avatar className="relative h-24 w-24 ring-4 ring-white/60 shadow-xl">
-                  <AvatarImage 
-                    src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
-                    alt={user.displayName}
-                    className="object-cover"
-                  />
-                  <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700 text-3xl font-bold">
-                    {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
-                  </AvatarFallback>
-                </Avatar>
+            {/* Main Content Layout - Left Side Circle + Right Side Info */}
+            <div className="flex items-center gap-8 mb-8">
+              {/* Left: Avatar Circle (like clock in reference) */}
+              <div className="relative flex-shrink-0">
+                <div className="w-24 h-24 rounded-full border-3 border-gray-300 flex items-center justify-center bg-white shadow-inner">
+                  <Avatar className="h-20 w-20">
+                    <AvatarImage 
+                      src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
+                      alt={user.displayName}
+                      className="object-cover"
+                    />
+                    <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-200 text-blue-700 text-2xl font-bold">
+                      {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
                 
                 {/* Status Indicator */}
-                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1.5 ring-3 ring-white shadow-lg">
+                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
                 </div>
               </div>
 
-              {/* Trust Score - Large & Prominent */}
-              <div>
-                <div className="text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+              {/* Right: Info Section */}
+              <div className="flex-1 text-left">
+                <div className="text-sm font-medium text-gray-500 mb-1">Trust Score</div>
+                <div className="text-4xl font-black text-gray-900 mb-3">
                   {animatedScore}
                 </div>
-                <div className="text-gray-600 font-semibold text-sm">Trust Score</div>
-              </div>
-
-              {/* User Name */}
-              <div>
-                <h1 className="text-2xl font-black text-gray-900 mb-1">
+                
+                <h1 className="text-xl font-bold text-gray-900 mb-1">
                   {user.displayName}
                 </h1>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-sm text-gray-500 font-medium">
                   {formatAddress(user?.userkeys?.[0] || '')}
                 </p>
               </div>
+            </div>
 
-              {/* Tier Badge */}
-              {score > 0 && (
-                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold shadow-lg ${getTierColor(score)}`}>
+            {/* Tier Badge - Centered */}
+            {score > 0 && (
+              <div className="flex justify-center mb-8">
+                <div className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold ${getTierColor(score)} shadow-md`}>
                   <IconComponent className="w-4 h-4" />
                   <span>{tierInfo.tier}</span>
                 </div>
-              )}
-
-              {/* Compact Stats Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <Users className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{vouchesReceived}</div>
-                  <div className="text-xs font-semibold text-gray-600">Vouches</div>
-                </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
-                  <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <MessageSquare className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
-                  <div className="text-xs font-semibold text-gray-600">Reviews</div>
-                </div>
               </div>
+            )}
 
-              {/* Additional Stats Row */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <Star className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
-                  <div className="text-xs font-semibold text-gray-600">XP Total</div>
+            {/* Stats Row - Clean Apple Style */}
+            <div className="grid grid-cols-4 gap-4 mb-6">
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                  <Users className="w-5 h-5 text-blue-600" />
                 </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
-                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <Network className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">#{user?.id || '—'}</div>
-                  <div className="text-xs font-semibold text-gray-600">Profile ID</div>
-                </div>
+                <div className="text-lg font-black text-gray-900">{vouchesReceived}</div>
+                <div className="text-xs font-medium text-gray-500">Vouches</div>
               </div>
-
-              {/* Branding Footer */}
-              <div className="pt-2 border-t border-gray-200/50">
-                <div className="text-xs font-semibold text-gray-400 tracking-wide">
-                  ETHOSRADAR.COM
+              
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                  <MessageSquare className="w-5 h-5 text-green-600" />
                 </div>
+                <div className="text-lg font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
+                <div className="text-xs font-medium text-gray-500">Reviews</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                  <Star className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="text-lg font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
+                <div className="text-xs font-medium text-gray-500">XP</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
+                  <Network className="w-5 h-5 text-orange-600" />
+                </div>
+                <div className="text-lg font-black text-gray-900">#{user?.id || '—'}</div>
+                <div className="text-xs font-medium text-gray-500">Rank</div>
+              </div>
+            </div>
+
+            {/* Footer Branding - Subtle */}
+            <div className="text-center pt-4 border-t border-gray-200/50">
+              <div className="text-xs font-semibold text-gray-400 tracking-wider">
+                ETHOSRADAR
               </div>
             </div>
           </div>
