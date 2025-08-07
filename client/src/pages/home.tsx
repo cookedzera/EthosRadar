@@ -116,7 +116,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a0b' }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: '#000000' }}>
       {/* Premium Background with Floating Particles */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/50"></div>
