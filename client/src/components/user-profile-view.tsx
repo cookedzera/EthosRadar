@@ -359,7 +359,9 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
                   <Network className="w-5 h-5 text-orange-600" />
                 </div>
-                <div className="text-lg font-black text-gray-900">#{user?.id || '—'}</div>
+                <div className="text-lg font-black text-gray-900">
+                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+                </div>
                 <div className="text-xs font-medium text-gray-500">Rank</div>
               </div>
             </div>
