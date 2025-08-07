@@ -30,10 +30,10 @@ import NotFound from "@/pages/not-found";
 function AppHeader() {
   return (
     <header className="absolute top-0 left-0 right-0 z-10">
-      <div className="flex items-center justify-between p-6">
+      <div className="flex items-center justify-between p-8">
         <div className="flex items-center space-x-3">
           <SimpleRadarLogo className="w-6 h-6 text-gray-900" />
-          <span className="text-lg font-medium text-gray-900">EthosRadar</span>
+          <span className="text-lg font-light text-gray-900">EthosRadar</span>
         </div>
         <ThemeToggle />
       </div>

@@ -123,7 +123,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
           onKeyPress={handleKeyPress}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          className="w-full h-14 pl-4 pr-20 text-base border-0 rounded-2xl bg-white text-gray-900 placeholder:text-gray-500 focus:ring-0 focus:outline-none transition-all shadow-sm"
+          className="w-full h-16 pl-5 pr-20 text-base border-0 rounded-3xl bg-white text-gray-900 placeholder:text-gray-500 focus:ring-0 focus:outline-none transition-all shadow-md"
         />
         
         {/* Clear button */}
@@ -152,7 +152,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
 
       {/* Search suggestions dropdown */}
       {showSuggestions && (suggestions.length > 0 || suggestionsLoading) && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto border-0">
+        <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-2xl shadow-xl z-50 max-h-60 overflow-y-auto border-0">
           {suggestionsLoading ? (
             <div className="px-4 py-3 text-gray-500 text-sm">Loading suggestions...</div>
           ) : (
