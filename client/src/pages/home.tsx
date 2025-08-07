@@ -27,7 +27,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa]">
+    <div className="min-h-screen bg-[#c7c8c9]">
       {/* Main Container - Centered like reference */}
       <div className="max-w-sm mx-auto px-6 py-16">
         

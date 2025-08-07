@@ -52,7 +52,7 @@ function Router() {
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-gray-50 transition-colors duration-200">
+    <div className="min-h-screen bg-[#c7c8c9] transition-colors duration-200">
       <AppHeader />
       <main>
         <Router />
