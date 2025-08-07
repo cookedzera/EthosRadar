@@ -329,40 +329,46 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             )}
 
-            {/* Stats Row - Clean Apple Style */}
-            <div className="grid grid-cols-4 gap-4 mb-6">
-              <div className="text-center">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                  <Users className="w-5 h-5 text-blue-600" />
+            {/* Stats Grid - Improved Layout */}
+            <div className="space-y-4 mb-6">
+              {/* Top Row - Primary Stats */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                    <Users className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div className="text-2xl font-black text-gray-900">{vouchesReceived}</div>
+                  <div className="text-sm font-medium text-gray-500">Vouches</div>
                 </div>
-                <div className="text-lg font-black text-gray-900">{vouchesReceived}</div>
-                <div className="text-xs font-medium text-gray-500">Vouches</div>
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                    <MessageSquare className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="text-2xl font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
+                  <div className="text-sm font-medium text-gray-500">Reviews</div>
+                </div>
               </div>
               
-              <div className="text-center">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-                  <MessageSquare className="w-5 h-5 text-green-600" />
+              {/* Bottom Row - Secondary Stats */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
+                    <Star className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="text-2xl font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
+                  <div className="text-sm font-medium text-gray-500">XP Total</div>
                 </div>
-                <div className="text-lg font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
-                <div className="text-xs font-medium text-gray-500">Reviews</div>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
-                  <Star className="w-5 h-5 text-purple-600" />
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3">
+                    <Network className="w-6 h-6 text-orange-600" />
+                  </div>
+                  <div className="text-2xl font-black text-gray-900">
+                    {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+                  </div>
+                  <div className="text-sm font-medium text-gray-500">Rank</div>
                 </div>
-                <div className="text-lg font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
-                <div className="text-xs font-medium text-gray-500">XP</div>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
-                  <Network className="w-5 h-5 text-orange-600" />
-                </div>
-                <div className="text-lg font-black text-gray-900">
-                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
-                </div>
-                <div className="text-xs font-medium text-gray-500">Rank</div>
               </div>
             </div>
 
