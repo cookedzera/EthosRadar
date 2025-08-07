@@ -225,7 +225,8 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         <div className="mb-8 flex items-center justify-between">
           <button
             onClick={onBackToSearch}
-            className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white text-gray-700 hover:shadow-lg transition-all shadow-md border-0"
+            className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white text-gray-700 hover:shadow-lg transition-all shadow-md border-0 relative z-10 cursor-pointer"
+            data-testid="button-back"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="font-medium">Back</span>
