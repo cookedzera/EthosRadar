@@ -257,14 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const offset = req.query.offset || "0";
 
       if (!query || typeof query !== 'string' || query.length < 2) {
-        return res.json({ success: true, data: [] });
-      }
-
-      // Check cache first
-      const cacheKey = `search-${query}-${limit}-${offset}`;
-      const cached = searchCache.get(cacheKey);
-      if (cached && Date.now() - cached.timestamp < SEARCH_CACHE_TTL) {
-        return res.json({ success: true, data: cached.data, cached: true });
+        return res.json([]);
       }
 
       // Set cache headers for search suggestions
@@ -285,30 +278,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const data = await response.json();
       
-      if (data.ok && data.data && data.data.values) {
-        // Simple conversion to our format with null safety
-        const suggestions = data.data.values.map((user: any) => ({
+      if (data.success && data.data) {
+        // Direct API response - already in correct format
+        const suggestions = data.data.slice(0, 8).map((user: any) => ({
           userkey: user.userkey || '',
-          displayName: user.name || user.username || 'Unknown User',
+          display_name: user.displayName || user.username || 'Unknown User',
           username: user.username || 'unknown',
-          avatarUrl: user.avatar || '',
+          pfp_url: user.avatarUrl || '',
           score: user.score || 0,
           description: user.description || ''
         }));
         
-        // Cache the results
-        searchCache.set(cacheKey, { data: suggestions, timestamp: Date.now() });
-        
-        return res.json({ success: true, data: suggestions });
+        return res.json(suggestions);
       }
       
-      return res.json({ success: true, data: [] });
+      return res.json([]);
     } catch (error) {
-      // Error fetching from Ethos API
-      return res.json({ 
-        success: false, 
-        error: "Failed to fetch from Ethos API" 
-      });
+      console.error('Search suggestions error:', error);
+      // Return empty array on error
+      return res.json([]);
     }
   });
 

@@ -28,7 +28,11 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   // Search suggestions
   const { data: suggestions = [] } = useQuery<Suggestion[]>({
     queryKey: ['/api/search-suggestions', query],
-    queryFn: () => apiRequest(`/api/search-suggestions?q=${encodeURIComponent(query)}`),
+    queryFn: async () => {
+      const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`);
+      if (!response.ok) throw new Error('Failed to fetch suggestions');
+      return response.json();
+    },
     enabled: query.length >= 2 && showSuggestions,
     staleTime: 30000,
   });
