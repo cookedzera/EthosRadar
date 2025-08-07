@@ -251,126 +251,126 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </h1>
         </div>
 
-        {/* Hero Section - Premium Profile Card */}
-        <div className="bg-gradient-to-br from-white/90 via-white/85 to-white/90 backdrop-blur-xl rounded-[2rem] p-10 mb-8 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] border border-white/40 relative overflow-hidden group hover:shadow-[0_40px_80px_-12px_rgba(0,0,0,0.2)] transition-all duration-500">
-          {/* Enhanced Background Effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/8 via-purple-500/6 to-pink-500/8"></div>
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-          
-          {/* Floating Elements for Premium Feel */}
-          <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-xl"></div>
-          <div className="absolute bottom-8 left-8 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-xl"></div>
+        {/* Mobile-Optimized Shareable Profile Card */}
+        <div className="max-w-md mx-auto bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-xl rounded-3xl p-6 mb-8 shadow-[0_20px_40px_-8px_rgba(0,0,0,0.15)] border border-white/50 relative overflow-hidden">
+          {/* Background Accent */}
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5"></div>
           
           <div className="relative z-10">
-            {/* Header Row with Back Button and Actions */}
-            <div className="flex justify-between items-start mb-8">
+            {/* Header Row */}
+            <div className="flex justify-between items-center mb-6">
               <button
                 onClick={onBackToSearch}
-                className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white hover:text-gray-900 transition-all shadow-lg border border-white/50 group hover:scale-105"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-all shadow-md text-sm"
                 data-testid="button-back"
               >
-                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                <span className="font-semibold">Back to Search</span>
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back</span>
               </button>
               
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={handleViewOnEthos}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-all shadow-md text-sm font-medium"
                 >
-                  <ExternalLink className="w-4 h-4" />
-                  <span>View on Ethos</span>
+                  <ExternalLink className="w-3 h-3" />
+                  <span>Ethos</span>
                 </button>
                 <FarcasterShareButton user={user} />
               </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row items-center gap-12">
-              {/* Enhanced Avatar Section */}
-              <div className="flex flex-col items-center">
-                <div className="relative group">
-                  {/* Avatar Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity animate-pulse"></div>
-                  
-                  <Avatar className="relative h-40 w-40 ring-6 ring-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
-                    <AvatarImage 
-                      src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
-                      alt={user.displayName}
-                      className="object-cover"
-                    />
-                    <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700 text-5xl font-black">
-                      {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                  
-                  {/* Enhanced Status Indicator */}
-                  <div className="absolute -bottom-3 -right-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full p-3 ring-6 ring-white shadow-2xl">
-                    <div className="w-4 h-4 bg-white rounded-full animate-pulse"></div>
-                  </div>
-                </div>
+            {/* Profile Content - Vertical Layout */}
+            <div className="text-center space-y-6">
+              {/* Avatar with Glow */}
+              <div className="relative inline-block">
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-md opacity-60 animate-pulse"></div>
+                <Avatar className="relative h-24 w-24 ring-4 ring-white/60 shadow-xl">
+                  <AvatarImage 
+                    src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
+                    alt={user.displayName}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700 text-3xl font-bold">
+                    {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
+                  </AvatarFallback>
+                </Avatar>
                 
-                {/* Trust Score - Dramatic Display */}
-                <div className="mt-8 text-center">
-                  <div className="text-7xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 drop-shadow-lg">
-                    {animatedScore}
-                  </div>
-                  <div className="text-gray-700 font-bold text-lg">Trust Score</div>
-                  
-                  {/* Enhanced Tier Badge */}
-                  {score > 0 && (
-                    <div className={`inline-flex items-center gap-4 px-8 py-4 rounded-3xl text-xl font-black shadow-2xl mt-4 ${getTierColor(score)} hover:scale-105 transition-transform`}>
-                      <IconComponent className="w-7 h-7" />
-                      <span>{tierInfo.tier}</span>
-                    </div>
-                  )}
+                {/* Status Indicator */}
+                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1.5 ring-3 ring-white shadow-lg">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
                 </div>
               </div>
 
-              {/* Enhanced User Information */}
-              <div className="flex-1 text-center lg:text-left space-y-6">
-                <div>
-                  <h1 className="text-5xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight">
-                    {user.displayName}
-                  </h1>
-                  
-                  <p className="text-gray-600 text-xl font-medium mb-6">
-                    {formatAddress(user?.userkeys?.[0] || '')}
-                  </p>
+              {/* Trust Score - Large & Prominent */}
+              <div>
+                <div className="text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                  {animatedScore}
                 </div>
+                <div className="text-gray-600 font-semibold text-sm">Trust Score</div>
+              </div>
 
-                {/* Premium Stats Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                      <Users className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-3xl font-black text-gray-900 mb-2">{vouchesReceived}</div>
-                    <div className="text-sm font-semibold text-gray-600">Vouches</div>
+              {/* User Name */}
+              <div>
+                <h1 className="text-2xl font-black text-gray-900 mb-1">
+                  {user.displayName}
+                </h1>
+                <p className="text-gray-500 text-sm font-medium">
+                  {formatAddress(user?.userkeys?.[0] || '')}
+                </p>
+              </div>
+
+              {/* Tier Badge */}
+              {score > 0 && (
+                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold shadow-lg ${getTierColor(score)}`}>
+                  <IconComponent className="w-4 h-4" />
+                  <span>{tierInfo.tier}</span>
+                </div>
+              )}
+
+              {/* Compact Stats Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-2">
+                    <Users className="w-4 h-4 text-white" />
                   </div>
-                  
-                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                      <MessageSquare className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-3xl font-black text-gray-900 mb-2">{realStats?.review?.received?.positive || 0}</div>
-                    <div className="text-sm font-semibold text-gray-600">Reviews</div>
+                  <div className="text-xl font-black text-gray-900">{vouchesReceived}</div>
+                  <div className="text-xs font-semibold text-gray-600">Vouches</div>
+                </div>
+                
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
+                  <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mx-auto mb-2">
+                    <MessageSquare className="w-4 h-4 text-white" />
                   </div>
-                  
-                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                      <Star className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-3xl font-black text-gray-900 mb-2">{formatNumber(user?.xpTotal || 0)}</div>
-                    <div className="text-sm font-semibold text-gray-600">XP Total</div>
+                  <div className="text-xl font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
+                  <div className="text-xs font-semibold text-gray-600">Reviews</div>
+                </div>
+              </div>
+
+              {/* Additional Stats Row */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-2">
+                    <Star className="w-4 h-4 text-white" />
                   </div>
-                  
-                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                      <Network className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-3xl font-black text-gray-900 mb-2">#{user?.id || '—'}</div>
-                    <div className="text-sm font-semibold text-gray-600">Profile ID</div>
+                  <div className="text-xl font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
+                  <div className="text-xs font-semibold text-gray-600">XP Total</div>
+                </div>
+                
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/50 shadow-lg">
+                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-2">
+                    <Network className="w-4 h-4 text-white" />
                   </div>
+                  <div className="text-xl font-black text-gray-900">#{user?.id || '—'}</div>
+                  <div className="text-xs font-semibold text-gray-600">Profile ID</div>
+                </div>
+              </div>
+
+              {/* Branding Footer */}
+              <div className="pt-2 border-t border-gray-200/50">
+                <div className="text-xs font-semibold text-gray-400 tracking-wide">
+                  ETHOSRADAR.COM
                 </div>
               </div>
             </div>
