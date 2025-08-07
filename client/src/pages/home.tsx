@@ -117,103 +117,109 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Modern Warpcast Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Floating Orbs */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-cyan-400/15 rounded-full blur-2xl floating-animation"></div>
-        <div className="absolute top-60 right-16 w-24 h-24 bg-gradient-to-br from-purple-400/25 to-pink-400/20 rounded-full blur-xl floating-animation" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-40 left-20 w-40 h-40 bg-gradient-to-br from-orange-400/18 to-yellow-400/12 rounded-full blur-2xl floating-animation" style={{ animationDelay: '4s' }}></div>
+        {/* Floating Base Chain Orbs */}
+        <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-full blur-3xl float-bounce"></div>
+        <div className="absolute top-60 right-16 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-cyan-500/15 rounded-full blur-2xl float-bounce" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-40 left-20 w-48 h-48 bg-gradient-to-br from-cyan-500/12 to-blue-600/8 rounded-full blur-3xl float-bounce" style={{ animationDelay: '4s' }}></div>
         
-        {/* Moving Light Beams */}
-        <div className="absolute top-1/4 left-1/4 w-1 h-40 bg-gradient-to-b from-transparent via-blue-400/30 to-transparent rotating-slow"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-1 h-32 bg-gradient-to-b from-transparent via-purple-400/25 to-transparent rotating-slow" style={{ animationDelay: '3s' }}></div>
+        {/* Warpcast Inspired Light Beams */}
+        <div className="absolute top-1/3 left-1/3 w-2 h-60 bg-gradient-to-b from-transparent via-purple-400/20 to-transparent transform rotate-12 pulse-accent"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-1 h-40 bg-gradient-to-b from-transparent via-cyan-400/25 to-transparent transform -rotate-12 pulse-accent" style={{ animationDelay: '1.5s' }}></div>
         
-        {/* Particle Effects */}
-        <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-cyan-400/40 rounded-full loading-pulse-soft"></div>
-        <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-blue-400/50 rounded-full loading-pulse-soft" style={{ animationDelay: '1s' }}></div>
+        {/* Animated Particles */}
+        <div className="absolute top-1/4 right-1/3 w-3 h-3 bg-purple-400/60 rounded-full pulse-accent"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-2 h-2 bg-cyan-400/70 rounded-full pulse-accent" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-2/3 right-1/5 w-1 h-1 bg-pink-400/80 rounded-full pulse-accent" style={{ animationDelay: '3s' }}></div>
       </div>
 
-      {/* Hero Content */}
-      <div className="relative z-10 container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto space-y-8">
-          {/* Enhanced Hero Section */}
-          <div className="text-center space-y-6 mb-12">
+      {/* Main Content with Fresh Warpcast Design */}
+      <div className="relative z-10 container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
+          
+          {/* Hero Section - Warpcast Style */}
+          <div className="text-center space-y-8 slide-up-fade">
             <div className="relative">
-              <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent mb-4">
-                Trust Scanner
+              <h1 className="text-6xl md:text-8xl font-black gradient-warp mb-6 font-display">
+                TrustRadar
               </h1>
-              <div className="absolute -inset-4 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl"></div>
+              <div className="absolute -inset-8 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 rounded-full blur-3xl pulse-accent"></div>
             </div>
             
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Scan trust networks, analyze reputation patterns, and explore the Web3 credibility ecosystem
+            <p className="text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed font-medium">
+              The most advanced trust network scanner for <span className="gradient-base font-bold">Warpcast</span> and <span className="gradient-base font-bold">Base</span> users
             </p>
             
-            {/* Feature Pills */}
-            <div className="flex flex-wrap justify-center gap-3 mt-8">
+            {/* Modern Feature Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
               {[
-                { icon: '🔍', text: 'Multi-Platform Search' },
-                { icon: '⚡', text: 'Real-Time Analysis' },
-                { icon: '🛡️', text: 'Trust Verification' },
-                { icon: '📊', text: 'R4R Detection' }
+                { icon: '🔍', text: 'Smart Search', color: 'from-purple-500/20 to-pink-500/20' },
+                { icon: '⚡', text: 'Instant Results', color: 'from-cyan-500/20 to-blue-500/20' },
+                { icon: '🛡️', text: 'Trust Verified', color: 'from-green-500/20 to-emerald-500/20' },
+                { icon: '📊', text: 'Deep Analytics', color: 'from-orange-500/20 to-red-500/20' }
               ].map((feature, index) => (
                 <div
                   key={feature.text}
-                  className="neo-card px-4 py-2 bg-opacity-30 floating-animation"
-                  style={{ animationDelay: `${index * 0.2}s` }}
+                  className={`warp-card p-4 text-center hover-scale scale-in bg-gradient-to-br ${feature.color}`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="flex items-center space-x-2 text-sm">
-                    <span className="text-lg">{feature.icon}</span>
-                    <span className="text-slate-300 font-medium">{feature.text}</span>
-                  </div>
+                  <div className="text-2xl mb-2">{feature.icon}</div>
+                  <div className="text-white font-semibold text-sm">{feature.text}</div>
                 </div>
               ))}
             </div>
           </div>
           
-          {/* Hero tagline */}
-          <HeroTagline />
+          {/* Enhanced Hero Tagline */}
+          <div className="slide-up-fade" style={{ animationDelay: '0.3s' }}>
+            <HeroTagline />
+          </div>
           
-          {/* Enhanced Wallet Scanner */}
-          <WalletScanner />
+          {/* Main Scanner - Warpcast Design */}
+          <div className="slide-up-fade" style={{ animationDelay: '0.5s' }}>
+            <WalletScanner />
+          </div>
+          
         </div>
         
-        {/* Farcaster Auto-Detect Component */}
+        {/* Enhanced Farcaster Auto-Detect */}
         {detectedUser && (
-          <div className="w-full mb-8">
-            <div className="neo-card p-4 floating-animation">
+          <div className="max-w-4xl mx-auto mt-8">
+            <div className="warp-card p-6 slide-up-fade">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-4">
                   {detectedUser.pfpUrl ? (
                     <img 
                       src={detectedUser.pfpUrl} 
                       alt={detectedUser.displayName || 'Profile'}
-                      className="w-12 h-12 rounded-full border-2 border-blue-400/50 object-cover"
+                      className="w-16 h-16 rounded-full border-3 border-purple-400/50 object-cover hover-scale"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.style.display = 'none';
                       }}
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-full border-2 border-blue-400/50 bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xl font-bold">
+                    <div className="w-16 h-16 rounded-full border-3 border-purple-400/50 bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold hover-scale">
                       {detectedUser.displayName ? detectedUser.displayName[0].toUpperCase() : '?'}
                     </div>
                   )}
                   <div>
-                    <p className="text-white text-lg font-semibold">{detectedUser.displayName || 'Farcaster User'}</p>
-                    <p className="text-slate-400 text-sm">@{detectedUser.username} • Your Profile</p>
+                    <p className="text-white text-xl font-bold gradient-warp">{detectedUser.displayName || 'Farcaster User'}</p>
+                    <p className="text-white/60 text-base">@{detectedUser.username} • Detected Profile</p>
                   </div>
                 </div>
-                <Button 
+                <button 
                   onClick={() => handleViewProfile(detectedUser.username)}
-                  className="neo-button px-6 py-3"
+                  className="warp-button px-8 py-4 text-lg font-bold"
                 >
-                  View Profile →
-                </Button>
+                  Analyze Trust →
+                </button>
               </div>
             </div>
           </div>
         )}
+        
       </div>
     </div>
   );

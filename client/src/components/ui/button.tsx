@@ -5,25 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "neo-button inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all duration-300 focus:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "warp-button inline-flex items-center justify-center gap-3 whitespace-nowrap text-base font-bold transition-all duration-300 focus:outline-none focus-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default: "text-white hover:scale-105 active:scale-95",
         destructive:
-          "text-red-100 glow-accent-red hover:scale-105 active:scale-95",
+          "bg-gradient-to-r from-red-500 to-pink-500 text-white hover:scale-105 active:scale-95 state-error",
         outline:
-          "border border-slate-600/50 bg-slate-800/30 text-slate-300 hover:bg-slate-700/50 hover:scale-105",
+          "border-2 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:scale-105 hover:border-purple-400/40",
         secondary:
-          "bg-slate-700/50 text-slate-200 hover:bg-slate-600/60 hover:scale-105",
-        ghost: "bg-transparent hover:bg-slate-700/30 text-slate-300 hover:scale-105",
-        link: "text-blue-400 underline-offset-4 hover:underline bg-transparent",
+          "bg-gradient-to-r from-gray-600/50 to-gray-700/50 text-white hover:from-gray-500/60 hover:to-gray-600/60 hover:scale-105",
+        ghost: "bg-transparent hover:bg-white/10 text-white hover:scale-105",
+        link: "text-purple-400 underline-offset-4 hover:underline bg-transparent hover:text-purple-300",
       },
       size: {
-        default: "h-12 px-6 py-3 rounded-2xl",
-        sm: "h-10 px-4 py-2 rounded-xl text-xs",
-        lg: "h-14 px-8 py-4 rounded-2xl text-base",
-        icon: "h-12 w-12 rounded-2xl",
+        default: "h-14 px-8 py-4 rounded-2xl text-base",
+        sm: "h-12 px-6 py-3 rounded-xl text-sm",
+        lg: "h-16 px-10 py-5 rounded-2xl text-lg",
+        icon: "h-14 w-14 rounded-2xl",
       },
     },
     defaultVariants: {

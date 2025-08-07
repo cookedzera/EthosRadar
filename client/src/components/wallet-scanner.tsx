@@ -252,31 +252,20 @@ export function WalletScanner() {
   return (
     <>
       <div className="w-full max-w-full">
-        <div className="search-container relative backdrop-blur-md bg-white/12 light:bg-white/15 dark:bg-white/12 border border-white/18 light:border-white/25 dark:border-white/18 rounded-3xl p-6 md:p-6 px-5 transition-all duration-500 w-full max-w-full pb-7 shadow-2xl shadow-black/20 light:shadow-black/30 dark:shadow-black/15 space-y-4 z-50">
-          {/* Enhanced floating background elements */}
-          <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-br from-blue-400/15 to-cyan-400/12 light:from-gray-600/12 light:to-gray-700/10 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-gradient-to-br from-purple-400/12 to-pink-400/10 light:from-gray-500/12 light:to-gray-600/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          
-          {/* Main container inner border glow */}
-          <div className="absolute inset-0 rounded-3xl border border-white/15 pointer-events-none"></div>
+        <div className="warp-card p-8 transition-all duration-500 w-full max-w-full space-y-6 z-50 hover-scale"
+          {/* Warpcast-style floating elements */}
+          <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-full blur-2xl pulse-accent"></div>
+          <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-cyan-500/15 to-blue-500/10 rounded-full blur-xl pulse-accent" style={{ animationDelay: '1s' }}></div>
             
           {/* Redesigned Search Bar */}
           <div className="relative mb-4 z-[100]">
             <div className="group relative">
-              {/* Main search container with enhanced glassmorphism + Farcaster mode */}
+              {/* Modern Warpcast search container */}
               <div className={`
-                relative backdrop-blur-sm bg-white/10 dark:bg-white/8 light:bg-white/12
-                border border-white/20 dark:border-white/15 light:border-white/22 rounded-2xl overflow-hidden 
-                transition-all duration-300 ease-out group
-                shadow-xl shadow-black/15 dark:shadow-black/25 light:shadow-black/20
-                hover:bg-white/12 dark:hover:bg-white/10 light:hover:bg-white/15
-                hover:border-white/25 dark:hover:border-white/18 light:hover:border-white/28
-                hover:shadow-2xl hover:shadow-black/20 dark:hover:shadow-black/30 light:hover:shadow-black/25
-                hover:scale-[1.01]
+                relative warp-card rounded-2xl overflow-hidden transition-all duration-300 ease-out group p-0
                 ${farcasterMode 
-                  ? 'border-purple-500/70 shadow-lg shadow-purple-500/20 bg-gradient-to-r from-purple-500/15 dark:from-purple-900/20 via-purple-400/8 dark:via-purple-800/15 to-purple-500/15 dark:to-purple-900/20' + 
-                    (showFarcasterAnimation ? ' shadow-xl shadow-purple-500/30' : '')
-                  : ''
+                  ? 'border-purple-400/40 shadow-lg shadow-purple-500/20 bg-gradient-to-r from-purple-500/15 via-purple-400/8 to-purple-500/15' 
+                  : 'border-blue-400/30'
                 }
               `}>
                 
