@@ -29,16 +29,24 @@ import NotFound from "@/pages/not-found";
 
 function AppHeader() {
   return (
-    <header className="relative">
-      <div className="container mx-auto px-3 py-2">
-        <div className="flex items-center justify-between backdrop-blur-sm bg-white/15 border border-amber-900/25 rounded-xl px-6 py-3 shadow-lg hover:bg-white/20 transition-all duration-300">
-          <div className="flex items-center space-x-3">
-            <SimpleRadarLogo className="w-6 h-6 text-white dark:text-gray-800" />
-            <h1 className="text-xl font-bold text-white dark:text-gray-800">
-              EthosRadar
-            </h1>
+    <header className="relative z-10">
+      <div className="container mx-auto px-4 py-4">
+        <div className="neo-card flex items-center justify-between px-6 py-4 floating-animation">
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <SimpleRadarLogo className="w-8 h-8 text-blue-400 rotating-slow" />
+              <div className="absolute inset-0 w-8 h-8 bg-blue-400/20 rounded-full blur-lg"></div>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                EthosRadar
+              </h1>
+              <p className="text-xs text-slate-400 font-medium">Trust Network Scanner</p>
+            </div>
           </div>
-          <ThemeToggle />
+          <div className="neo-card p-2 bg-opacity-50">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>

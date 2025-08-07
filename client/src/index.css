@@ -42,7 +42,7 @@ button.bolt-icon-button {
   background: rgba(255, 255, 255, 0.05) !important;
 }
 
-/* Enhanced Loading Animations - optimized for performance */
+/* Enhanced Neomorphic + Glassmorphic Animations */
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
@@ -54,19 +54,46 @@ button.bolt-icon-button {
 
 @keyframes pulse-soft {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   50% {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-neu-raised), 0 0 10px rgba(59, 130, 246, 0.2);
   }
   50% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-neu-raised), 0 0 25px rgba(59, 130, 246, 0.4);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
@@ -125,10 +152,93 @@ button.bolt-icon-button {
   }
 }
 
+/* Neomorphic + Glassmorphic Components */
+.neo-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-neu-raised), var(--shadow-glass);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neo-card:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    var(--shadow-neu-raised),
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.neo-button {
+  background: linear-gradient(135deg, var(--glow-primary), #2563eb);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  font-weight: 600;
+  box-shadow: 
+    var(--shadow-neu-raised),
+    0 0 20px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neo-button:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 
+    var(--shadow-neu-raised),
+    0 0 30px rgba(59, 130, 246, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.neo-input {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-neu-inset);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neo-input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--glow-primary);
+  box-shadow: 
+    var(--shadow-neu-inset),
+    0 0 0 2px rgba(59, 130, 246, 0.2),
+    0 0 20px rgba(59, 130, 246, 0.15);
+}
+
+.glow-accent-green {
+  background: linear-gradient(135deg, var(--glow-secondary), #059669);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.glow-accent-orange {
+  background: linear-gradient(135deg, var(--glow-accent), #d97706);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.glow-accent-red {
+  background: linear-gradient(135deg, var(--glow-danger), #dc2626);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
 .loading-shimmer {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%);
+  background: linear-gradient(
+    90deg, 
+    rgba(255, 255, 255, 0.08) 25%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.08) 75%
+  );
   background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 2s infinite;
 }
 
 .loading-pulse-soft {
@@ -139,14 +249,53 @@ button.bolt-icon-button {
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
-/* Default light theme background - optimized for mobile */
+.floating-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+.rotating-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+/* Modern Neomorphic + Glassmorphic Dark Theme */
+:root {
+  /* Neomorphic Dark Colors */
+  --bg-primary: #1a1d23;
+  --bg-secondary: #212731;
+  --bg-tertiary: #2a2f3a;
+  --surface-light: #343a47;
+  --surface-darker: #151921;
+  
+  /* Glassmorphic Glass Colors */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-hover: rgba(255, 255, 255, 0.12);
+  
+  /* Glow Effects */
+  --glow-primary: #3b82f6;
+  --glow-secondary: #10b981;
+  --glow-accent: #f59e0b;
+  --glow-danger: #ef4444;
+  
+  /* Text Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  /* Shadows */
+  --shadow-neu-inset: inset 2px 2px 6px var(--surface-darker), inset -2px -2px 6px var(--surface-light);
+  --shadow-neu-raised: 4px 4px 12px var(--surface-darker), -4px -4px 12px var(--surface-light);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
 body {
   background: 
-    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
-    url('/unified-bg.webp') center center/cover no-repeat, 
-    linear-gradient(135deg, #080805 0%, #0f0f0e 25%, #161612 50%, #0f0f0e 75%, #080805 100%);
-  /* Use scroll for mobile performance instead of fixed */
-  background-attachment: scroll;
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+  background-attachment: fixed;
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0;
@@ -155,11 +304,9 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  /* Reduce transition duration for faster responsiveness */
-  transition: background 0.15s ease, color 0.15s ease;
-  color: #d1d5db;
-  /* Add content-visibility for better rendering performance */
-  content-visibility: auto;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+  position: relative;
 }
 
 /* Mobile-like layout for all screen sizes */
@@ -229,14 +376,7 @@ html {
   }
 }
 
-/* Dark theme background (now has light appearance) - mobile optimized */ 
-html.dark body,
-body.dark,
-.dark body {
-  background: url('/unified-bg.webp') center center/cover no-repeat, linear-gradient(135deg, #f1f5f9 0%, #e8f0fe 50%, #f8fafc 100%) !important;
-  background-attachment: scroll !important;
-  color: #1e293b !important;
-}
+/* Keep unified dark theme with new neomorphic design */
 
 /* Desktop gets fixed background for dark theme */
 @media (min-width: 431px) {
