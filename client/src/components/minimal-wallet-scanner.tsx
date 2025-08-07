@@ -111,8 +111,8 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto relative">
-      {/* Minimal search input */}
+    <div className="w-full relative">
+      {/* Clean search input - no background, just border */}
       <div className="relative">
         <Input
           ref={inputRef}
@@ -123,7 +123,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
           onKeyPress={handleKeyPress}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          className="w-full h-12 pl-4 pr-20 text-base border-2 border-gray-200 rounded-2xl bg-white text-gray-900 placeholder:text-gray-400 focus:border-gray-400 focus:ring-0 focus:outline-none transition-colors"
+          className="w-full h-14 pl-4 pr-20 text-base border border-gray-200 rounded-2xl bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:border-gray-300 focus:bg-white focus:ring-0 focus:outline-none transition-all"
         />
         
         {/* Clear button */}
@@ -186,25 +186,6 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
           )}
         </div>
       )}
-      
-      {/* Quick examples */}
-      <div className="mt-6 space-y-2">
-        <p className="text-xs text-gray-400 text-center">Try these examples:</p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {['vitalik.eth', 'dwr.eth', 'jessepollak'].map((example) => (
-            <button
-              key={example}
-              onClick={() => {
-                setQuery(example);
-                searchMutation.mutate(example);
-              }}
-              className="px-3 py-1 text-xs text-gray-500 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
-            >
-              {example}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
