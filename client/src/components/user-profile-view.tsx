@@ -251,17 +251,17 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </h1>
         </div>
 
-        {/* Apple-Inspired Widget Card */}
-        <div className="max-w-sm mx-auto bg-white/95 backdrop-blur-xl rounded-[2rem] p-6 mb-8 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-200/60 relative overflow-hidden">
-          {/* Subtle Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50/60 via-white/40 to-gray-100/60"></div>
+        {/* Mobile-First Profile Card */}
+        <div className="w-80 mx-auto bg-white/90 backdrop-blur-xl rounded-3xl p-5 mb-8 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)] border border-gray-200/40 relative overflow-hidden">
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50/40 via-white/20 to-gray-100/40"></div>
           
           <div className="relative z-10">
-            {/* Header Row - Minimal */}
-            <div className="flex justify-between items-center mb-6">
+            {/* Header - Clean & Minimal */}
+            <div className="flex justify-between items-center mb-4">
               <button
                 onClick={onBackToSearch}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 transition-all text-sm font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100/70 text-gray-600 hover:bg-gray-200/70 transition-all text-sm"
                 data-testid="button-back"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -271,7 +271,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleViewOnEthos}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all text-sm font-medium shadow-md"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all text-sm font-medium"
                 >
                   <ExternalLink className="w-3 h-3" />
                   <span>Ethos</span>
@@ -280,100 +280,97 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             </div>
 
-            {/* Main Content Layout - Optimized */}
-            <div className="flex items-center gap-6 mb-5">
-              {/* Left: Avatar Circle */}
-              <div className="relative flex-shrink-0">
-                <div className="w-20 h-20 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white/80 shadow-sm">
-                  <Avatar className="h-16 w-16">
+            {/* Profile Section - Centered & Compact */}
+            <div className="text-center mb-4">
+              {/* Avatar */}
+              <div className="relative inline-block mb-3">
+                <div className="w-16 h-16 rounded-full border-2 border-gray-200/60 flex items-center justify-center bg-white/60 shadow-sm">
+                  <Avatar className="h-14 w-14">
                     <AvatarImage 
                       src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
                       alt={user.displayName}
                       className="object-cover"
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-200 text-blue-700 text-xl font-bold">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-200 text-blue-700 text-lg font-bold">
                       {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </div>
                 
-                {/* Status Indicator */}
-                <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-md">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                {/* Status dot */}
+                <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 rounded-full w-4 h-4 flex items-center justify-center border-2 border-white">
+                  <div className="w-1 h-1 bg-white rounded-full"></div>
                 </div>
               </div>
 
-              {/* Right: Info Section */}
-              <div className="flex-1 text-left">
+              {/* Trust Score */}
+              <div className="mb-2">
                 <div className="text-xs font-medium text-gray-500 mb-1">Trust Score</div>
-                <div className="text-3xl font-black text-gray-900 mb-2">
+                <div className="text-3xl font-black text-gray-900">
                   {animatedScore}
                 </div>
-                
+              </div>
+
+              {/* User Info */}
+              <div className="mb-3">
                 <h1 className="text-lg font-bold text-gray-900 mb-0.5">
                   {user.displayName}
                 </h1>
-                <p className="text-xs text-gray-500 font-medium">
+                <p className="text-xs text-gray-500">
                   {formatAddress(user?.userkeys?.[0] || '')}
                 </p>
               </div>
+
+              {/* Tier Badge */}
+              {score > 0 && (
+                <div className="mb-4">
+                  <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${getTierColor(score)}`}>
+                    <IconComponent className="w-3 h-3" />
+                    <span>{tierInfo.tier}</span>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Tier Badge - Centered */}
-            {score > 0 && (
-              <div className="flex justify-center mb-5">
-                <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold ${getTierColor(score)} shadow-sm`}>
-                  <IconComponent className="w-3 h-3" />
-                  <span>{tierInfo.tier}</span>
+            {/* Stats - Clean 2x2 Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="bg-white/50 rounded-2xl p-3 text-center border border-gray-100/60">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                  <Users className="w-4 h-4 text-blue-600" />
                 </div>
-              </div>
-            )}
-
-            {/* Stats Grid - Compact & Clean */}
-            <div className="space-y-3 mb-5">
-              {/* Top Row - Primary Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                    <Users className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{vouchesReceived}</div>
-                  <div className="text-xs font-medium text-gray-500">Vouches</div>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-                    <MessageSquare className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
-                  <div className="text-xs font-medium text-gray-500">Reviews</div>
-                </div>
+                <div className="text-lg font-black text-gray-900">{vouchesReceived}</div>
+                <div className="text-xs text-gray-500 font-medium">Vouches</div>
               </div>
               
-              {/* Bottom Row - Secondary Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
-                    <Star className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
-                  <div className="text-xs font-medium text-gray-500">XP Total</div>
+              <div className="bg-white/50 rounded-2xl p-3 text-center border border-gray-100/60">
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                  <MessageSquare className="w-4 h-4 text-green-600" />
                 </div>
-                
-                <div className="text-center">
-                  <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
-                    <Network className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">
-                    {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
-                  </div>
-                  <div className="text-xs font-medium text-gray-500">Rank</div>
+                <div className="text-lg font-black text-gray-900">{realStats?.review?.received?.positive || 0}</div>
+                <div className="text-xs text-gray-500 font-medium">Reviews</div>
+              </div>
+              
+              <div className="bg-white/50 rounded-2xl p-3 text-center border border-gray-100/60">
+                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                  <Star className="w-4 h-4 text-purple-600" />
                 </div>
+                <div className="text-lg font-black text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
+                <div className="text-xs text-gray-500 font-medium">XP Total</div>
+              </div>
+              
+              <div className="bg-white/50 rounded-2xl p-3 text-center border border-gray-100/60">
+                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
+                  <Network className="w-4 h-4 text-orange-600" />
+                </div>
+                <div className="text-lg font-black text-gray-900">
+                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+                </div>
+                <div className="text-xs text-gray-500 font-medium">Rank</div>
               </div>
             </div>
 
-            {/* Footer Branding - Subtle */}
-            <div className="text-center pt-3 border-t border-gray-200/50">
+            {/* Footer */}
+            <div className="text-center pt-3 border-t border-gray-200/40">
               <div className="text-[10px] font-semibold text-gray-400 tracking-wider">
                 ETHOSRADAR
               </div>
