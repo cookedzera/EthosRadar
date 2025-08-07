@@ -224,8 +224,18 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
       <div className="max-w-4xl mx-auto px-6 pt-4 pb-12">
         {/* Hidden Header for Clean Profile View */}
 
+        {/* Profile Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-black text-gray-900 text-center">
+            {user.displayName}'s Profile Overview
+          </h1>
+          <p className="text-gray-600 text-center mt-2">
+            Trust analysis and reputation insights
+          </p>
+        </div>
+
         {/* Hero Section - Enhanced Profile Card */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 mb-8 shadow-2xl border border-white/30 relative overflow-hidden mt-4">
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 mb-8 shadow-2xl border border-white/30 relative overflow-hidden">
           {/* Background Gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5"></div>
           
