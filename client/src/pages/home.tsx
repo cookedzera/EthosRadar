@@ -117,21 +117,26 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a0b' }}>
-      {/* Premium Background Gradient */}
+      {/* Premium Background with Floating Particles */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/50"></div>
+        
+        {/* Premium Floating Orbs */}
         <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-purple-500/15 to-pink-500/10 rounded-full blur-3xl float-bounce"></div>
         <div className="absolute top-60 right-16 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-cyan-500/15 rounded-full blur-2xl float-bounce" style={{ animationDelay: '2s' }}></div>
         <div className="absolute bottom-40 left-20 w-48 h-48 bg-gradient-to-br from-cyan-500/12 to-blue-600/8 rounded-full blur-3xl float-bounce" style={{ animationDelay: '4s' }}></div>
         
-        {/* Warpcast Inspired Light Beams */}
-        <div className="absolute top-1/3 left-1/3 w-2 h-60 bg-gradient-to-b from-transparent via-purple-400/20 to-transparent transform rotate-12 pulse-accent"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-1 h-40 bg-gradient-to-b from-transparent via-cyan-400/25 to-transparent transform -rotate-12 pulse-accent" style={{ animationDelay: '1.5s' }}></div>
+        {/* Reference-Style Floating Particles */}
+        <div className="floating-particle w-2 h-2 top-1/4 left-1/4" style={{ animationDelay: '0s' }}></div>
+        <div className="floating-particle w-1 h-1 top-1/3 right-1/3" style={{ animationDelay: '1s' }}></div>
+        <div className="floating-particle w-3 h-3 bottom-1/3 left-1/3" style={{ animationDelay: '2s' }}></div>
+        <div className="floating-particle w-1.5 h-1.5 top-1/2 right-1/4" style={{ animationDelay: '3s' }}></div>
+        <div className="floating-particle w-2 h-2 bottom-1/4 right-1/2" style={{ animationDelay: '4s' }}></div>
+        <div className="floating-particle w-1 h-1 top-3/4 left-1/5" style={{ animationDelay: '5s' }}></div>
         
-        {/* Animated Particles */}
-        <div className="absolute top-1/4 right-1/3 w-3 h-3 bg-purple-400/60 rounded-full pulse-accent"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-2 h-2 bg-cyan-400/70 rounded-full pulse-accent" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-2/3 right-1/5 w-1 h-1 bg-pink-400/80 rounded-full pulse-accent" style={{ animationDelay: '3s' }}></div>
+        {/* Subtle Light Beams */}
+        <div className="absolute top-1/3 left-1/3 w-1 h-60 bg-gradient-to-b from-transparent via-white/5 to-transparent transform rotate-12 pulse"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-1 h-40 bg-gradient-to-b from-transparent via-white/3 to-transparent transform -rotate-12 pulse" style={{ animationDelay: '1.5s' }}></div>
       </div>
 
       {/* Main Content with Fresh Warpcast Design */}
