@@ -220,201 +220,300 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
   };
 
   return (
-    <div className="min-h-screen bg-[#c7c8c9]">
-      <div className="max-w-sm mx-auto px-6 pt-20 pb-12">
-        {/* Header with Back button */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="max-w-4xl mx-auto px-6 pt-8 pb-12">
+        {/* Enhanced Header */}
         <div className="mb-8 flex items-center justify-between">
           <button
             onClick={onBackToSearch}
-            className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white text-gray-700 hover:shadow-lg transition-all shadow-md border-0 relative z-10 cursor-pointer"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white hover:shadow-lg transition-all shadow-md border border-white/20"
             data-testid="button-back"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">Back</span>
+            <span className="font-medium">Back to Search</span>
           </button>
+          
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleViewOnEthos}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span className="font-medium">View on Ethos</span>
+            </button>
+            <FarcasterShareButton 
+              user={user}
+            />
+          </div>
         </div>
 
-        {/* Header Card - User Profile */}
-        <div className="bg-white rounded-3xl p-8 mb-6 shadow-md border-0">
-          <div className="flex items-center gap-5">
-            {/* Avatar */}
-            <Avatar className="h-20 w-20">
-              <AvatarImage 
-                src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
-                alt={user.displayName}
-                className="object-cover"
-              />
-              <AvatarFallback className="bg-gray-100 text-gray-600 text-2xl font-bold">
-                {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
-              </AvatarFallback>
-            </Avatar>
-
-            {/* User Info */}
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">
-                {user.displayName}
-              </h1>
-              <p className="text-gray-500 text-sm mb-2">
-                {formatAddress(user?.userkeys?.[0] || '')}
-              </p>
-              
-              {/* Status Badge */}
-              {score > 0 && (
-                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${getTierColor(score)}`}>
-                  <IconComponent className="w-3 h-3" />
-                  <span>{tierInfo.tier}</span>
+        {/* Hero Section - Enhanced Profile Card */}
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 mb-8 shadow-2xl border border-white/30 relative overflow-hidden">
+          {/* Background Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5"></div>
+          
+          <div className="relative z-10">
+            <div className="flex flex-col lg:flex-row items-center gap-8">
+              {/* Enhanced Avatar Section */}
+              <div className="flex flex-col items-center">
+                <div className="relative">
+                  <Avatar className="h-32 w-32 ring-4 ring-white/50 shadow-2xl">
+                    <AvatarImage 
+                      src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
+                      alt={user.displayName}
+                      className="object-cover"
+                    />
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700 text-4xl font-bold">
+                      {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  
+                  {/* Status Indicator */}
+                  <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-2 ring-4 ring-white shadow-lg">
+                    <div className="w-3 h-3 bg-white rounded-full"></div>
+                  </div>
                 </div>
-              )}
+                
+                {/* Trust Score - Large Display */}
+                <div className="mt-6 text-center">
+                  <div className="text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                    {animatedScore}
+                  </div>
+                  <div className="text-gray-600 font-medium">Trust Score</div>
+                </div>
+              </div>
+
+              {/* User Information */}
+              <div className="flex-1 text-center lg:text-left">
+                <h1 className="text-4xl font-black text-gray-900 mb-3">
+                  {user.displayName}
+                </h1>
+                
+                <p className="text-gray-600 text-lg mb-4">
+                  {formatAddress(user?.userkeys?.[0] || '')}
+                </p>
+                
+                {/* Enhanced Tier Badge */}
+                {score > 0 && (
+                  <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl text-lg font-bold shadow-lg ${getTierColor(score)} mb-6`}>
+                    <IconComponent className="w-6 h-6" />
+                    <span>{tierInfo.tier}</span>
+                  </div>
+                )}
+
+                {/* Quick Stats Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                    <div className="text-2xl font-bold text-gray-900">{vouchesReceived}</div>
+                    <div className="text-sm text-gray-600">Vouches</div>
+                  </div>
+                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                    <div className="text-2xl font-bold text-gray-900">{realStats?.review?.received?.positive || 0}</div>
+                    <div className="text-sm text-gray-600">Reviews</div>
+                  </div>
+                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                    <div className="text-2xl font-bold text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
+                    <div className="text-sm text-gray-600">XP Total</div>
+                  </div>
+                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                    <div className="text-2xl font-bold text-gray-900">#{user?.id || '—'}</div>
+                    <div className="text-sm text-gray-600">Profile ID</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Main Score Display */}
-        <div className="bg-white rounded-3xl p-8 mb-6 shadow-md border-0 text-center">
-          <div className="text-6xl font-bold text-gray-900 mb-2">
-            {animatedScore}
+
+
+
+
+
+
+        {/* Enhanced Tab Navigation */}
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-2 mb-8 shadow-lg border border-white/30">
+          <div className="flex">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`flex-1 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                activeTab === 'overview'
+                  ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/25'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+              }`}
+            >
+              <div className="flex items-center gap-2 justify-center">
+                <BarChart3 className="w-4 h-4" />
+                Overview
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('vouch-intel')}
+              className={`flex-1 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                activeTab === 'vouch-intel'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+              }`}
+            >
+              <div className="flex items-center gap-2 justify-center">
+                <Users className="w-4 h-4" />
+                Vouch Intel
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('r4r-analysis')}
+              className={`flex-1 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                activeTab === 'r4r-analysis'
+                  ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/25'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+              }`}
+            >
+              <div className="flex items-center gap-2 justify-center">
+                <AlertTriangle className="w-4 h-4" />
+                R4R Analysis
+              </div>
+            </button>
           </div>
-          <div className="text-gray-500 text-base mb-4">
-            Trust Score
-          </div>
-          {score > 0 && (
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold ${getTierColor(score)}`}>
-              <IconComponent className="w-4 h-4" />
-              <span>{tierInfo.tier}</span>
-            </div>
-          )}
-        </div>
-
-
-
-
-
-
-
-        {/* Tab Navigation */}
-        <div className="flex bg-gray-100 rounded-3xl p-2 mb-6 shadow-sm border-0">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`flex-1 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
-              activeTab === 'overview'
-                ? 'bg-white text-gray-900 shadow-md'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Overview
-          </button>
-          <button
-            onClick={() => setActiveTab('vouch-intel')}
-            className={`flex-1 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
-              activeTab === 'vouch-intel'
-                ? 'bg-white text-gray-900 shadow-md'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Vouch Intel
-          </button>
-          <button
-            onClick={() => setActiveTab('r4r-analysis')}
-            className={`flex-1 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
-              activeTab === 'r4r-analysis'
-                ? 'bg-white text-gray-900 shadow-md'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            R4R Analysis
-          </button>
         </div>
                 
-        {/* Dynamic Content Based on Active Tab */}
+        {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            {/* Global Rank Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-md border-0">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-blue-700" />
+          <div className="space-y-8">
+            {/* Enhanced Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Vouches</h3>
+                    <p className="text-xs text-gray-500">Trust endorsements</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Global Rank</h3>
-                  <p className="text-sm text-gray-500">Network position</p>
+                <div className="text-3xl font-black text-gray-900 mb-2">
+                  {vouchesReceived}
+                </div>
+                <div className="text-sm text-gray-600">
+                  Total received
                 </div>
               </div>
-              <div className="text-2xl font-bold text-gray-900">
-                {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : 'N/A'}
+
+              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <MessageSquare className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Reviews</h3>
+                    <p className="text-xs text-gray-500">Community feedback</p>
+                  </div>
+                </div>
+                <div className="text-3xl font-black text-gray-900 mb-2">
+                  {realStats?.review?.received?.positive || 0}
+                </div>
+                <div className="text-sm text-gray-600">
+                  Positive reviews
+                </div>
+              </div>
+
+              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">XP Total</h3>
+                    <p className="text-xs text-gray-500">Experience points</p>
+                  </div>
+                </div>
+                <div className="text-3xl font-black text-gray-900 mb-2">
+                  {formatNumber(user?.xpTotal || 0)}
+                </div>
+                <div className="text-sm text-gray-600">
+                  Network contribution
+                </div>
+              </div>
+
+              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300 group">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Network className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Rank</h3>
+                    <p className="text-xs text-gray-500">Network position</p>
+                  </div>
+                </div>
+                <div className="text-3xl font-black text-gray-900 mb-2">
+                  #{enhancedProfile?.leaderboardPosition || user?.id || '—'}
+                </div>
+                <div className="text-sm text-gray-600">
+                  Global position
+                </div>
               </div>
             </div>
 
-            {/* XP Points Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-md border-0">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <Star className="w-5 h-5 text-green-700" />
+            {/* Enhanced Recent Activity */}
+            {weeklyActivitiesData && (weeklyActivitiesData as any).success && (weeklyActivitiesData as any).data && (
+              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                    <Activity className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">XP Points</h3>
-                  <p className="text-sm text-gray-500">Experience earned</p>
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900">
-                {formatNumber(enhancedProfile?.xpTotal || user?.xpTotal || 0)}
-              </div>
-            </div>
-
-            {/* Vouches Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-md border-0">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Users className="w-5 h-5 text-purple-700" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Vouches</h3>
-                  <p className="text-sm text-gray-500">Received</p>
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-gray-900">
-                {vouchesReceived}
-              </div>
-            </div>
-
-            {/* Activity Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-md border-0">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-orange-700" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Activity</h3>
-                  <p className="text-sm text-gray-500">Recent actions</p>
+                <div className="space-y-4">
+                  {((weeklyActivitiesData as any).data.slice(0, 5) || []).map((activity: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-white/60 rounded-2xl border border-white/30 hover:bg-white/80 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg"></div>
+                        <span className="font-medium text-gray-900">{activity.type || 'Network Activity'}</span>
+                      </div>
+                      <span className="text-sm text-gray-500 font-medium">
+                        {activity.timestamp ? new Date(activity.timestamp * 1000).toLocaleDateString() : 'Recent'}
+                      </span>
+                    </div>
+                  ))}
+                  {((weeklyActivitiesData as any).data || []).length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p className="font-medium">No recent activity found</p>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="text-2xl font-bold text-gray-900">
-                {enhancedProfile?.xpStreakDays || 0}
-              </div>
-            </div>
+            )}
           </div>
         )}
 
         {activeTab === 'vouch-intel' && (
-          <div className="bg-white rounded-3xl p-8 shadow-md border-0">
-            <h3 className="font-semibold text-gray-900 mb-6">Vouch Intelligence</h3>
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/30">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">Vouch Intelligence</h3>
+            </div>
             
             <div className="space-y-6">
-              {/* Vouch Summary */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-green-700" />
+              {/* Enhanced Vouch Summary */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200/50 shadow-lg hover:shadow-xl transition-all">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
+                      <TrendingUp className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Received</h4>
-                      <p className="text-sm text-gray-500">Vouches for you</p>
+                      <h4 className="font-bold text-gray-900">Received</h4>
+                      <p className="text-sm text-gray-600">Vouches for you</p>
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 mb-2">
+                  <div className="text-3xl font-black text-gray-900 mb-3">
                     {vouchesReceived}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm font-medium text-gray-700">
                     Value: {realStats?.vouch?.received?.amountWeiTotal ? 
                       `${(parseInt(realStats.vouch.received.amountWeiTotal) / 1e18).toFixed(4)} ETH` : 
                       '0 ETH'
@@ -422,20 +521,20 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   </div>
                 </div>
 
-                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Users className="w-5 h-5 text-blue-700" />
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200/50 shadow-lg hover:shadow-xl transition-all">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
+                      <ArrowUpRight className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Given</h4>
-                      <p className="text-sm text-gray-500">Vouches by you</p>
+                      <h4 className="font-bold text-gray-900">Given</h4>
+                      <p className="text-sm text-gray-600">Vouches by you</p>
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 mb-2">
+                  <div className="text-3xl font-black text-gray-900 mb-3">
                     {realStats?.vouch?.given?.count || 0}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm font-medium text-gray-700">
                     Value: {realStats?.vouch?.given?.amountWeiTotal ? 
                       `${(parseInt(realStats.vouch.given.amountWeiTotal) / 1e18).toFixed(4)} ETH` : 
                       '0 ETH'
@@ -446,8 +545,8 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
               {/* Recent Vouch Activities */}
               {vouchData && (vouchData as any).success && (vouchData as any).data && (
-                <div className="bg-gray-50 rounded-xl p-6 border">
-                  <h4 className="font-semibold text-gray-900 mb-4">Recent Vouch Activities</h4>
+                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/40 shadow-lg">
+                  <h4 className="font-bold text-gray-900 mb-6">Recent Vouch Activities</h4>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
                     {/* Received Vouches */}
                     {((vouchData as any).data.received || []).slice(0, 5).map((vouch: any, index: number) => {
@@ -457,19 +556,19 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       const usdAmount = ((vouchData as any).data.ethUsdRate || 3400) * ethAmount;
                       
                       return (
-                        <div key={`received-${index}`} className="flex items-center justify-between p-3 bg-white rounded-lg border">
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <div key={`received-${index}`} className="flex items-center justify-between p-4 bg-white/80 rounded-xl border border-white/60 hover:bg-white transition-all shadow-md">
+                          <div className="flex items-center gap-4">
+                            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg"></div>
                             <div>
-                              <div className="text-sm font-medium text-gray-900">Received vouch</div>
-                              <div className="text-xs text-gray-500">{displayName}</div>
+                              <div className="text-sm font-bold text-gray-900">Received vouch</div>
+                              <div className="text-xs font-medium text-gray-600">{displayName}</div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-bold text-gray-900">
                               {ethAmount.toFixed(4)} ETH
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs font-medium text-gray-600">
                               ${usdAmount.toFixed(2)}
                             </div>
                           </div>
@@ -485,19 +584,19 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       const usdAmount = ((vouchData as any).data.ethUsdRate || 3400) * ethAmount;
                       
                       return (
-                        <div key={`given-${index}`} className="flex items-center justify-between p-3 bg-white rounded-lg border">
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <div key={`given-${index}`} className="flex items-center justify-between p-4 bg-white/80 rounded-xl border border-white/60 hover:bg-white transition-all shadow-md">
+                          <div className="flex items-center gap-4">
+                            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 shadow-lg"></div>
                             <div>
-                              <div className="text-sm font-medium text-gray-900">Gave vouch</div>
-                              <div className="text-xs text-gray-500">{displayName}</div>
+                              <div className="text-sm font-bold text-gray-900">Gave vouch</div>
+                              <div className="text-xs font-medium text-gray-600">{displayName}</div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-bold text-gray-900">
                               {ethAmount.toFixed(4)} ETH
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs font-medium text-gray-600">
                               ${usdAmount.toFixed(2)}
                             </div>
                           </div>
@@ -546,8 +645,13 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         )}
 
         {activeTab === 'r4r-analysis' && (
-          <div className="bg-white rounded-3xl p-8 shadow-md border-0">
-            <h3 className="font-semibold text-gray-900 mb-6">R4R Analysis</h3>
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/30">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">R4R Analysis</h3>
+            </div>
             
             {isR4RLoading && (
               <div className="flex items-center justify-center py-8">
