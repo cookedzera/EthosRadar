@@ -331,7 +331,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Try some common completions for popular users
         ...(searchQuery === 'vit' ? ['vitalik', 'vitalik.eth'] : []),
         ...(searchQuery === 'dan' ? ['dwr', 'danromero'] : []),
-        ...(searchQuery === 'cook' ? ['cookedzera'] : []),
+
         ...(searchQuery === 'jesse' ? ['jessepollak'] : []),
         ...(searchQuery === 'newton' ? ['newtonhere'] : []),
         ...(searchQuery === 'newt' ? ['newtonhere'] : [])

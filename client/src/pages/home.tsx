@@ -29,10 +29,10 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-[#c7c8c9]">
       {/* Main Container - Centered like reference */}
-      <div className="max-w-sm mx-auto px-6 py-28">
+      <div className="max-w-sm mx-auto px-6 pt-40 pb-28">
         
         {/* Header Section - Big typography like reference */}
-        <div className="text-center mb-16 mt-8">
+        <div className="text-center mb-16">
           <h1 className="text-6xl font-bold text-gray-900 mb-4 tracking-tight">
             Trust Score
           </h1>
