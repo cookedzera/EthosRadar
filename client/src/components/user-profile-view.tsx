@@ -221,35 +221,11 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="max-w-4xl mx-auto px-6 pt-8 pb-12">
-        {/* Enhanced Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <button
-            onClick={onBackToSearch}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white hover:shadow-lg transition-all shadow-md border border-white/20"
-            data-testid="button-back"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">Back to Search</span>
-          </button>
-          
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleViewOnEthos}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md"
-            >
-              <ExternalLink className="w-4 h-4" />
-              <span className="font-medium">View on Ethos</span>
-            </button>
-            <FarcasterShareButton 
-              user={user}
-            />
-          </div>
-        </div>
+      <div className="max-w-4xl mx-auto px-6 pt-4 pb-12">
+        {/* Hidden Header for Clean Profile View */}
 
         {/* Hero Section - Enhanced Profile Card */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 mb-8 shadow-2xl border border-white/30 relative overflow-hidden">
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 mb-8 shadow-2xl border border-white/30 relative overflow-hidden mt-4">
           {/* Background Gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5"></div>
           
@@ -302,23 +278,48 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   </div>
                 )}
 
-                {/* Quick Stats Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                    <div className="text-2xl font-bold text-gray-900">{vouchesReceived}</div>
-                    <div className="text-sm text-gray-600">Vouches</div>
-                  </div>
-                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                    <div className="text-2xl font-bold text-gray-900">{realStats?.review?.received?.positive || 0}</div>
-                    <div className="text-sm text-gray-600">Reviews</div>
-                  </div>
-                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                    <div className="text-2xl font-bold text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
-                    <div className="text-sm text-gray-600">XP Total</div>
-                  </div>
-                  <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                    <div className="text-2xl font-bold text-gray-900">#{user?.id || '—'}</div>
-                    <div className="text-sm text-gray-600">Profile ID</div>
+                {/* Quick Stats Grid with Back Button */}
+                <div className="relative">
+                  <button
+                    onClick={onBackToSearch}
+                    className="absolute -top-2 left-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white hover:text-gray-900 transition-all shadow-md border border-white/30 z-10"
+                    data-testid="button-back"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="font-medium">Back</span>
+                  </button>
+                  
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                      <div className="text-2xl font-bold text-gray-900">{vouchesReceived}</div>
+                      <div className="text-sm text-gray-600">Vouches</div>
+                    </div>
+                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                      <div className="text-2xl font-bold text-gray-900">{realStats?.review?.received?.positive || 0}</div>
+                      <div className="text-sm text-gray-600">Reviews</div>
+                    </div>
+                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
+                      <div className="text-2xl font-bold text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
+                      <div className="text-sm text-gray-600">XP Total</div>
+                    </div>
+                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30 relative">
+                      <div className="text-2xl font-bold text-gray-900">#{user?.id || '—'}</div>
+                      <div className="text-sm text-gray-600">Profile ID</div>
+                      
+                      {/* Action Buttons - Positioned in top right */}
+                      <div className="absolute -top-8 right-0 flex items-center gap-2">
+                        <button
+                          onClick={handleViewOnEthos}
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md text-sm"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          <span className="font-medium">Ethos</span>
+                        </button>
+                        <FarcasterShareButton 
+                          user={user}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
