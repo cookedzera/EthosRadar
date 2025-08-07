@@ -269,6 +269,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use direct Ethos V1 search API (same as ethos-r4r)
       const ethosUrl = `https://api.ethos.network/api/v1/search?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`;
       
+      console.log('Fetching from:', ethosUrl);
+      
       const response = await fetch(ethosUrl, {
         headers: {
           'Accept': 'application/json',
@@ -276,15 +278,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
       
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data keys:', Object.keys(data));
       
-      if (data.success && data.data) {
-        // Direct API response - already in correct format
-        const suggestions = data.data.slice(0, 8).map((user: any) => ({
+      // The actual Ethos API returns: {"ok": true, "data": {"values": [...]}}
+      if (data.ok && data.data && data.data.values) {
+        const suggestions = data.data.values.slice(0, 8).map((user: any) => ({
           userkey: user.userkey || '',
-          display_name: user.displayName || user.username || 'Unknown User',
+          display_name: user.name || user.username || 'Unknown User',
           username: user.username || 'unknown',
-          pfp_url: user.avatarUrl || '',
+          pfp_url: user.avatar || '',
           score: user.score || 0,
           description: user.description || ''
         }));
@@ -723,11 +727,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // General search endpoint that handles addresses and other userkeys
-  app.post("/api/search", async (req, res) => {
+  app.post("/api/search/:query", async (req, res) => {
     try {
-      const { query } = z.object({
-        query: z.string().min(1),
-      }).parse(req.body);
+      const query = req.params.query;
 
       let result;
       

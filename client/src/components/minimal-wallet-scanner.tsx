@@ -44,6 +44,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
+      if (!response.ok) throw new Error('Search failed');
       return await response.json();
     },
     onSuccess: (data) => {
