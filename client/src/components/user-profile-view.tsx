@@ -396,24 +396,119 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
         {activeTab === 'vouch-intel' && (
           <div className="bg-white rounded-3xl p-8 shadow-md border-0">
-            <h3 className="font-semibold text-gray-900 mb-4">Vouch Intelligence</h3>
-            <div className="space-y-4">
-              <div>
-                <span className="text-sm text-gray-500">Vouches Received:</span>
-                <p className="text-gray-900 font-semibold">{vouchesReceived}</p>
+            <h3 className="font-semibold text-gray-900 mb-6">Vouch Intelligence</h3>
+            
+            <div className="space-y-6">
+              {/* Vouch Summary */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-green-700" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Received</h4>
+                      <p className="text-sm text-gray-500">Vouches for you</p>
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 mb-2">
+                    {vouchesReceived}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Value: {realStats?.vouch?.received?.amountWeiTotal ? 
+                      `${(parseInt(realStats.vouch.received.amountWeiTotal) / 1e18).toFixed(4)} ETH` : 
+                      '0 ETH'
+                    }
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-blue-700" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Given</h4>
+                      <p className="text-sm text-gray-500">Vouches by you</p>
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 mb-2">
+                    {realStats?.vouch?.given?.count || 0}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Value: {realStats?.vouch?.given?.amountWeiTotal ? 
+                      `${(parseInt(realStats.vouch.given.amountWeiTotal) / 1e18).toFixed(4)} ETH` : 
+                      '0 ETH'
+                    }
+                  </div>
+                </div>
               </div>
-              <div>
-                <span className="text-sm text-gray-500">Vouches Given:</span>
-                <p className="text-gray-900 font-semibold">{realStats?.vouch?.given?.count || 0}</p>
-              </div>
-              <div>
-                <span className="text-sm text-gray-500">Total Vouch Value:</span>
-                <p className="text-gray-900 font-semibold">
-                  {realStats?.vouch?.received?.amountWeiTotal ? 
-                    `${(parseInt(realStats.vouch.received.amountWeiTotal) / 1e18).toFixed(4)} ETH` : 
-                    '0 ETH'
-                  }
-                </p>
+
+              {/* Recent Vouch Activities */}
+              {vouchData && (vouchData as any).success && (vouchData as any).data && (
+                <div className="bg-gray-50 rounded-xl p-6 border">
+                  <h4 className="font-semibold text-gray-900 mb-4">Recent Vouch Activities</h4>
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {((vouchData as any).data.slice(0, 10) || []).map((activity: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-2 h-2 rounded-full ${
+                            activity.type === 'vouch_received' ? 'bg-green-500' : 'bg-blue-500'
+                          }`}></div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {activity.type === 'vouch_received' ? 'Received vouch' : 'Gave vouch'}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {activity.participant?.displayName || activity.participant?.username || 'Unknown'}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-medium text-gray-900">
+                            {activity.amount ? `${(parseFloat(activity.amount) / 1e18).toFixed(4)} ETH` : '—'}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {activity.timestamp ? new Date(activity.timestamp * 1000).toLocaleDateString() : '—'}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {((vouchData as any).data || []).length === 0 && (
+                      <div className="text-center py-4 text-gray-500">
+                        <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm">No vouch activities found</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Vouch Network Insights */}
+              <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
+                <h4 className="font-semibold text-gray-900 mb-4">Network Insights</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-sm text-gray-500">Trust Ratio</div>
+                    <div className="text-lg font-bold text-gray-900">
+                      {vouchesReceived > 0 ? 
+                        `${((realStats?.vouch?.given?.count || 0) / vouchesReceived).toFixed(2)}` : 
+                        '—'
+                      }
+                    </div>
+                    <div className="text-xs text-gray-600">Given/Received ratio</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Average Value</div>
+                    <div className="text-lg font-bold text-gray-900">
+                      {vouchesReceived > 0 && realStats?.vouch?.received?.amountWeiTotal ? 
+                        `${(parseInt(realStats.vouch.received.amountWeiTotal) / 1e18 / vouchesReceived).toFixed(4)} ETH` : 
+                        '—'
+                      }
+                    </div>
+                    <div className="text-xs text-gray-600">Per vouch received</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -496,7 +591,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Base Score:</span>
-                        <span className="font-medium">{r4rData.scoreBreakdown.baseScore?.toFixed(1)}%</span>
+                        <span className="font-medium">{r4rData.scoreBreakdown.cappedBaseScore?.toFixed(1)}%</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Volume Multiplier:</span>
