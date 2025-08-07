@@ -225,13 +225,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Hidden Header for Clean Profile View */}
 
         {/* Profile Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-black text-gray-900 text-center">
-            {user.displayName}'s Profile Overview
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-gray-800 text-left">
+            {user.displayName}'s Profile
           </h1>
-          <p className="text-gray-600 text-center mt-2">
-            Trust analysis and reputation insights
-          </p>
         </div>
 
         {/* Hero Section - Enhanced Profile Card */}
