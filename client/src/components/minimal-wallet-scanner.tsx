@@ -26,12 +26,15 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   const queryClient = useQueryClient();
 
   // Search suggestions
-  const { data: suggestions = [] } = useQuery<Suggestion[]>({
+  const { data: suggestions = [], isLoading: suggestionsLoading } = useQuery<Suggestion[]>({
     queryKey: ['/api/search-suggestions', query],
     queryFn: async () => {
+      console.log('Fetching suggestions for:', query);
       const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`);
       if (!response.ok) throw new Error('Failed to fetch suggestions');
-      return response.json();
+      const data = await response.json();
+      console.log('Suggestions received:', data.length, 'items');
+      return data;
     },
     enabled: query.length >= 2 && showSuggestions,
     staleTime: 30000,
@@ -84,6 +87,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
     const value = e.target.value;
     setQuery(value);
     setShowSuggestions(value.length >= 2);
+    console.log('Input changed:', value, 'Show suggestions:', value.length >= 2);
   };
 
   const handleInputFocus = () => {
@@ -91,6 +95,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
     if (query.length >= 2) {
       setShowSuggestions(true);
     }
+    console.log('Input focused, query length:', query.length, 'Will show suggestions:', query.length >= 2);
   };
 
   const handleInputBlur = () => {
@@ -146,15 +151,18 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
       </div>
 
       {/* Search suggestions dropdown */}
-      {showSuggestions && suggestions.length > 0 && (
+      {showSuggestions && (suggestions.length > 0 || suggestionsLoading) && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
-          {suggestions.slice(0, 5).map((suggestion: Suggestion) => (
-            <button
-              key={suggestion.userkey}
-              onClick={() => handleSuggestionSelect(suggestion)}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
-            >
-              {suggestion.pfp_url ? (
+          {suggestionsLoading ? (
+            <div className="px-4 py-3 text-gray-500 text-sm">Loading suggestions...</div>
+          ) : (
+            suggestions.slice(0, 5).map((suggestion: Suggestion) => (
+              <button
+                key={suggestion.userkey}
+                onClick={() => handleSuggestionSelect(suggestion)}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+              >
+                {suggestion.pfp_url ? (
                 <img
                   src={suggestion.pfp_url}
                   alt={suggestion.display_name}
@@ -166,15 +174,16 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
                     {suggestion.display_name?.charAt(0)?.toUpperCase() || '?'}
                   </span>
                 </div>
-              )}
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  {suggestion.display_name || suggestion.username}
-                </p>
-                <p className="text-xs text-gray-500 truncate">@{suggestion.username}</p>
-              </div>
-            </button>
-          ))}
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {suggestion.display_name || suggestion.username}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">@{suggestion.username}</p>
+                </div>
+              </button>
+            ))
+          )}
         </div>
       )}
       
