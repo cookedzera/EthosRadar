@@ -143,6 +143,26 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
   // Format wallet address for display
   const formatAddress = (address: string) => {
+    if (!address) return '';
+    
+    // Handle different platform identifiers
+    if (address.startsWith('service:x.com:')) {
+      const id = address.replace('service:x.com:', '');
+      return `Twitter ID: ${id}`;
+    }
+    if (address.startsWith('service:farcaster:')) {
+      const fid = address.replace('service:farcaster:', '');
+      return `Farcaster FID: ${fid}`;
+    }
+    if (address.startsWith('address:0x')) {
+      const addr = address.replace('address:', '');
+      return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    }
+    if (address.startsWith('0x')) {
+      return `${address.slice(0, 6)}...${address.slice(-4)}`;
+    }
+    
+    // Generic formatting for other addresses
     if (address.includes(':')) {
       const parts = address.split(':');
       const actualAddress = parts[parts.length - 1];
@@ -231,102 +251,125 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </h1>
         </div>
 
-        {/* Hero Section - Enhanced Profile Card */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 mb-8 shadow-2xl border border-white/30 relative overflow-hidden">
-          {/* Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5"></div>
+        {/* Hero Section - Premium Profile Card */}
+        <div className="bg-gradient-to-br from-white/90 via-white/85 to-white/90 backdrop-blur-xl rounded-[2rem] p-10 mb-8 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] border border-white/40 relative overflow-hidden group hover:shadow-[0_40px_80px_-12px_rgba(0,0,0,0.2)] transition-all duration-500">
+          {/* Enhanced Background Effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/8 via-purple-500/6 to-pink-500/8"></div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+          
+          {/* Floating Elements for Premium Feel */}
+          <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-8 left-8 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-xl"></div>
           
           <div className="relative z-10">
-            <div className="flex flex-col lg:flex-row items-center gap-8">
+            {/* Header Row with Back Button and Actions */}
+            <div className="flex justify-between items-start mb-8">
+              <button
+                onClick={onBackToSearch}
+                className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white hover:text-gray-900 transition-all shadow-lg border border-white/50 group hover:scale-105"
+                data-testid="button-back"
+              >
+                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span className="font-semibold">Back to Search</span>
+              </button>
+              
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleViewOnEthos}
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>View on Ethos</span>
+                </button>
+                <FarcasterShareButton user={user} />
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:flex-row items-center gap-12">
               {/* Enhanced Avatar Section */}
               <div className="flex flex-col items-center">
-                <div className="relative">
-                  <Avatar className="h-32 w-32 ring-4 ring-white/50 shadow-2xl">
+                <div className="relative group">
+                  {/* Avatar Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity animate-pulse"></div>
+                  
+                  <Avatar className="relative h-40 w-40 ring-6 ring-white/60 shadow-2xl hover:scale-105 transition-transform duration-300">
                     <AvatarImage 
                       src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
                       alt={user.displayName}
                       className="object-cover"
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700 text-4xl font-bold">
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700 text-5xl font-black">
                       {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
                   
-                  {/* Status Indicator */}
-                  <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-2 ring-4 ring-white shadow-lg">
-                    <div className="w-3 h-3 bg-white rounded-full"></div>
+                  {/* Enhanced Status Indicator */}
+                  <div className="absolute -bottom-3 -right-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full p-3 ring-6 ring-white shadow-2xl">
+                    <div className="w-4 h-4 bg-white rounded-full animate-pulse"></div>
                   </div>
                 </div>
                 
-                {/* Trust Score - Large Display */}
-                <div className="mt-6 text-center">
-                  <div className="text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                {/* Trust Score - Dramatic Display */}
+                <div className="mt-8 text-center">
+                  <div className="text-7xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 drop-shadow-lg">
                     {animatedScore}
                   </div>
-                  <div className="text-gray-600 font-medium">Trust Score</div>
+                  <div className="text-gray-700 font-bold text-lg">Trust Score</div>
+                  
+                  {/* Enhanced Tier Badge */}
+                  {score > 0 && (
+                    <div className={`inline-flex items-center gap-4 px-8 py-4 rounded-3xl text-xl font-black shadow-2xl mt-4 ${getTierColor(score)} hover:scale-105 transition-transform`}>
+                      <IconComponent className="w-7 h-7" />
+                      <span>{tierInfo.tier}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* User Information */}
-              <div className="flex-1 text-center lg:text-left">
-                <h1 className="text-4xl font-black text-gray-900 mb-3">
-                  {user.displayName}
-                </h1>
-                
-                <p className="text-gray-600 text-lg mb-4">
-                  {formatAddress(user?.userkeys?.[0] || '')}
-                </p>
-                
-                {/* Enhanced Tier Badge */}
-                {score > 0 && (
-                  <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl text-lg font-bold shadow-lg ${getTierColor(score)} mb-6`}>
-                    <IconComponent className="w-6 h-6" />
-                    <span>{tierInfo.tier}</span>
-                  </div>
-                )}
-
-                {/* Quick Stats Grid with Back Button */}
-                <div className="relative">
-                  <button
-                    onClick={onBackToSearch}
-                    className="absolute -top-2 left-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white hover:text-gray-900 transition-all shadow-md border border-white/30 z-10"
-                    data-testid="button-back"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="font-medium">Back</span>
-                  </button>
+              {/* Enhanced User Information */}
+              <div className="flex-1 text-center lg:text-left space-y-6">
+                <div>
+                  <h1 className="text-5xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight">
+                    {user.displayName}
+                  </h1>
                   
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                      <div className="text-2xl font-bold text-gray-900">{vouchesReceived}</div>
-                      <div className="text-sm text-gray-600">Vouches</div>
+                  <p className="text-gray-600 text-xl font-medium mb-6">
+                    {formatAddress(user?.userkeys?.[0] || '')}
+                  </p>
+                </div>
+
+                {/* Premium Stats Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                      <Users className="w-6 h-6 text-white" />
                     </div>
-                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                      <div className="text-2xl font-bold text-gray-900">{realStats?.review?.received?.positive || 0}</div>
-                      <div className="text-sm text-gray-600">Reviews</div>
+                    <div className="text-3xl font-black text-gray-900 mb-2">{vouchesReceived}</div>
+                    <div className="text-sm font-semibold text-gray-600">Vouches</div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                      <MessageSquare className="w-6 h-6 text-white" />
                     </div>
-                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30">
-                      <div className="text-2xl font-bold text-gray-900">{formatNumber(user?.xpTotal || 0)}</div>
-                      <div className="text-sm text-gray-600">XP Total</div>
+                    <div className="text-3xl font-black text-gray-900 mb-2">{realStats?.review?.received?.positive || 0}</div>
+                    <div className="text-sm font-semibold text-gray-600">Reviews</div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                      <Star className="w-6 h-6 text-white" />
                     </div>
-                    <div className="bg-white/60 rounded-2xl p-4 text-center backdrop-blur-sm border border-white/30 relative">
-                      <div className="text-2xl font-bold text-gray-900">#{user?.id || '—'}</div>
-                      <div className="text-sm text-gray-600">Profile ID</div>
-                      
-                      {/* Action Buttons - Positioned in top right */}
-                      <div className="absolute -top-8 right-0 flex items-center gap-2">
-                        <button
-                          onClick={handleViewOnEthos}
-                          className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md text-sm"
-                        >
-                          <ExternalLink className="w-3 h-3" />
-                          <span className="font-medium">Ethos</span>
-                        </button>
-                        <FarcasterShareButton 
-                          user={user}
-                        />
-                      </div>
+                    <div className="text-3xl font-black text-gray-900 mb-2">{formatNumber(user?.xpTotal || 0)}</div>
+                    <div className="text-sm font-semibold text-gray-600">XP Total</div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-3xl p-6 text-center border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                      <Network className="w-6 h-6 text-white" />
                     </div>
+                    <div className="text-3xl font-black text-gray-900 mb-2">#{user?.id || '—'}</div>
+                    <div className="text-sm font-semibold text-gray-600">Profile ID</div>
                   </div>
                 </div>
               </div>
