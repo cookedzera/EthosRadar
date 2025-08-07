@@ -123,7 +123,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
           onKeyPress={handleKeyPress}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          className="w-full h-14 pl-4 pr-20 text-base border border-gray-200 rounded-2xl bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:border-gray-300 focus:bg-white focus:ring-0 focus:outline-none transition-all"
+          className="w-full h-14 pl-4 pr-20 text-base border border-gray-300 rounded-2xl bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:border-gray-400 focus:bg-white focus:ring-0 focus:outline-none transition-all"
         />
         
         {/* Clear button */}
