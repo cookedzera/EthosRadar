@@ -779,7 +779,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } else if (parsed.type === 'twitter') {
         // For Twitter userkeys, try the dedicated Twitter search first to get real status
-        const twitterId = query.replace('service:x.com:', '');
+        const twitterId = query.replace('service:x.com:', '').replace('service:twitter.com:', '');
         console.log('Searching Twitter ID:', twitterId);
         const twitterResult = await ethosApi.getUsersByTwitter([twitterId]);
         console.log('Twitter API result:', twitterResult);

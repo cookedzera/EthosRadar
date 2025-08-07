@@ -1121,6 +1121,28 @@ export class EthosApiClient {
     const discordRegex = /^.+#\d{4}$|^\d{17,19}$/;
     const twitterRegex = /^@?[a-zA-Z0-9_]{1,15}$/;
     
+    // Handle already formatted userkeys first
+    if (input.startsWith('address:')) {
+      return { type: 'address', value: input, formatted: input };
+    }
+    
+    if (input.startsWith('service:x.com:') || input.startsWith('service:twitter.com:')) {
+      return { type: 'twitter', value: input, formatted: input };
+    }
+    
+    if (input.startsWith('service:farcaster:')) {
+      return { type: 'farcaster', value: input, formatted: input };
+    }
+    
+    if (input.startsWith('service:discord:')) {
+      return { type: 'discord', value: input, formatted: input };
+    }
+    
+    if (input.startsWith('profileId:')) {
+      return { type: 'profileId', value: input, formatted: input };
+    }
+    
+    // Handle raw inputs
     if (ethAddressRegex.test(input)) {
       return { type: 'address', value: input, formatted: `address:${input}` };
     }

@@ -53,15 +53,12 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
     onSuccess: (data) => {
       console.log('Search result received:', data);
       if (data && data.success && data.data && onUserFound) {
-        // Invalidate all related caches when a new user is found
-        queryClient.invalidateQueries({ queryKey: ['/api/search-suggestions'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/trust-score'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/enhanced-profile'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/user-vouch-activities'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/weekly-activities'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/r4r-analytics'] });
+        console.log('New user found:', data.data.displayName, 'Userkey:', data.data.userkeys?.[0]);
         
+        // Clear all caches completely to force fresh data
+        queryClient.clear();
+        
+        // Call onUserFound with the new user data
         onUserFound(data.data, 'global');
       } else if (data && !data.success) {
         console.error('Search failed:', data.error);

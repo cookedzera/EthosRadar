@@ -7,6 +7,7 @@ export function HomePage() {
   const [searchMode, setSearchMode] = useState<'farcaster' | 'global'>('global');
 
   const handleUserFound = (userData: any, mode: 'farcaster' | 'global') => {
+    console.log('HomePage: handleUserFound called with:', userData.displayName, userData.userkeys?.[0]);
     setUser(userData);
     setSearchMode(mode);
   };
