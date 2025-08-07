@@ -1,6 +1,31 @@
+import { useState } from 'react';
 import { MinimalWalletScanner } from '@/components/minimal-wallet-scanner';
+import { UserProfileView } from '@/components/user-profile-view';
 
 export function HomePage() {
+  const [user, setUser] = useState<any>(null);
+  const [searchMode, setSearchMode] = useState<'farcaster' | 'global'>('global');
+
+  const handleUserFound = (userData: any, mode: 'farcaster' | 'global') => {
+    setUser(userData);
+    setSearchMode(mode);
+  };
+
+  const handleBackToSearch = () => {
+    setUser(null);
+  };
+
+  if (user) {
+    return (
+      <UserProfileView 
+        user={user} 
+        onBackToSearch={handleBackToSearch} 
+        onUserSearch={(userData) => setUser(userData)}
+        searchMode={searchMode}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Minimal clean header */}
@@ -16,7 +41,7 @@ export function HomePage() {
           </div>
           
           {/* Search Component */}
-          <MinimalWalletScanner />
+          <MinimalWalletScanner onUserFound={handleUserFound} />
         </div>
       </div>
       
