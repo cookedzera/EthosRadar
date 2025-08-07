@@ -449,32 +449,63 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="bg-gray-50 rounded-xl p-6 border">
                   <h4 className="font-semibold text-gray-900 mb-4">Recent Vouch Activities</h4>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
-                    {((vouchData as any).data.slice(0, 10) || []).map((activity: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg border">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-2 h-2 rounded-full ${
-                            activity.type === 'vouch_received' ? 'bg-green-500' : 'bg-blue-500'
-                          }`}></div>
-                          <div>
+                    {/* Received Vouches */}
+                    {((vouchData as any).data.received || []).slice(0, 5).map((vouch: any, index: number) => {
+                      const userInfo = vouch.voucherInfo;
+                      const displayName = userInfo?.displayName || userInfo?.username || 'Anonymous';
+                      const ethAmount = parseFloat(vouch.amountEth || 0);
+                      const usdAmount = ((vouchData as any).data.ethUsdRate || 3400) * ethAmount;
+                      
+                      return (
+                        <div key={`received-${index}`} className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">Received vouch</div>
+                              <div className="text-xs text-gray-500">{displayName}</div>
+                            </div>
+                          </div>
+                          <div className="text-right">
                             <div className="text-sm font-medium text-gray-900">
-                              {activity.type === 'vouch_received' ? 'Received vouch' : 'Gave vouch'}
+                              {ethAmount.toFixed(4)} ETH
                             </div>
                             <div className="text-xs text-gray-500">
-                              {activity.participant?.displayName || activity.participant?.username || 'Unknown'}
+                              ${usdAmount.toFixed(2)}
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-sm font-medium text-gray-900">
-                            {activity.amount ? `${(parseFloat(activity.amount) / 1e18).toFixed(4)} ETH` : '—'}
+                      );
+                    })}
+                    
+                    {/* Given Vouches */}
+                    {((vouchData as any).data.given || []).slice(0, 5).map((vouch: any, index: number) => {
+                      const userInfo = vouch.voucheeInfo;
+                      const displayName = userInfo?.displayName || userInfo?.username || 'Anonymous';
+                      const ethAmount = parseFloat(vouch.amountEth || 0);
+                      const usdAmount = ((vouchData as any).data.ethUsdRate || 3400) * ethAmount;
+                      
+                      return (
+                        <div key={`given-${index}`} className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">Gave vouch</div>
+                              <div className="text-xs text-gray-500">{displayName}</div>
+                            </div>
                           </div>
-                          <div className="text-xs text-gray-500">
-                            {activity.timestamp ? new Date(activity.timestamp * 1000).toLocaleDateString() : '—'}
+                          <div className="text-right">
+                            <div className="text-sm font-medium text-gray-900">
+                              {ethAmount.toFixed(4)} ETH
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              ${usdAmount.toFixed(2)}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                    {((vouchData as any).data || []).length === 0 && (
+                      );
+                    })}
+                    
+                    {(((vouchData as any).data.received || []).length === 0 && ((vouchData as any).data.given || []).length === 0) && (
                       <div className="text-center py-4 text-gray-500">
                         <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
                         <p className="text-sm">No vouch activities found</p>
