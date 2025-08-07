@@ -220,7 +220,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
   return (
     <div className="min-h-screen bg-[#c7c8c9]">
-      <div className="max-w-sm mx-auto px-6 py-8">
+      <div className="max-w-sm mx-auto px-6 py-12">
         {/* Header with Back button */}
         <div className="mb-8 flex items-center justify-between">
           <button
