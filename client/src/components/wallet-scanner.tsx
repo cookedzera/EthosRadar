@@ -295,11 +295,11 @@ export function WalletScanner() {
                       textShadow: document.documentElement.classList.contains('dark') ? 'none' : '1px 1px 2px rgba(0,0,0,0.5)'
                     }}
                     className={`
-                      w-full px-4 py-3 pr-12 border-none 
+                      w-full px-6 py-4 pr-16 border-none 
                       text-white dark:text-slate-900 light:text-gray-300 text-lg font-medium dark:font-extrabold light:font-normal
                       placeholder:font-medium placeholder-gray-400 dark:placeholder:text-slate-600 dark:placeholder:font-semibold
                       focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none
-                      transition-all duration-200 rounded-2xl min-h-[50px]
+                      transition-all duration-200 rounded-2xl min-h-[60px] md:min-h-[56px]
                       ${farcasterMode 
                         ? 'placeholder:text-purple-200/90 dark:placeholder:text-purple-800' 
                         : 'placeholder-gray-400 dark:placeholder:text-slate-600'
