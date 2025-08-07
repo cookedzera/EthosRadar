@@ -87,7 +87,7 @@ const getTierInfo = (score: number) => {
 
 export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode = 'global' }: UserProfileViewProps) {
   const [animatedScore, setAnimatedScore] = useState(0);
-  const [activeTab, setActiveTab] = useState<'overview' | 'activity' | 'details'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'vouch-intel' | 'r4r-analysis'>('overview');
   
   // Get real-time data
   const { data: scoreData } = useTrustScore(user?.userkeys?.[0] || '', !!user);
@@ -303,24 +303,24 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             Overview
           </button>
           <button
-            onClick={() => setActiveTab('activity')}
+            onClick={() => setActiveTab('vouch-intel')}
             className={`flex-1 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
-              activeTab === 'activity'
+              activeTab === 'vouch-intel'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Activity
+            Vouch Intel
           </button>
           <button
-            onClick={() => setActiveTab('details')}
+            onClick={() => setActiveTab('r4r-analysis')}
             className={`flex-1 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
-              activeTab === 'details'
+              activeTab === 'r4r-analysis'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Details
+            R4R Analysis
           </button>
         </div>
                 
@@ -393,30 +393,52 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </div>
         )}
 
-        {activeTab === 'activity' && (
+        {activeTab === 'vouch-intel' && (
           <div className="bg-white rounded-3xl p-8 shadow-md border-0">
-            <h3 className="font-semibold text-gray-900 mb-4">Recent Activity</h3>
-            <p className="text-gray-500">Activity data will be displayed here...</p>
+            <h3 className="font-semibold text-gray-900 mb-4">Vouch Intelligence</h3>
+            <div className="space-y-4">
+              <div>
+                <span className="text-sm text-gray-500">Vouches Received:</span>
+                <p className="text-gray-900 font-semibold">{vouchesReceived}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-500">Vouches Given:</span>
+                <p className="text-gray-900 font-semibold">{realStats?.vouch?.given?.count || 0}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-500">Total Vouch Value:</span>
+                <p className="text-gray-900 font-semibold">
+                  {realStats?.vouch?.received?.amountWeiTotal ? 
+                    `${(parseInt(realStats.vouch.received.amountWeiTotal) / 1e18).toFixed(4)} ETH` : 
+                    '0 ETH'
+                  }
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
-        {activeTab === 'details' && (
+        {activeTab === 'r4r-analysis' && (
           <div className="bg-white rounded-3xl p-8 shadow-md border-0">
-            <h3 className="font-semibold text-gray-900 mb-4">Profile Details</h3>
-            <div className="space-y-3">
+            <h3 className="font-semibold text-gray-900 mb-4">R4R Analysis</h3>
+            <div className="space-y-4">
               <div>
-                <span className="text-sm text-gray-500">Wallet Address:</span>
-                <p className="text-gray-900 font-mono text-sm">
-                  {user?.userkeys?.[0] || 'N/A'}
+                <span className="text-sm text-gray-500">Reviews Received:</span>
+                <p className="text-gray-900 font-semibold">
+                  {(realStats?.review?.received?.positive || 0) + 
+                   (realStats?.review?.received?.neutral || 0) + 
+                   (realStats?.review?.received?.negative || 0)}
                 </p>
               </div>
               <div>
-                <span className="text-sm text-gray-500">Trust Level:</span>
-                <p className="text-gray-900">{tierInfo.tier}</p>
+                <span className="text-sm text-gray-500">Positive Reviews:</span>
+                <p className="text-gray-900 font-semibold text-green-600">
+                  {realStats?.review?.received?.positive || 0}
+                </p>
               </div>
               <div>
-                <span className="text-sm text-gray-500">Status:</span>
-                <p className="text-gray-900">{enhancedProfile?.status || 'Unknown'}</p>
+                <span className="text-sm text-gray-500">Trust Score:</span>
+                <p className="text-gray-900 font-semibold">{score}</p>
               </div>
             </div>
           </div>

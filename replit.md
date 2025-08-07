@@ -43,6 +43,8 @@ Theme preference: Light mode enforced for all users (dark appearance with light 
 - **Farcaster PNG Compliance**: Updated all Farcaster assets to use PNG format for maximum compatibility (logos, frame backgrounds)
 - **TypeScript Errors Fixed**: Resolved error handling type issues in frame generation code
 - **Migration Completed**: Successfully migrated from Replit Agent to standard Replit environment with homepage redesign
+- **Search System Fixed**: Resolved userkey parsing and cache invalidation issues - users can now search different profiles correctly
+- **Navigation Updated**: Tab labels changed from "Activity/Details" to "Vouch Intel/R4R Analysis" to match original design
 - **Homepage Redesign Applied**: Updated to match premium financial app reference with proper color scheme (#f8f9fa background, #ffffff cards), enhanced typography (text-6xl heading), and clean feature cards layout
 - **Pre-deployment Optimization**: Cleaned attached assets folder (37 images), verified API performance - all systems ready for deployment
 - **Pre-deployment Optimization**: Cleaned attached assets folder (37 images), verified API performance - all systems ready for deployment
