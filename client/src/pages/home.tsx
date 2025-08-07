@@ -42,7 +42,7 @@ export function HomePage() {
         </div>
         
         {/* Search Card - Contained like reference */}
-        <div className="bg-gray-100 rounded-2xl border border-gray-300 p-6 mb-8 shadow-sm">
+        <div className="bg-gray-100 rounded-2xl p-6 mb-8 shadow-sm border-0">
           <MinimalWalletScanner onUserFound={handleUserFound} />
         </div>
         
@@ -61,7 +61,7 @@ export function HomePage() {
                     searchInput.dispatchEvent(new Event('input', { bubbles: true }));
                   }
                 }}
-                className="bg-gray-100 border border-gray-300 rounded-full px-4 py-2 text-sm text-gray-700 hover:border-gray-400 hover:shadow-sm transition-all"
+                className="bg-white rounded-full px-4 py-2 text-sm text-gray-700 hover:shadow-md transition-all shadow-sm border-0"
               >
                 {name}
               </button>
@@ -71,7 +71,7 @@ export function HomePage() {
         
         {/* Features Grid - Clean cards like reference */}
         <div className="mt-16 space-y-4">
-          <div className="bg-gray-100 rounded-2xl border border-gray-300 p-6 shadow-sm">
+          <div className="bg-gray-100 rounded-2xl p-6 shadow-sm border-0">
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
                 <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,7 +85,7 @@ export function HomePage() {
             </div>
           </div>
           
-          <div className="bg-gray-100 rounded-2xl border border-gray-300 p-6 shadow-sm">
+          <div className="bg-gray-100 rounded-2xl p-6 shadow-sm border-0">
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center">
                 <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,7 +99,7 @@ export function HomePage() {
             </div>
           </div>
           
-          <div className="bg-gray-100 rounded-2xl border border-gray-300 p-6 shadow-sm">
+          <div className="bg-gray-100 rounded-2xl p-6 shadow-sm border-0">
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
                 <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
