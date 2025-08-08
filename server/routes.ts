@@ -2727,49 +2727,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`Fetching activities for userkey: ${userkey}`);
 
-      // Fetch activities using our existing enhanced profile API that already gets reviews
+      // Use the Ethos API to get individual review and vouch objects
       const [reviewsResult, vouchResult] = await Promise.all([
-        // Use our existing dashboard-reviews endpoint
-        fetch(`http://localhost:${process.env.PORT || 5000}/api/dashboard-reviews/${encodeURIComponent(userkey)}`),
+        // Get individual reviews received by this user using Ethos API
+        ethosApi.makeRequest(`/api/v2/reviews/by-target?targetUserKey=${encodeURIComponent(userkey)}&limit=100`),
         // Use our existing vouch activities endpoint
         fetch(`http://localhost:${process.env.PORT || 5000}/api/user-vouch-activities/${encodeURIComponent(userkey)}`)
       ]);
 
-      const [reviewsData, vouchData] = await Promise.all([
-        reviewsResult.ok ? reviewsResult.json() : { success: false, data: [] },
-        vouchResult.ok ? vouchResult.json() : { success: false, data: [] }
-      ]);
+      // Parse vouch data
+      const vouchData = vouchResult.ok ? await vouchResult.json() : { success: false, data: [] };
+      
+      // Extract reviews and vouches arrays
+      const reviews = reviewsResult.success && reviewsResult.data?.values ? reviewsResult.data.values : [];
+      const vouches = vouchData.success && vouchData.data ? 
+        [...(vouchData.data.received || []), ...(vouchData.data.given || [])] : [];
 
-      const reviews = reviewsData.success ? reviewsData.data || [] : [];
-      const vouches = vouchData.success ? vouchData.data || [] : [];
+      console.log(`Found ${reviews.length} reviews and ${vouches.length} vouches for analysis`);
 
-      // Format activities consistently
+      // Format activities consistently for AI analysis
       const formattedActivities = [
         ...reviews.map((review: any) => ({
           type: 'review',
           author: {
-            name: review.authorName,
-            username: review.authorUsername,
-            score: review.authorScore
+            name: review.author?.name || review.authorDisplayName || 'Unknown',
+            username: review.author?.username || review.authorUsername || 'unknown',
+            score: review.author?.score || review.authorScore || 0
           },
           data: {
-            comment: review.comment,
-            score: review.score
+            comment: review.comment || '',
+            score: review.score || 0,
+            sentiment: review.sentiment || 'neutral'
           },
-          timestamp: review.createdAt
+          timestamp: review.createdAt || review.timestamp
         })),
         ...vouches.map((vouch: any) => ({
-          type: 'vouch',
+          type: 'vouch', 
           author: {
-            name: vouch.authorName,
-            username: vouch.authorUsername,
-            score: vouch.authorScore
+            name: vouch.authorDisplayName || vouch.author?.name || 'Unknown',
+            username: vouch.authorUsername || vouch.author?.username || 'unknown',
+            score: vouch.authorScore || vouch.author?.score || 0
           },
           data: {
-            comment: vouch.comment || vouch.description,
-            score: vouch.amount
+            comment: vouch.comment || vouch.description || '',
+            amount: vouch.amount || vouch.amountWei || 0
           },
-          timestamp: vouch.createdAt
+          timestamp: vouch.createdAt || vouch.timestamp
         }))
       ];
 
