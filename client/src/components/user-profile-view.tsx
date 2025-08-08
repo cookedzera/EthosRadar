@@ -387,7 +387,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       ) : (
                         <ArrowDown className="w-2.5 h-2.5" />
                       )}
-                      <span>{weeklyXpGain > 0 ? '+' : ''}{weeklyXpGain}</span>
+                      <span>{weeklyXpGain > 0 ? '+' : ''}{formatNumber(Math.abs(weeklyXpGain))}</span>
                     </div>
                   )}
                 </div>
