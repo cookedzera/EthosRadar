@@ -177,10 +177,18 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
   
   // XP and ranking data - use enhanced profile data as primary source, strict null checking
-  const xpTotal = enhancedProfile?.xpTotal || 0;
-  const xpStreakDays = enhancedProfile?.xpStreakDays || null; // Strict null - only show if enhanced profile has data
+  const xpTotal = enhancedProfile?.xpTotal || user?.xpTotal || 0;
+  const xpStreakDays = enhancedProfile?.xpStreakDays || user?.xpStreakDays || null; 
   const leaderboardPosition = enhancedProfile?.leaderboardPosition ?? null;
   const weeklyXpGain = enhancedProfile?.weeklyXpGain || 0;
+
+  // Debug enhanced profile loading
+  console.log('Enhanced profile data:', {
+    hasEnhancedData: !!enhancedData?.success,
+    enhancedProfile: enhancedProfile,
+    xpTotal,
+    userXpTotal: user?.xpTotal
+  });
 
   // Status-based ring colors for profile avatar (dark mode only)
   const getStatusRingColor = (status: string, profileId: any) => {
