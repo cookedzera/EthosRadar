@@ -101,8 +101,14 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
   const realStats = (statsData as any)?.success ? (statsData as any).data : user?.stats;
   const enhancedProfile = (enhancedData as any)?.success ? (enhancedData as any).data : null;
   
-  // Stats - vouches from stats API
+  // Stats - vouches from stats API, reviews total from enhanced profile
   const vouchesReceived = realStats?.vouch?.received?.count || 0;
+  
+  // Calculate total reviews from enhanced profile (most accurate source)
+  const enhancedReviewStats = enhancedProfile?.stats?.review?.received;
+  const totalReviews = enhancedReviewStats 
+    ? (enhancedReviewStats.positive + enhancedReviewStats.neutral + enhancedReviewStats.negative)
+    : (realStats?.review?.received?.positive + realStats?.review?.received?.neutral + realStats?.review?.received?.negative) || 0;
   
   const tierInfo = getTierInfo(score);
   const IconComponent = tierInfo.icon;
@@ -382,7 +388,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-1.5">
                   <MessageSquare className="w-4 h-4 text-green-600" />
                 </div>
-                <div className="text-lg font-black text-gray-900 leading-none">{realStats?.review?.received?.positive || 0}</div>
+                <div className="text-lg font-black text-gray-900 leading-none">{totalReviews}</div>
                 <div className="text-xs text-gray-500 font-medium mt-0.5">Reviews</div>
               </div>
             </div>
@@ -481,10 +487,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   </div>
                 </div>
                 <div className="text-3xl font-black text-gray-900 mb-2">
-                  {realStats?.review?.received?.positive || 0}
+                  {totalReviews}
                 </div>
                 <div className="text-sm text-gray-600">
-                  Positive reviews
+                  Total reviews
                 </div>
               </div>
 
