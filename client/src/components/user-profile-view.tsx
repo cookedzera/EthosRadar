@@ -375,8 +375,21 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 {/* XP */}
                 <div className="text-center flex-1">
                   <div className="text-gray-500">XP</div>
-                  <div className="font-bold text-gray-800">
-                    {formatNumber(xpTotal)}
+                  <div className="flex items-center justify-center gap-1">
+                    <div className="font-bold text-gray-800">
+                      {formatNumber(xpTotal)}
+                    </div>
+                    {weeklyXpGain !== 0 && (
+                      <div className={`flex items-center ${
+                        weeklyXpGain > 0 ? 'text-green-600' : 'text-red-600'
+                      }`}>
+                        {weeklyXpGain > 0 ? (
+                          <ArrowUp className="w-2.5 h-2.5" />
+                        ) : (
+                          <ArrowDown className="w-2.5 h-2.5" />
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
