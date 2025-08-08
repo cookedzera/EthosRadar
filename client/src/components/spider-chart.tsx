@@ -31,37 +31,105 @@ export function SpiderChart({ userkey, className = '' }: SpiderChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
 
-  // Mock analysis for now - replace with actual API call
+  // Load real analysis from actual API data
   useEffect(() => {
-    const mockAnalysis = async () => {
+    const loadRealAnalysis = async () => {
       try {
         setLoading(true);
         
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        if (!userkey) {
+          setError('No user key provided');
+          return;
+        }
+
+        // Fetch real data from multiple endpoints
+        const [reviewsRes, statsRes, vouchActivitiesRes] = await Promise.all([
+          fetch(`/api/dashboard-reviews/${encodeURIComponent(userkey)}`),
+          fetch(`/api/user-stats/${encodeURIComponent(userkey)}`),
+          fetch(`/api/user-vouch-activities/${encodeURIComponent(userkey)}`)
+        ]);
+
+        const [reviewsData, statsData, vouchData] = await Promise.all([
+          reviewsRes.ok ? reviewsRes.json() : null,
+          statsRes.ok ? statsRes.json() : null,
+          vouchActivitiesRes.ok ? vouchActivitiesRes.json() : null
+        ]);
+
+        // Calculate real metrics from actual data
+        const reviews = reviewsData?.success ? reviewsData.data || [] : [];
+        const stats = statsData?.success ? statsData.data : null;
+        const vouches = vouchData?.success ? vouchData.data || [] : [];
         
-        // Mock data - replace with actual API call to your backend
-        const mockResults: AnalysisResult = {
-          "Trustworthy": 0.85,
-          "Professional": 0.72,
-          "Helpful": 0.68,
-          "Reliable": 0.91,
-          "Knowledgeable": 0.76,
-          "Responsive": 0.63,
-          "Innovative": 0.45,
-          "Collaborative": 0.82
-        };
+        const totalReviews = reviews.length;
+        const totalVouches = vouches.length;
+        const positiveReviews = reviews.filter((r: any) => r.score > 0).length;
+        const avgAuthorScore = reviews.length > 0 
+          ? Math.round(reviews.reduce((sum: number, r: any) => sum + (r.authorScore || 0), 0) / reviews.length)
+          : 0;
+
+        // Generate analysis based on real data patterns
+        const analysisResults: AnalysisResult = {};
+
+        // Trust metrics based on actual review scores and patterns
+        if (totalReviews > 0) {
+          const positiveRatio = positiveReviews / totalReviews;
+          const highScoreReviews = reviews.filter((r: any) => r.score >= 3).length;
+          const consistentRating = highScoreReviews / totalReviews;
+          
+          analysisResults["Trustworthy"] = Math.min(0.95, positiveRatio * 0.8 + (totalReviews / 20) * 0.2);
+          analysisResults["Reliable"] = Math.min(0.95, consistentRating * 0.9 + (avgAuthorScore / 3000) * 0.1);
+          analysisResults["Professional"] = Math.min(0.90, (avgAuthorScore / 3000) * 0.7 + consistentRating * 0.3);
+        } else {
+          // Default values for new users
+          analysisResults["Trustworthy"] = 0.20;
+          analysisResults["Reliable"] = 0.15;
+          analysisResults["Professional"] = 0.25;
+        }
+
+        // Vouch-based metrics
+        if (totalVouches > 0) {
+          const vouchScore = Math.min(0.90, (totalVouches / 10) * 0.8 + 0.2);
+          analysisResults["Collaborative"] = vouchScore;
+          analysisResults["Network Builder"] = Math.min(0.85, vouchScore * 0.9);
+        } else {
+          analysisResults["Collaborative"] = 0.10;
+          analysisResults["Network Builder"] = 0.05;
+        }
+
+        // Activity-based metrics
+        const hasRecentActivity = reviews.some((r: any) => 
+          new Date(r.createdAt).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000
+        );
+        
+        analysisResults["Active"] = hasRecentActivity ? 
+          Math.min(0.80, (totalReviews / 15) * 0.6 + 0.4) : 
+          Math.max(0.05, (totalReviews / 20) * 0.5);
+
+        // Quality metrics based on review content patterns (simplified)
+        const hasDescriptiveReviews = reviews.some((r: any) => 
+          r.comment && r.comment.length > 50
+        );
+        
+        if (hasDescriptiveReviews) {
+          analysisResults["Helpful"] = Math.min(0.85, positiveRatio * 0.7 + 0.3);
+          analysisResults["Knowledgeable"] = Math.min(0.80, (avgAuthorScore / 3000) * 0.8 + 0.2);
+        } else {
+          analysisResults["Helpful"] = Math.max(0.10, positiveRatio * 0.5);
+          analysisResults["Knowledgeable"] = Math.max(0.15, (avgAuthorScore / 3000) * 0.6);
+        }
 
         setAnalysis({
           userkey,
           timestamp: new Date().toISOString(),
-          totalReviews: 12,
-          totalVouches: 8,
-          avgAuthorScore: 1250,
-          model: "gpt-4",
-          results: mockResults
+          totalReviews,
+          totalVouches,
+          avgAuthorScore,
+          model: "real-data-analysis",
+          results: analysisResults
         });
+
       } catch (err) {
+        console.error('Failed to load real analysis:', err);
         setError(err instanceof Error ? err.message : 'Failed to load analysis');
       } finally {
         setLoading(false);
@@ -69,7 +137,7 @@ export function SpiderChart({ userkey, className = '' }: SpiderChartProps) {
     };
 
     if (userkey) {
-      mockAnalysis();
+      loadRealAnalysis();
     }
   }, [userkey]);
 
