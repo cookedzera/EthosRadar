@@ -260,9 +260,9 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         </div>
 
         {/* Compact Shareable Card */}
-        <div className="w-80 mx-auto bg-gray-100/90 backdrop-blur-xl rounded-3xl p-6 mb-8 shadow-md border-0 relative overflow-hidden">
+        <div className="w-80 mx-auto bg-gray-100 rounded-3xl p-6 mb-8 shadow-md border-0 relative overflow-hidden">
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-100/80 via-gray-50/60 to-gray-200/40"></div>
+          <div className="absolute inset-0 bg-gray-100"></div>
           
           <div className="relative z-10">
             {/* Header */}
@@ -292,7 +292,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             <div className="flex items-center gap-4 mb-4">
               {/* Avatar with Status Ring */}
               <div className="relative flex-shrink-0">
-                <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center bg-white/80 ${
+                <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center bg-gray-200/80 ${
                   user.status === 'ACTIVE' 
                     ? 'border-green-400 ring-2 ring-green-200' 
                     : user.status === 'INACTIVE' && user.profileId === null
@@ -307,14 +307,14 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       alt={user.displayName}
                       className="object-cover"
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-200 text-blue-700 text-lg font-bold">
+                    <AvatarFallback className="bg-gray-200 text-gray-700 text-lg font-bold">
                       {user.displayName?.charAt(0) || user.username?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </div>
                 
                 {/* Status Indicator Dot */}
-                <div className={`absolute -bottom-0.5 -right-0.5 rounded-full w-4 h-4 border-2 border-white ${
+                <div className={`absolute -bottom-0.5 -right-0.5 rounded-full w-4 h-4 border-2 border-gray-100 ${
                   user.status === 'ACTIVE' 
                     ? 'bg-green-500' 
                     : user.status === 'INACTIVE' && user.profileId === null
@@ -356,8 +356,8 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
 
             {/* Footer */}
-            <div className="text-center pt-2 border-t border-gray-200/60">
-              <div className="text-xs font-bold text-gray-400 tracking-wider">
+            <div className="text-center pt-2 border-t border-gray-300/40">
+              <div className="text-xs font-bold text-gray-500 tracking-wider">
                 ETHOSRADAR
               </div>
             </div>
@@ -371,14 +371,14 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
 
         {/* Compact Tab Navigation */}
-        <div className="bg-white/85 backdrop-blur-lg rounded-xl p-1 mb-6 shadow-sm border border-gray-200/40 max-w-md mx-auto">
+        <div className="bg-gray-100 rounded-3xl p-1 mb-6 shadow-md border-0 max-w-md mx-auto">
           <div className="flex gap-0.5">
             <button
               onClick={() => setActiveTab('overview')}
               className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                 activeTab === 'overview'
                   ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50'
               }`}
             >
               <div className="flex items-center gap-1.5 justify-center">
@@ -391,7 +391,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                 activeTab === 'vouch-intel'
                   ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50'
               }`}
             >
               <div className="flex items-center gap-1.5 justify-center">
@@ -404,7 +404,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                 activeTab === 'r4r-analysis'
                   ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50'
               }`}
             >
               <div className="flex items-center gap-1.5 justify-center">
