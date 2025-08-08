@@ -20,7 +20,7 @@ export interface AnalysisConfig {
       high: number;
     };
   };
-  openRouter: {
+  groq: {
     model: string;
     maxTokens: number;
     temperature: number;
@@ -148,8 +148,8 @@ Return ONLY a JSON object with precise confidence scores (0.0 to 1.0) for each c
     }
   },
 
-  openRouter: {
-    model: "anthropic/claude-3.5-sonnet",
+  groq: {
+    model: "llama-3.1-70b-versatile",
     maxTokens: 1000,
     temperature: 0.3
   }

@@ -2553,7 +2553,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Spider Chart Analysis using OpenRouter
+  // AI Spider Chart Analysis using Groq (Free)
   app.post("/api/analyze-activities", async (req, res) => {
     try {
       const { userkey, activities } = req.body;
@@ -2564,11 +2564,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-      if (!OPENROUTER_API_KEY) {
-        console.error("OpenRouter API key not found in environment variables");
+      const GROQ_API_KEY = process.env.GROQ_API_KEY;
+      if (!GROQ_API_KEY) {
+        console.error("Groq API key not found in environment variables");
         return res.status(500).json({
-          error: "OpenRouter API key not configured. Please add OPENROUTER_API_KEY to your environment variables."
+          error: "Groq API key not configured. Please add GROQ_API_KEY to your environment variables."
         });
       }
 
@@ -2618,19 +2618,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .replace('{vouchMultiplier}', analysisConfig.multipliers.vouch.toString())
         .replace('{activities}', JSON.stringify(formattedActivities, null, 2));
 
-      console.log(`Sending request to OpenRouter with model: ${analysisConfig.openRouter.model}`);
+      console.log(`Sending request to Groq with model: ${analysisConfig.groq.model}`);
 
-      // Call OpenRouter API
-      const openRouterResponse = await fetch(`https://openrouter.ai/api/v1/chat/completions`, {
+      // Call Groq API (Free tier available)
+      const groqResponse = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://ethosradar.com',
-          'X-Title': 'EthosRadar Spider Chart'
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: analysisConfig.openRouter.model,
+          model: analysisConfig.groq.model,
           messages: [
             {
               role: 'system',
@@ -2641,25 +2639,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
               content: userPrompt
             }
           ],
-          max_tokens: analysisConfig.openRouter.maxTokens,
-          temperature: analysisConfig.openRouter.temperature
+          max_tokens: analysisConfig.groq.maxTokens,
+          temperature: analysisConfig.groq.temperature
         })
       });
 
-      if (!openRouterResponse.ok) {
-        const errorText = await openRouterResponse.text();
-        console.error(`OpenRouter API error: ${openRouterResponse.status} - ${errorText}`);
+      if (!groqResponse.ok) {
+        const errorText = await groqResponse.text();
+        console.error(`Groq API error: ${groqResponse.status} - ${errorText}`);
         return res.status(500).json({
-          error: `OpenRouter API responded with status: ${openRouterResponse.status}`,
+          error: `Groq API responded with status: ${groqResponse.status}`,
           details: errorText
         });
       }
 
-      const openRouterData = await openRouterResponse.json();
-      console.log(`OpenRouter response received`);
+      const groqData = await groqResponse.json();
+      console.log(`Groq response received`);
 
       // Extract the analysis result
-      const analysisText = openRouterData.choices[0].message.content;
+      const analysisText = groqData.choices[0].message.content;
       console.log(`Analysis result: ${analysisText}`);
 
       let analysisResult: any;
@@ -2692,7 +2690,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalReviews: reviews.length,
         totalVouches: vouches.length,
         avgAuthorScore: Math.round(avgAuthorScore),
-        model: analysisConfig.openRouter.model,
+        model: analysisConfig.groq.model,
         results: analysisResult
       };
 
@@ -2730,7 +2728,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use the Ethos API to get individual review and vouch objects
       const [reviewsResult, vouchResult] = await Promise.all([
         // Get individual reviews received by this user using Ethos API
-        ethosApi.makeRequest(`/api/v2/reviews/by-target?targetUserKey=${encodeURIComponent(userkey)}&limit=100`),
+        ethosApi.getReviewsReceived(userkey, 100),
         // Use our existing vouch activities endpoint
         fetch(`http://localhost:${process.env.PORT || 5000}/api/user-vouch-activities/${encodeURIComponent(userkey)}`)
       ]);
