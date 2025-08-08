@@ -403,11 +403,12 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </div>
         </div>
 
-
-
-
-
-
+        {/* Next Rank Progress Bar */}
+        {score > 0 && (
+          <div className="max-w-80 mx-auto mb-6">
+            <NextRankProgress currentScore={score} className="bg-gray-100/80 backdrop-blur-lg border-0 shadow-md" />
+          </div>
+        )}
 
         {/* Compact Tab Navigation */}
         <div className="bg-gray-100 rounded-3xl p-1 mb-6 shadow-md border-0 max-w-md mx-auto">
