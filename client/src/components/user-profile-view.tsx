@@ -282,9 +282,15 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
             {/* Main Profile - Horizontal Layout */}
             <div className="flex items-center gap-4 mb-4">
-              {/* Avatar */}
+              {/* Avatar with Status Ring */}
               <div className="relative flex-shrink-0">
-                <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white/80">
+                <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center bg-white/80 ${
+                  user.status === 'ACTIVE' 
+                    ? 'border-green-400 ring-2 ring-green-200' 
+                    : user.status === 'INACTIVE'
+                    ? 'border-gray-300 ring-2 ring-gray-200'
+                    : 'border-gray-200'
+                }`}>
                   <Avatar className="h-14 w-14">
                     <AvatarImage 
                       src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
@@ -296,7 +302,21 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                     </AvatarFallback>
                   </Avatar>
                 </div>
-                <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 rounded-full w-4 h-4 border-2 border-white"></div>
+                
+                {/* Status Indicator Dot */}
+                <div className={`absolute -bottom-0.5 -right-0.5 rounded-full w-4 h-4 border-2 border-white ${
+                  user.status === 'ACTIVE' 
+                    ? 'bg-green-500' 
+                    : user.status === 'INACTIVE'
+                    ? 'bg-gray-400'
+                    : 'bg-green-500'
+                }`}>
+                  <div className={`w-1 h-1 rounded-full mx-auto mt-1 ${
+                    user.status === 'ACTIVE' 
+                      ? 'bg-white' 
+                      : 'bg-white opacity-70'
+                  }`}></div>
+                </div>
               </div>
 
               {/* Info */}
