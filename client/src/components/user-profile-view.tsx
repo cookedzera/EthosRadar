@@ -10,7 +10,7 @@ import { useAttestations, type SocialAttestation } from "@/hooks/use-attestation
 import { useWeeklyActivities } from "@/hooks/use-weekly-activities";
 import { R4RDataSection } from "./r4r-data-section";
 import { NextRankProgress } from "./next-rank-progress";
-import { TrustConstellation } from "./trust-constellation";
+
 
 import { FarcasterShareButton } from "./farcaster-share-button";
 import { formatNumber, formatXP, formatWeeklyGain, formatCurrency } from "@/lib/number-utils";
@@ -473,19 +473,8 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 
         {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
-            {/* Trust Constellation Visualization */}
-            <div className="max-w-80 mx-auto">
-              <TrustConstellation 
-                user={user}
-                vouchData={vouchData}
-                realStats={realStats}
-                r4rData={r4rData}
-                className="mb-6"
-              />
-            </div>
-
-            {/* Minimal Stats Cards */}
+          <div className="space-y-6">
+            {/* Stats Cards */}
             <div className="grid grid-cols-3 gap-4 max-w-80 mx-auto">
               <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
                 <div className="text-lg font-bold text-orange-600 mb-1">
