@@ -10,6 +10,7 @@ import { useAttestations, type SocialAttestation } from "@/hooks/use-attestation
 import { useWeeklyActivities } from "@/hooks/use-weekly-activities";
 import { R4RDataSection } from "./r4r-data-section";
 import { NextRankProgress } from "./next-rank-progress";
+import { SpiderChart } from "./spider-chart";
 
 
 import { FarcasterShareButton } from "./farcaster-share-button";
@@ -494,36 +495,11 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             </div>
 
-            {/* Enhanced Recent Activity */}
-            {weeklyActivitiesData && (weeklyActivitiesData as any).success && (weeklyActivitiesData as any).data && (
-              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
-                    <Activity className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
-                </div>
-                <div className="space-y-4">
-                  {(Array.isArray((weeklyActivitiesData as any).data) ? (weeklyActivitiesData as any).data.slice(0, 5) : []).map((activity: any, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-200/60 rounded-2xl border-0 hover:bg-gray-200/80 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg"></div>
-                        <span className="font-medium text-gray-900">{activity.type || 'Network Activity'}</span>
-                      </div>
-                      <span className="text-sm text-gray-500 font-medium">
-                        {activity.timestamp ? new Date(activity.timestamp * 1000).toLocaleDateString() : 'Recent'}
-                      </span>
-                    </div>
-                  ))}
-                  {(!Array.isArray((weeklyActivitiesData as any).data) || (weeklyActivitiesData as any).data.length === 0) && (
-                    <div className="text-center py-8 text-gray-500">
-                      <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                      <p className="font-medium">No recent activity found</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {/* Spider Chart Analysis */}
+            <SpiderChart 
+              userkey={user?.userkeys?.[0] || ''}
+              className=""
+            />
           </div>
         )}
 
