@@ -145,68 +145,37 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
     // Debug logging
     console.log('🌌 Constellation: Generated network with', connectedUsers.size, 'unique connections');
 
-    // Create nodes for connected users
+    // Create nodes for connected users - LIMIT TO TOP CONNECTIONS ONLY
     const userArray = Array.from(connectedUsers.values());
     
-    // If no connections, create some sample nodes for visualization
-    if (userArray.length === 0) {
-      // Add some demo connections based on realStats if available
-      if (realStats?.vouch?.received?.count > 0) {
-        for (let i = 0; i < Math.min(3, realStats.vouch.received.count); i++) {
-          const angle = (2 * Math.PI * i) / 3;
-          const distance = 70 + Math.random() * 30;
-          const demoTier = getTierInfo(1200 + Math.random() * 600);
-          
-          const demoNode: ConstellationNode = {
-            id: `demo-${i}`,
-            x: centerX + Math.cos(angle) * distance,
-            y: centerY + Math.sin(angle) * distance,
-            radius: 4 + (demoTier.brightness * 2),
-            brightness: demoTier.brightness,
-            color: demoTier.color,
-            user: {
-              userkey: `demo-${i}`,
-              displayName: `Connection ${i + 1}`,
-              username: `user${i + 1}`,
-              avatarUrl: '',
-              score: Math.floor(1200 + Math.random() * 600),
-              tier: demoTier.tier
-            },
-            connections: [mainNode.id],
-            isMainUser: false,
-            pulse: Math.random() * Math.PI * 2
-          };
-          
-          newNodes.push(demoNode);
-          
-          const demoConnection: ConstellationConnection = {
-            from: mainNode.id,
-            to: demoNode.id,
-            strength: demoTier.brightness,
-            amount: Math.random() * 0.1,
-            type: 'vouch',
-            color: demoTier.color,
-            animated: Math.random() > 0.5
-          };
-          
-          newConnections.push(demoConnection);
-          mainNode.connections.push(demoNode.id);
-        }
-      }
-    } else {
-      // Process real connections
-      const angleStep = (2 * Math.PI) / userArray.length;
+    // Sort by importance: mutual > received > given, then by score
+    const sortedUsers = userArray.sort((a, b) => {
+      // Priority: mutual vouches first
+      if (a.relationship === 'mutual' && b.relationship !== 'mutual') return -1;
+      if (b.relationship === 'mutual' && a.relationship !== 'mutual') return 1;
       
-      userArray.forEach((connectedUser, index) => {
-        const angle = angleStep * index;
-        const distance = 60 + Math.random() * 40; // Vary distance for natural look
+      // Then by score (higher score = more important)
+      return (b.score || 0) - (a.score || 0);
+    });
+
+    // LIMIT: Show only top 8 most important connections for clarity
+    const topConnections = sortedUsers.slice(0, 8);
+    
+    if (topConnections.length === 0) {
+      // Show a simple message if no connections
+      console.log('🌌 Constellation: No meaningful connections to display');
+    } else {
+      // Process top connections with clean layout
+      topConnections.forEach((connectedUser, index) => {
+        const angle = (2 * Math.PI * index) / topConnections.length;
+        const baseDistance = 80; // Fixed distance for clean layout
         const tier = getTierInfo(connectedUser.score || 1200);
         
         const node: ConstellationNode = {
           id: connectedUser.userkey,
-          x: centerX + Math.cos(angle) * distance,
-          y: centerY + Math.sin(angle) * distance,
-          radius: 4 + (tier.brightness * 3),
+          x: centerX + Math.cos(angle) * baseDistance,
+          y: centerY + Math.sin(angle) * baseDistance,
+          radius: 6 + (tier.brightness * 2), // Larger, more visible stars
           brightness: tier.brightness,
           color: tier.color,
           user: {
@@ -224,7 +193,7 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
         
         newNodes.push(node);
         
-        // Create connection
+        // Create connection with clean styling
         const connection: ConstellationConnection = {
           from: mainNode.id,
           to: node.id,
@@ -381,9 +350,9 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
   };
 
   const stats = {
-    totalConnections: nodes.length - 1,
+    totalConnections: nodes.length - 1, // Showing top connections only
     mutualVouches: connections.filter(c => c.animated).length,
-    networkReach: nodes.length > 1 ? 2 : 1 // Simplified for now
+    networkReach: Math.min(8, nodes.length - 1) // Max 8 displayed
   };
 
   return (
@@ -420,15 +389,15 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
       <div className="grid grid-cols-3 gap-3 mt-4">
         <div className="text-center">
           <div className="text-lg font-bold text-purple-600">{stats.totalConnections}</div>
-          <div className="text-xs text-gray-600">Connections</div>
+          <div className="text-xs text-gray-600">Top Shown</div>
         </div>
         <div className="text-center">
           <div className="text-lg font-bold text-blue-600">{stats.mutualVouches}</div>
           <div className="text-xs text-gray-600">Mutual</div>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold text-emerald-600">{stats.networkReach}</div>
-          <div className="text-xs text-gray-600">Reach</div>
+          <div className="text-lg font-bold text-emerald-600">{vouchData?.success && vouchData.data ? (vouchData.data.received?.length || 0) + (vouchData.data.given?.length || 0) : 0}</div>
+          <div className="text-xs text-gray-600">Total</div>
         </div>
       </div>
 
