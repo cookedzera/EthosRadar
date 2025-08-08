@@ -149,7 +149,7 @@ Return ONLY a JSON object with precise confidence scores (0.0 to 1.0) for each c
   },
 
   groq: {
-    model: "llama-3.1-70b-versatile",
+    model: "llama3-70b-8192",
     maxTokens: 1000,
     temperature: 0.3
   }
