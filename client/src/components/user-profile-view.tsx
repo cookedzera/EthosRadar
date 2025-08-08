@@ -343,48 +343,41 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             </div>
 
-            {/* EthosRadar Style Stats Grid */}
-            <div className="grid grid-cols-2 gap-2 mb-4 mt-4">
-              {/* Reviews Card */}
-              {realStats?.review?.received && (
-                <div className="bg-gray-200/50 rounded-2xl p-3 text-center">
-                  <div className="text-xs text-gray-500 mb-1">Reviews</div>
-                  <div className="text-sm font-bold text-gray-800">
-                    {realStats.review.received.positive > 0 
-                      ? `${Math.round((realStats.review.received.positive / (realStats.review.received.positive + realStats.review.received.neutral + realStats.review.received.negative)) * 100)}%`
-                      : '0%'
-                    }
+            {/* Compact Horizontal Stats */}
+            <div className="bg-gray-200/30 rounded-xl p-2 mb-3 mt-3">
+              <div className="flex justify-between items-center text-xs">
+                {/* Reviews */}
+                {realStats?.review?.received && (
+                  <div className="text-center flex-1">
+                    <div className="text-gray-500">Reviews</div>
+                    <div className="font-bold text-gray-800">
+                      {realStats.review.received.positive > 0 
+                        ? `${Math.round((realStats.review.received.positive / (realStats.review.received.positive + realStats.review.received.neutral + realStats.review.received.negative)) * 100)}%`
+                        : '0%'
+                      }
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600">
-                    {totalReviews} total
+                )}
+                
+                {/* Vouches */}
+                {realStats?.vouch?.received && (
+                  <div className="text-center flex-1">
+                    <div className="text-gray-500">Vouched</div>
+                    <div className="font-bold text-gray-800">
+                      ${realStats.vouch.received.amountWeiTotal 
+                        ? (parseInt(realStats.vouch.received.amountWeiTotal) / 1e18 * 3400).toFixed(0)
+                        : '0'
+                      }
+                    </div>
                   </div>
-                </div>
-              )}
-              
-              {/* Vouches Card */}
-              {realStats?.vouch?.received && (
-                <div className="bg-gray-200/50 rounded-2xl p-3 text-center">
-                  <div className="text-xs text-gray-500 mb-1">Vouched</div>
-                  <div className="text-sm font-bold text-gray-800">
-                    ${realStats.vouch.received.amountWeiTotal 
-                      ? (parseInt(realStats.vouch.received.amountWeiTotal) / 1e18 * 3400).toFixed(0)
-                      : '0'
-                    }
+                )}
+                
+                {/* XP */}
+                <div className="text-center flex-1">
+                  <div className="text-gray-500">XP</div>
+                  <div className="font-bold text-gray-800">
+                    {formatNumber(xpTotal)}
                   </div>
-                  <div className="text-xs text-gray-600">
-                    {vouchesReceived} vouches
-                  </div>
-                </div>
-              )}
-              
-              {/* XP Card - spans both columns if only 1 other card */}
-              <div className={`bg-gray-200/50 rounded-2xl p-3 text-center ${(!realStats?.review?.received || !realStats?.vouch?.received) ? 'col-span-2' : ''}`}>
-                <div className="text-xs text-gray-500 mb-1">Experience</div>
-                <div className="text-sm font-bold text-gray-800">
-                  {formatNumber(xpTotal)}
-                </div>
-                <div className="text-xs text-gray-600">
-                  XP
                 </div>
               </div>
             </div>
