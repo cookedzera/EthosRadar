@@ -11,12 +11,66 @@ interface NextRankProgressProps {
 
 // Official Ethos Protocol tier system (0-2800 range)
 const getTierThresholds = () => [
-  { threshold: 2800, tier: 'Exemplary (Max)', icon: Crown, colors: 'from-purple-600 to-purple-400', textColor: 'text-purple-300', nextLabel: 'MAX TIER REACHED' },
-  { threshold: 2000, tier: 'Exemplary', icon: Crown, colors: 'from-purple-500 to-purple-300', textColor: 'text-purple-300', nextLabel: 'Exemplary (Max)' },
-  { threshold: 1600, tier: 'Reputable', icon: Award, colors: 'from-emerald-500 to-emerald-300', textColor: 'text-emerald-300', nextLabel: 'Exemplary' },
-  { threshold: 1200, tier: 'Neutral', icon: Zap, colors: 'from-blue-500 to-blue-300', textColor: 'text-blue-300', nextLabel: 'Reputable' },
-  { threshold: 800, tier: 'Questionable', icon: AlertTriangle, colors: 'from-amber-500 to-amber-300', textColor: 'text-amber-300', nextLabel: 'Neutral' },
-  { threshold: 0, tier: 'Untrusted', icon: Shield, colors: 'from-gray-500 to-gray-300', textColor: 'text-gray-400', nextLabel: 'Questionable' }
+  { 
+    threshold: 2800, 
+    tier: 'Exemplary (Max)', 
+    icon: Crown, 
+    colors: 'from-purple-600 to-purple-400', 
+    textColor: 'text-purple-300', 
+    nextLabel: 'MAX TIER REACHED',
+    progressColors: 'from-purple-400 to-purple-500',
+    bgColor: 'bg-purple-500'
+  },
+  { 
+    threshold: 2000, 
+    tier: 'Exemplary', 
+    icon: Crown, 
+    colors: 'from-purple-500 to-purple-300', 
+    textColor: 'text-purple-300', 
+    nextLabel: 'Exemplary (Max)',
+    progressColors: 'from-purple-400 to-purple-500',
+    bgColor: 'bg-purple-500'
+  },
+  { 
+    threshold: 1600, 
+    tier: 'Reputable', 
+    icon: Award, 
+    colors: 'from-emerald-500 to-emerald-300', 
+    textColor: 'text-emerald-300', 
+    nextLabel: 'Exemplary',
+    progressColors: 'from-green-400 to-green-500',
+    bgColor: 'bg-green-500'
+  },
+  { 
+    threshold: 1200, 
+    tier: 'Neutral', 
+    icon: Zap, 
+    colors: 'from-blue-500 to-blue-300', 
+    textColor: 'text-blue-300', 
+    nextLabel: 'Reputable',
+    progressColors: 'from-blue-400 to-blue-500',
+    bgColor: 'bg-blue-500'
+  },
+  { 
+    threshold: 800, 
+    tier: 'Questionable', 
+    icon: AlertTriangle, 
+    colors: 'from-amber-500 to-amber-300', 
+    textColor: 'text-amber-300', 
+    nextLabel: 'Neutral',
+    progressColors: 'from-yellow-400 to-amber-500',
+    bgColor: 'bg-amber-500'
+  },
+  { 
+    threshold: 0, 
+    tier: 'Untrusted', 
+    icon: Shield, 
+    colors: 'from-gray-500 to-gray-300', 
+    textColor: 'text-gray-400', 
+    nextLabel: 'Questionable',
+    progressColors: 'from-gray-400 to-gray-500',
+    bgColor: 'bg-gray-500'
+  }
 ];
 
 export function NextRankProgress({ currentScore, userkey, className = '' }: NextRankProgressProps) {
@@ -72,10 +126,10 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
         
         <div className="mb-3">
           <div className="h-3 bg-gray-300/60 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-purple-400 to-purple-500 rounded-full" />
+            <div className={`h-full bg-gradient-to-r ${currentTier.progressColors} rounded-full`} />
           </div>
           <div className="text-center mt-2">
-            <span className="text-lg font-bold text-purple-500">100%</span>
+            <span className={`text-lg font-bold ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')}`}>100%</span>
           </div>
         </div>
         
@@ -133,7 +187,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       <div className="mb-3">
         <div className="h-3 bg-gray-300/60 rounded-full overflow-hidden">
           <motion.div 
-            className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full relative"
+            className={`h-full bg-gradient-to-r ${currentTier.progressColors} rounded-full relative`}
             initial={{ width: "0%" }}
             animate={{ width: `${animatedProgress}%` }}
             transition={{ duration: 1.2, ease: "easeOut" }}
@@ -147,7 +201,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
         
         {/* Progress percentage centered */}
         <div className="text-center mt-2">
-          <span className="text-lg font-bold text-green-500">
+          <span className={`text-lg font-bold ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')}`}>
             {animatedProgress.toFixed(0)}%
           </span>
         </div>
@@ -156,7 +210,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       {/* Bottom Row - Current and Next Tier */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-blue-500 flex items-center justify-center">
+          <div className={`w-6 h-6 rounded-md ${currentTier.bgColor} flex items-center justify-center`}>
             <CurrentIcon className="w-3 h-3 text-white" />
           </div>
           <div className="text-xs">
@@ -169,10 +223,10 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
         
         <div className="flex items-center gap-2">
           <div className="text-xs text-right">
-            <div className="font-medium text-green-600">{nextTier.tier}</div>
+            <div className="font-medium text-gray-600">{nextTier.tier}</div>
             <div className="text-gray-500">{nextTier.threshold} pts</div>
           </div>
-          <div className="w-6 h-6 rounded-md bg-green-500 flex items-center justify-center">
+          <div className={`w-6 h-6 rounded-md ${nextTier.bgColor} flex items-center justify-center`}>
             <NextIcon className="w-3 h-3 text-white" />
           </div>
         </div>
@@ -180,7 +234,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       
       {/* Progress Status */}
       <div className="text-center mt-2">
-        <span className="text-xs text-green-500 font-medium">
+        <span className={`text-xs ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')} font-medium`}>
           Progress: {animatedProgress.toFixed(1)}%
         </span>
       </div>
