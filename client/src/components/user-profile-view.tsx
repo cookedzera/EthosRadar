@@ -295,7 +295,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 }`}>
                   <Avatar className="h-14 w-14">
                     <AvatarImage 
-                      src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? user.avatarUrl : undefined} 
+                      src={user.avatarUrl && !user.avatarUrl.includes('default_profile') ? `/api/proxy-avatar?url=${encodeURIComponent(user.avatarUrl)}` : undefined} 
                       alt={user.displayName}
                       className="object-cover"
                     />

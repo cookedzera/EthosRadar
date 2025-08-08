@@ -212,11 +212,11 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {suggestion.pfp_url ? (
                     <img
-                      src={suggestion.pfp_url}
+                      src={`/api/proxy-avatar?url=${encodeURIComponent(suggestion.pfp_url)}`}
                       alt={suggestion.display_name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        console.log('Avatar failed to load:', suggestion.pfp_url);
+                        console.log('Avatar failed to load via proxy:', suggestion.pfp_url);
                         // Hide the broken image and show fallback
                         e.currentTarget.style.display = 'none';
                         const fallback = e.currentTarget.nextElementSibling as HTMLElement;

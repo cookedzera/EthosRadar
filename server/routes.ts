@@ -111,6 +111,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.setHeader('Cache-Control', 'public, max-age=31536000');
     res.sendFile(path.join(process.cwd(), 'public', 'logo1.png'));
   });
+
+  // Avatar proxy endpoint to bypass CORS issues
+  app.get('/api/proxy-avatar', async (req, res) => {
+    try {
+      const url = req.query.url as string;
+      if (!url) {
+        return res.status(400).json({ error: 'URL parameter is required' });
+      }
+
+      // Only allow certain domains for security
+      const allowedDomains = ['pbs.twimg.com', 'abs.twimg.com', 'cdn.discordapp.com', 'avatars.githubusercontent.com'];
+      const urlObj = new URL(url);
+      if (!allowedDomains.includes(urlObj.hostname)) {
+        return res.status(403).json({ error: 'Domain not allowed' });
+      }
+
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'EthosRadar/1.0',
+          'Referer': 'https://ethosradar.com'
+        }
+      });
+
+      if (!response.ok) {
+        return res.status(response.status).json({ error: 'Failed to fetch image' });
+      }
+
+      const contentType = response.headers.get('content-type') || 'image/jpeg';
+      const imageBuffer = await response.arrayBuffer();
+
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.send(Buffer.from(imageBuffer));
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
   
 
   
