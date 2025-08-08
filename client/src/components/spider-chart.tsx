@@ -79,10 +79,18 @@ export function SpiderChart({ userkey, className = '' }: SpiderChartProps) {
       chartInstance.current.destroy();
     }
 
-    // Filter out categories with very low values for cleaner display
-    const filteredCategories = Object.keys(analysis.results)
-      .filter(category => analysis.results[category] > 0.2)
-      .slice(0, 8); // Limit to 8 categories for readability
+    // Get all categories sorted by score, ensure minimum 3 for radar chart
+    const allCategories = Object.keys(analysis.results)
+      .sort((a, b) => analysis.results[b] - analysis.results[a]);
+    
+    // Take categories with significant scores first, then fill with top remaining to get minimum 3
+    const significantCategories = allCategories.filter(cat => analysis.results[cat] > 0.2);
+    const remainingCategories = allCategories.filter(cat => analysis.results[cat] <= 0.2);
+    
+    const filteredCategories = [
+      ...significantCategories,
+      ...remainingCategories.slice(0, Math.max(0, 3 - significantCategories.length))
+    ].slice(0, 8); // Limit to 8 categories for readability
     
     const data = filteredCategories.map(category => 
       Math.round(analysis.results[category] * 100)
@@ -173,7 +181,6 @@ export function SpiderChart({ userkey, className = '' }: SpiderChartProps) {
     if (!analysis) return [];
     
     return Object.keys(analysis.results)
-      .filter(category => analysis.results[category] > 0.2)
       .sort((a, b) => analysis.results[b] - analysis.results[a])
       .slice(0, 3);
   };
