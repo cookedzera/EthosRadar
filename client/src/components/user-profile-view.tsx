@@ -248,7 +248,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-[#c7c8c9]">
       <div className="max-w-4xl mx-auto px-6 pt-4 pb-12">
         {/* Hidden Header for Clean Profile View */}
 
