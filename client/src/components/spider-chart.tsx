@@ -42,91 +42,20 @@ export function SpiderChart({ userkey, className = '' }: SpiderChartProps) {
           return;
         }
 
-        // Fetch real data from multiple endpoints
-        const [reviewsRes, statsRes, vouchActivitiesRes] = await Promise.all([
-          fetch(`/api/dashboard-reviews/${encodeURIComponent(userkey)}`),
-          fetch(`/api/user-stats/${encodeURIComponent(userkey)}`),
-          fetch(`/api/user-vouch-activities/${encodeURIComponent(userkey)}`)
-        ]);
-
-        const [reviewsData, statsData, vouchData] = await Promise.all([
-          reviewsRes.ok ? reviewsRes.json() : null,
-          statsRes.ok ? statsRes.json() : null,
-          vouchActivitiesRes.ok ? vouchActivitiesRes.json() : null
-        ]);
-
-        // Calculate real metrics from actual data
-        const reviews = reviewsData?.success ? reviewsData.data || [] : [];
-        const stats = statsData?.success ? statsData.data : null;
-        const vouches = vouchData?.success ? vouchData.data || [] : [];
+        // Use the new AI-powered spider chart analysis API
+        const response = await fetch(`/api/spider-analysis/${encodeURIComponent(userkey)}`);
         
-        const totalReviews = reviews.length;
-        const totalVouches = vouches.length;
-        const positiveReviews = reviews.filter((r: any) => r.score > 0).length;
-        const avgAuthorScore = reviews.length > 0 
-          ? Math.round(reviews.reduce((sum: number, r: any) => sum + (r.authorScore || 0), 0) / reviews.length)
-          : 0;
-
-        // Generate analysis based on real data patterns
-        const analysisResults: AnalysisResult = {};
-
-        // Trust metrics based on actual review scores and patterns
-        if (totalReviews > 0) {
-          const positiveRatio = positiveReviews / totalReviews;
-          const highScoreReviews = reviews.filter((r: any) => r.score >= 3).length;
-          const consistentRating = highScoreReviews / totalReviews;
-          
-          analysisResults["Trustworthy"] = Math.min(0.95, positiveRatio * 0.8 + (totalReviews / 20) * 0.2);
-          analysisResults["Reliable"] = Math.min(0.95, consistentRating * 0.9 + (avgAuthorScore / 3000) * 0.1);
-          analysisResults["Professional"] = Math.min(0.90, (avgAuthorScore / 3000) * 0.7 + consistentRating * 0.3);
-        } else {
-          // Default values for new users
-          analysisResults["Trustworthy"] = 0.20;
-          analysisResults["Reliable"] = 0.15;
-          analysisResults["Professional"] = 0.25;
+        if (!response.ok) {
+          throw new Error(`API responded with status: ${response.status}`);
         }
 
-        // Vouch-based metrics
-        if (totalVouches > 0) {
-          const vouchScore = Math.min(0.90, (totalVouches / 10) * 0.8 + 0.2);
-          analysisResults["Collaborative"] = vouchScore;
-          analysisResults["Network Builder"] = Math.min(0.85, vouchScore * 0.9);
-        } else {
-          analysisResults["Collaborative"] = 0.10;
-          analysisResults["Network Builder"] = 0.05;
-        }
-
-        // Activity-based metrics
-        const hasRecentActivity = reviews.some((r: any) => 
-          new Date(r.createdAt).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000
-        );
+        const analysisData = await response.json();
         
-        analysisResults["Active"] = hasRecentActivity ? 
-          Math.min(0.80, (totalReviews / 15) * 0.6 + 0.4) : 
-          Math.max(0.05, (totalReviews / 20) * 0.5);
-
-        // Quality metrics based on review content patterns (simplified)
-        const hasDescriptiveReviews = reviews.some((r: any) => 
-          r.comment && r.comment.length > 50
-        );
-        
-        if (hasDescriptiveReviews) {
-          analysisResults["Helpful"] = Math.min(0.85, positiveRatio * 0.7 + 0.3);
-          analysisResults["Knowledgeable"] = Math.min(0.80, (avgAuthorScore / 3000) * 0.8 + 0.2);
+        if (analysisData.success && analysisData.data) {
+          setAnalysis(analysisData.data);
         } else {
-          analysisResults["Helpful"] = Math.max(0.10, positiveRatio * 0.5);
-          analysisResults["Knowledgeable"] = Math.max(0.15, (avgAuthorScore / 3000) * 0.6);
+          throw new Error(analysisData.error || 'Failed to get analysis data');
         }
-
-        setAnalysis({
-          userkey,
-          timestamp: new Date().toISOString(),
-          totalReviews,
-          totalVouches,
-          avgAuthorScore,
-          model: "real-data-analysis",
-          results: analysisResults
-        });
 
       } catch (err) {
         console.error('Failed to load real analysis:', err);
