@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, memo } from "react";
-import { Star, Users, Zap, Award, Crown, Shield, AlertTriangle } from "lucide-react";
+import { Star, Users, Zap, Award, Crown, Shield, AlertTriangle, Brain, Network } from "lucide-react";
 
 interface ConstellationNode {
   id: string;
@@ -19,6 +19,9 @@ interface ConstellationNode {
   connections: string[];
   isMainUser: boolean;
   pulse: number;
+  riskLevel?: 'low' | 'moderate' | 'high' | 'critical';
+  mutualConnections: number;
+  trustIndex: number;
 }
 
 interface ConstellationConnection {
@@ -26,15 +29,18 @@ interface ConstellationConnection {
   to: string;
   strength: number;
   amount: number;
-  type: 'vouch' | 'review';
+  type: 'vouch' | 'review' | 'mutual';
   color: string;
   animated: boolean;
+  bidirectional?: boolean;
+  riskScore?: number;
 }
 
 interface TrustConstellationProps {
   user: any;
   vouchData?: any;
   realStats?: any;
+  r4rData?: any;
   className?: string;
 }
 
@@ -71,148 +77,286 @@ const getTierInfo = (score: number) => {
   };
 };
 
-export const TrustConstellation = memo(({ user, vouchData, realStats, className = "" }: TrustConstellationProps) => {
+export const TrustConstellation = memo(({ user, vouchData, realStats, r4rData, className = "" }: TrustConstellationProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredNode, setHoveredNode] = useState<ConstellationNode | null>(null);
   const [selectedNode, setSelectedNode] = useState<ConstellationNode | null>(null);
   const [nodes, setNodes] = useState<ConstellationNode[]>([]);
   const [connections, setConnections] = useState<ConstellationConnection[]>([]);
+  const [networkInsights, setNetworkInsights] = useState<any>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const animationRef = useRef<number>();
 
-  // Generate constellation data from vouch/review data
+  // Enhanced constellation generation with AI analysis
   useEffect(() => {
     if (!user || !vouchData || !vouchData.success || !vouchData.data) return;
-
-    const newNodes: ConstellationNode[] = [];
-    const newConnections: ConstellationConnection[] = [];
-    const centerX = 150;
-    const centerY = 150;
-    const maxRadius = 120;
-
-    // Main user at center
-    const mainUserTier = getTierInfo(user.score || 0);
-    const mainNode: ConstellationNode = {
-      id: user.userkeys?.[0] || 'main',
-      x: centerX,
-      y: centerY,
-      radius: 8,
-      brightness: mainUserTier.brightness,
-      color: mainUserTier.color,
-      user: {
-        userkey: user.userkeys?.[0] || '',
-        displayName: user.displayName || 'You',
-        username: user.username || '',
-        avatarUrl: user.avatarUrl || '',
-        score: user.score || 0,
-        tier: mainUserTier.tier
-      },
-      connections: [],
-      isMainUser: true,
-      pulse: 0
-    };
-    newNodes.push(mainNode);
-
-    // Add connected users from vouch data
-    const connectedUsers = new Map<string, any>();
     
-    // Process received vouches - use voucherInfo (person who vouched for us)
-    const receivedVouches = vouchData.data.received || [];
-    receivedVouches.forEach((vouch: any) => {
-      if (vouch.voucherInfo && vouch.voucherInfo.userkey) {
-        connectedUsers.set(vouch.voucherInfo.userkey, {
-          ...vouch.voucherInfo,
-          vouchAmount: parseFloat(vouch.amountEth || vouch.amount || '0'),
-          relationship: 'received',
-          vouchData: vouch
-        });
-      }
-    });
+    generateEnhancedConstellation();
+  }, [user, vouchData, realStats, r4rData]);
 
-    // Process given vouches - use voucheeInfo (person we vouched for)
-    const givenVouches = vouchData.data.given || [];
-    givenVouches.forEach((vouch: any) => {
-      if (vouch.voucheeInfo && vouch.voucheeInfo.userkey) {
-        const existing = connectedUsers.get(vouch.voucheeInfo.userkey);
-        connectedUsers.set(vouch.voucheeInfo.userkey, {
-          ...(existing || vouch.voucheeInfo),
-          vouchAmount: (existing?.vouchAmount || 0) + parseFloat(vouch.amountEth || vouch.amount || '0'),
-          relationship: existing ? 'mutual' : 'given',
-          vouchData: vouch
-        });
-      }
-    });
+  const generateEnhancedConstellation = async () => {
+    setIsAnalyzing(true);
 
-    // Successfully processed unique connections for this user
+    try {
+      const newNodes: ConstellationNode[] = [];
+      const newConnections: ConstellationConnection[] = [];
+      const centerX = 150;
+      const centerY = 150;
+      const maxRadius = 120;
 
-    // Create nodes for connected users - LIMIT TO TOP CONNECTIONS ONLY
-    const userArray = Array.from(connectedUsers.values());
-    
-    // Sort by importance: mutual > received > given, then by score
-    const sortedUsers = userArray.sort((a, b) => {
-      // Priority: mutual vouches first
-      if (a.relationship === 'mutual' && b.relationship !== 'mutual') return -1;
-      if (b.relationship === 'mutual' && a.relationship !== 'mutual') return 1;
+      // Enhanced main user node with risk analysis
+      const mainUserTier = getTierInfo(user.score || 0);
+      const userRisk = r4rData?.riskLevel || 'low';
       
-      // Then by score (higher score = more important)
-      return (b.score || 0) - (a.score || 0);
-    });
+      const mainNode: ConstellationNode = {
+        id: user.userkeys?.[0] || 'main',
+        x: centerX,
+        y: centerY,
+        radius: 10,
+        brightness: mainUserTier.brightness,
+        color: mainUserTier.color,
+        user: {
+          userkey: user.userkeys?.[0] || '',
+          displayName: user.displayName || 'You',
+          username: user.username || '',
+          avatarUrl: user.avatarUrl || '',
+          score: user.score || 0,
+          tier: mainUserTier.tier
+        },
+        connections: [],
+        isMainUser: true,
+        pulse: 0,
+        riskLevel: userRisk.toLowerCase(),
+        mutualConnections: 0,
+        trustIndex: user.score || 0
+      };
+      newNodes.push(mainNode);
 
-    // LIMIT: Show only top 8 most important connections for clarity
-    const topConnections = sortedUsers.slice(0, 8);
-    
-    if (topConnections.length === 0) {
-      // Show a simple message if no connections
-      console.log('🌌 Constellation: No meaningful connections to display');
-    } else {
-      // Process top connections with clean layout
-      topConnections.forEach((connectedUser, index) => {
-        const angle = (2 * Math.PI * index) / topConnections.length;
-        const baseDistance = 80; // Fixed distance for clean layout
-        const tier = getTierInfo(connectedUser.score || 1200);
-        
-        const node: ConstellationNode = {
-          id: connectedUser.userkey,
-          x: centerX + Math.cos(angle) * baseDistance,
-          y: centerY + Math.sin(angle) * baseDistance,
-          radius: 6 + (tier.brightness * 2), // Larger, more visible stars
-          brightness: tier.brightness,
-          color: tier.color,
-          user: {
-            userkey: connectedUser.userkey,
-            displayName: connectedUser.displayName || connectedUser.username || 'Unknown',
-            username: connectedUser.username || '',
-            avatarUrl: connectedUser.avatarUrl || '',
-            score: connectedUser.score || 1200,
-            tier: tier.tier
-          },
-          connections: [mainNode.id],
-          isMainUser: false,
-          pulse: Math.random() * Math.PI * 2
-        };
-        
-        newNodes.push(node);
-        
-        // Create connection with clean styling
-        const connection: ConstellationConnection = {
-          from: mainNode.id,
-          to: node.id,
-          strength: tier.brightness,
-          amount: connectedUser.vouchAmount || 0,
-          type: 'vouch',
-          color: tier.color,
-          animated: connectedUser.relationship === 'mutual'
-        };
-        
-        newConnections.push(connection);
-        mainNode.connections.push(node.id);
+      // Enhanced user connection analysis
+      const connectedUsers = new Map<string, any>();
+      const userInteractions = new Map<string, {
+        vouches: any[];
+        reviews: any[];
+        mutualCount: number;
+        riskScore: number;
+        trustLevel: number;
+      }>();
+      
+      // Process received vouches with enhanced analysis
+      const receivedVouches = vouchData.data.received || [];
+      receivedVouches.forEach((vouch: any) => {
+        if (vouch.voucherInfo && vouch.voucherInfo.userkey) {
+          const userkey = vouch.voucherInfo.userkey;
+          connectedUsers.set(userkey, {
+            ...vouch.voucherInfo,
+            vouchAmount: parseFloat(vouch.amountEth || vouch.amount || '0'),
+            relationship: 'received',
+            vouchData: vouch,
+            trustScore: vouch.voucherInfo.score || 1200
+          });
+          
+          // Track interactions
+          if (!userInteractions.has(userkey)) {
+            userInteractions.set(userkey, {
+              vouches: [vouch],
+              reviews: [],
+              mutualCount: 0,
+              riskScore: 0,
+              trustLevel: vouch.voucherInfo.score || 1200
+            });
+          } else {
+            userInteractions.get(userkey)!.vouches.push(vouch);
+          }
+        }
       });
+
+      // Process given vouches with mutual detection
+      const givenVouches = vouchData.data.given || [];
+      givenVouches.forEach((vouch: any) => {
+        if (vouch.voucheeInfo && vouch.voucheeInfo.userkey) {
+          const userkey = vouch.voucheeInfo.userkey;
+          const existing = connectedUsers.get(userkey);
+          
+          connectedUsers.set(userkey, {
+            ...(existing || vouch.voucheeInfo),
+            vouchAmount: (existing?.vouchAmount || 0) + parseFloat(vouch.amountEth || vouch.amount || '0'),
+            relationship: existing ? 'mutual' : 'given',
+            vouchData: vouch,
+            trustScore: vouch.voucheeInfo.score || 1200
+          });
+          
+          // Update interactions for mutual detection
+          if (!userInteractions.has(userkey)) {
+            userInteractions.set(userkey, {
+              vouches: [vouch],
+              reviews: [],
+              mutualCount: existing ? 1 : 0,
+              riskScore: 0,
+              trustLevel: vouch.voucheeInfo.score || 1200
+            });
+          } else {
+            const interaction = userInteractions.get(userkey)!;
+            interaction.vouches.push(vouch);
+            if (existing) interaction.mutualCount = 1;
+          }
+        }
+      });
+
+      // Add R4R analysis data if available
+      if (r4rData && r4rData.networkConnections) {
+        r4rData.networkConnections.forEach((connection: any) => {
+          const userkey = connection.userkey;
+          const interaction = userInteractions.get(userkey);
+          if (interaction) {
+            interaction.riskScore = connection.suspiciousScore || 0;
+          }
+        });
+      }
+
+      // Enhanced user ranking with multiple factors
+      const userArray = Array.from(connectedUsers.values());
+      
+      // Advanced sorting with trust and risk factors
+      const sortedUsers = userArray.sort((a, b) => {
+        const aInteraction = userInteractions.get(a.userkey);
+        const bInteraction = userInteractions.get(b.userkey);
+        
+        // Priority 1: Mutual connections (highest trust)
+        if (a.relationship === 'mutual' && b.relationship !== 'mutual') return -1;
+        if (b.relationship === 'mutual' && a.relationship !== 'mutual') return 1;
+        
+        // Priority 2: Lower risk score (more trustworthy)
+        if (aInteraction && bInteraction) {
+          const riskDiff = aInteraction.riskScore - bInteraction.riskScore;
+          if (Math.abs(riskDiff) > 10) return riskDiff;
+        }
+        
+        // Priority 3: Higher trust score
+        const scoreDiff = (b.trustScore || 0) - (a.trustScore || 0);
+        if (Math.abs(scoreDiff) > 100) return scoreDiff;
+        
+        // Priority 4: Higher vouch amount
+        return (b.vouchAmount || 0) - (a.vouchAmount || 0);
+      });
+
+      // Show top 8 connections with diverse risk levels
+      const topConnections = sortedUsers.slice(0, 8);
+    
+      if (topConnections.length === 0) {
+        console.log('🌌 Constellation: No meaningful connections to display');
+        setNetworkInsights({
+          totalNodes: 1,
+          mutualConnections: 0,
+          riskConnections: 0,
+          trustIndex: user.score || 0,
+          networkHealth: 'isolated'
+        });
+      } else {
+        let mutualCount = 0;
+        let riskCount = 0;
+        
+        // Process connections with enhanced analysis
+        topConnections.forEach((connectedUser, index) => {
+          const interaction = userInteractions.get(connectedUser.userkey);
+          const angle = (2 * Math.PI * index) / topConnections.length;
+          
+          // Dynamic positioning based on trust level
+          const trustFactor = Math.min(1, (connectedUser.trustScore || 1200) / 2000);
+          const riskFactor = interaction ? Math.min(1, interaction.riskScore / 100) : 0;
+          const baseDistance = 60 + (trustFactor * 40) - (riskFactor * 20);
+          
+          const tier = getTierInfo(connectedUser.trustScore || 1200);
+          
+          // Risk-based styling
+          let nodeColor = tier.color;
+          let nodeRadius = 6 + (tier.brightness * 2);
+          
+          if (riskFactor > 0.7) {
+            nodeColor = '#ef4444'; // Red for high risk
+            riskCount++;
+          } else if (riskFactor > 0.4) {
+            nodeColor = '#f59e0b'; // Orange for moderate risk
+          }
+          
+          if (connectedUser.relationship === 'mutual') {
+            mutualCount++;
+            nodeRadius += 2; // Larger for mutual connections
+          }
+          
+          const node: ConstellationNode = {
+            id: connectedUser.userkey,
+            x: centerX + Math.cos(angle) * baseDistance,
+            y: centerY + Math.sin(angle) * baseDistance,
+            radius: nodeRadius,
+            brightness: Math.max(0.3, tier.brightness - riskFactor * 0.5),
+            color: nodeColor,
+            user: {
+              userkey: connectedUser.userkey,
+              displayName: connectedUser.displayName || connectedUser.username || 'Unknown',
+              username: connectedUser.username || '',
+              avatarUrl: connectedUser.avatarUrl || '',
+              score: connectedUser.trustScore || 1200,
+              tier: tier.tier
+            },
+            connections: [mainNode.id],
+            isMainUser: false,
+            pulse: Math.random() * Math.PI * 2,
+            riskLevel: riskFactor > 0.7 ? 'high' : riskFactor > 0.4 ? 'moderate' : 'low',
+            mutualConnections: interaction?.mutualCount || 0,
+            trustIndex: connectedUser.trustScore || 1200
+          };
+          
+          newNodes.push(node);
+          
+          // Enhanced connection styling
+          const connection: ConstellationConnection = {
+            from: mainNode.id,
+            to: node.id,
+            strength: Math.max(0.3, tier.brightness - riskFactor * 0.3),
+            amount: connectedUser.vouchAmount || 0,
+            type: connectedUser.relationship === 'mutual' ? 'mutual' : 'vouch',
+            color: nodeColor,
+            animated: connectedUser.relationship === 'mutual',
+            bidirectional: connectedUser.relationship === 'mutual',
+            riskScore: interaction?.riskScore || 0
+          };
+          
+          newConnections.push(connection);
+          mainNode.connections.push(node.id);
+        });
+        
+        // Update main node mutual connections
+        mainNode.mutualConnections = mutualCount;
+        
+        // Network health analysis
+        const networkHealth = riskCount > topConnections.length * 0.5 ? 'risky' :
+                             mutualCount > topConnections.length * 0.3 ? 'healthy' : 'developing';
+        
+        setNetworkInsights({
+          totalNodes: topConnections.length + 1,
+          mutualConnections: mutualCount,
+          riskConnections: riskCount,
+          trustIndex: (user.score || 0) + (mutualCount * 50) - (riskCount * 100),
+          networkHealth
+        });
+      }
+
+      setNodes(newNodes);
+      setConnections(newConnections);
+      
+    } catch (error) {
+      console.error('Failed to generate constellation:', error);
+      setNetworkInsights({
+        totalNodes: 1,
+        mutualConnections: 0,
+        riskConnections: 0,
+        trustIndex: user.score || 0,
+        networkHealth: 'error'
+      });
+    } finally {
+      setIsAnalyzing(false);
     }
-
-    // Final constellation generated
-
-    setNodes(newNodes);
-    setConnections(newConnections);
-  }, [user, vouchData, realStats]);
+  };
 
   // Animation loop
   useEffect(() => {
@@ -363,18 +507,33 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
   };
 
   const stats = {
-    totalConnections: nodes.length - 1, // Showing top connections only
-    mutualVouches: connections.filter(c => c.animated).length,
-    networkReach: Math.min(8, nodes.length - 1) // Max 8 displayed
+    totalShown: nodes.length - 1,
+    mutualConnections: networkInsights?.mutualConnections || 0,
+    totalNetwork: vouchData?.success && vouchData.data ? 
+      (vouchData.data.received?.length || 0) + (vouchData.data.given?.length || 0) : 0,
+    riskConnections: networkInsights?.riskConnections || 0,
+    trustIndex: networkInsights?.trustIndex || (user.score || 0),
+    networkHealth: networkInsights?.networkHealth || 'unknown'
   };
 
   return (
-    <div className={`bg-gray-100/80 backdrop-blur-lg rounded-3xl p-6 shadow-xl border-0 ${className}`}>
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center">
-          <Star className="w-5 h-5 text-white" />
+    <div className={`bg-white/90 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-gray-200/50 ${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center">
+            <Network className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-gray-900">Trust Constellation</h3>
+            <p className="text-xs text-gray-600">AI-Enhanced Network Analysis</p>
+          </div>
         </div>
-        <h3 className="text-xl font-bold text-gray-900">Trust Constellation</h3>
+        {isAnalyzing && (
+          <div className="flex items-center gap-2 text-sm text-blue-600">
+            <Brain className="w-4 h-4 animate-pulse" />
+            <span>Analyzing...</span>
+          </div>
+        )}
       </div>
 
       <div className="relative">
@@ -388,46 +547,100 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
           data-testid="constellation-canvas"
         />
         
-        {/* Hover tooltip */}
+        {/* Enhanced hover tooltip */}
         {hoveredNode && !hoveredNode.isMainUser && (
-          <div className="absolute top-2 left-2 bg-white/95 text-gray-800 text-xs p-3 rounded-xl border border-gray-200 shadow-lg pointer-events-none backdrop-blur-sm">
+          <div className="absolute top-2 left-2 bg-white/95 text-gray-800 text-xs p-3 rounded-xl border border-gray-200 shadow-lg pointer-events-none backdrop-blur-sm min-w-[180px]">
             <div className="font-bold text-gray-900">{hoveredNode.user.displayName}</div>
-            <div className="text-gray-600">Score: {hoveredNode.user.score}</div>
+            <div className="text-gray-600">Trust Score: {hoveredNode.user.score}</div>
             <div className="text-gray-600">Tier: {hoveredNode.user.tier}</div>
+            <div className="flex items-center gap-1 mt-1">
+              <div className={`w-2 h-2 rounded-full ${
+                hoveredNode.riskLevel === 'high' ? 'bg-red-500' :
+                hoveredNode.riskLevel === 'moderate' ? 'bg-yellow-500' : 'bg-green-500'
+              }`}></div>
+              <span className="text-gray-600 capitalize">{hoveredNode.riskLevel} Risk</span>
+            </div>
+            {hoveredNode.mutualConnections > 0 && (
+              <div className="text-blue-600 text-xs mt-1">✓ Mutual Connection</div>
+            )}
           </div>
         )}
       </div>
 
-      {/* Stats */}
+      {/* Enhanced Stats with Network Health */}
       <div className="grid grid-cols-3 gap-3 mt-4">
         <div className="text-center">
-          <div className="text-lg font-bold text-purple-600">{stats.totalConnections}</div>
+          <div className="text-lg font-bold text-purple-600">{stats.totalShown}</div>
           <div className="text-xs text-gray-600">Top Shown</div>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold text-blue-600">{stats.mutualVouches}</div>
+          <div className="text-lg font-bold text-blue-600">{stats.mutualConnections}</div>
           <div className="text-xs text-gray-600">Mutual</div>
         </div>
         <div className="text-center">
-          <div className="text-lg font-bold text-emerald-600">{vouchData?.success && vouchData.data ? (vouchData.data.received?.length || 0) + (vouchData.data.given?.length || 0) : 0}</div>
+          <div className="text-lg font-bold text-emerald-600">{stats.totalNetwork}</div>
           <div className="text-xs text-gray-600">Total</div>
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="mt-4 text-xs text-gray-600 text-center">
-        <div className="flex items-center justify-center gap-4">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-            <span>Exemplary</span>
+      {/* Network Health Indicator */}
+      {networkInsights && (
+        <div className="mt-4 p-3 bg-gray-50/80 rounded-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${
+                stats.networkHealth === 'healthy' ? 'bg-green-500' :
+                stats.networkHealth === 'risky' ? 'bg-red-500' :
+                stats.networkHealth === 'developing' ? 'bg-yellow-500' : 'bg-gray-400'
+              }`}></div>
+              <span className="text-sm font-medium text-gray-700 capitalize">
+                {stats.networkHealth} Network
+              </span>
+            </div>
+            <div className="text-sm text-gray-600">
+              Trust Index: {Math.round(stats.trustIndex)}
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-            <span>Reputable</span>
+          {stats.riskConnections > 0 && (
+            <div className="text-xs text-red-600 mt-1">
+              ⚠️ {stats.riskConnections} high-risk connection{stats.riskConnections > 1 ? 's' : ''} detected
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Enhanced Legend */}
+      <div className="mt-4 space-y-2">
+        <div className="text-xs text-gray-600 text-center">
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span>Exemplary</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+              <span>Reputable</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span>Neutral</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-            <span>Neutral</span>
+        </div>
+        <div className="text-xs text-gray-500 text-center border-t border-gray-200 pt-2">
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center gap-1">
+              <div className="w-1 h-3 bg-green-500"></div>
+              <span>Low Risk</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-1 h-3 bg-yellow-500"></div>
+              <span>Moderate Risk</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-1 h-3 bg-red-500"></div>
+              <span>High Risk</span>
+            </div>
           </div>
         </div>
       </div>

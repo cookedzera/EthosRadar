@@ -480,6 +480,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 user={user}
                 vouchData={vouchData}
                 realStats={realStats}
+                r4rData={r4rData}
                 className="mb-6"
               />
             </div>
