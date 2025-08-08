@@ -414,46 +414,46 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </div>
         )}
 
-        {/* Compact Tab Navigation */}
-        <div className="bg-gray-100 rounded-3xl p-1 mb-6 shadow-md border-0 max-w-md mx-auto">
-          <div className="flex gap-0.5">
+        {/* Modern Tab Navigation */}
+        <div className="bg-gray-100/90 rounded-2xl p-1 mb-6 shadow-md border-0 max-w-sm mx-auto">
+          <div className="flex gap-0">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+              className={`flex-1 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 activeTab === 'overview'
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
               }`}
             >
-              <div className="flex items-center gap-1.5 justify-center">
-                <BarChart3 className="w-3.5 h-3.5" />
-                Overview
+              <div className="flex items-center gap-1 justify-center">
+                <BarChart3 className="w-3 h-3" />
+                <span>Overview</span>
               </div>
             </button>
             <button
               onClick={() => setActiveTab('vouch-intel')}
-              className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+              className={`flex-1 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 activeTab === 'vouch-intel'
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
               }`}
             >
-              <div className="flex items-center gap-1.5 justify-center">
-                <Users className="w-3.5 h-3.5" />
-                Vouch Intel
+              <div className="flex items-center gap-1 justify-center">
+                <Users className="w-3 h-3" />
+                <span>Vouch Intel</span>
               </div>
             </button>
             <button
               onClick={() => setActiveTab('r4r-analysis')}
-              className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+              className={`flex-1 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 activeTab === 'r4r-analysis'
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
               }`}
             >
-              <div className="flex items-center gap-1.5 justify-center">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                R4R Analysis
+              <div className="flex items-center gap-1 justify-center">
+                <AlertTriangle className="w-3 h-3" />
+                <span>R4R Analysis</span>
               </div>
             </button>
           </div>
