@@ -1522,6 +1522,89 @@ export class EthosApiClient {
     return Math.min(streak, 30); // Cap at 30 days
   }
 
+  // Get user activities (including attestations)
+  async getUserActivities(userkey: string, type: 'given' | 'received' | 'all' = 'all'): Promise<EthosApiResponse<any>> {
+    try {
+      const url = `${this.baseURL}/activities/profile/${type}`;
+      
+      const body = {
+        userkey: userkey,
+        filter: ['attestation'],
+        excludeSpam: true,
+        limit: 100,
+        offset: 0
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Ethos-Client': 'EthosRadar@1.0.0'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: `API error: ${response.status}`
+        };
+      }
+
+      const data = await response.json();
+      return {
+        success: true,
+        data: data
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch user activities'
+      };
+    }
+  }
+
+  // Get attestation activities specifically
+  async getAttestationActivities(userkey: string): Promise<EthosApiResponse<any>> {
+    try {
+      const url = `${this.baseURL}/activities/userkey`;
+      
+      const params = new URLSearchParams({
+        userkey: userkey,
+        'activityType[]': 'attestation',
+        limit: '100',
+        offset: '0'
+      });
+
+      const response = await fetch(`${url}?${params}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Ethos-Client': 'EthosRadar@1.0.0'
+        }
+      });
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: `API error: ${response.status}`
+        };
+      }
+
+      const data = await response.json();
+      return {
+        success: true,
+        data: data
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch attestation activities'
+      };
+    }
+  }
+
   // Real network data using authentic Ethos APIs - NO MOCK DATA
   async getSimpleNetworkData(userkey: string): Promise<EthosApiResponse<any>> {
     try {
