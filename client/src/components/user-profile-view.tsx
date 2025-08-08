@@ -376,15 +376,15 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
 
 
-        {/* Enhanced Tab Navigation */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-2 mb-8 shadow-lg border border-white/30">
-          <div className="flex">
+        {/* Clean Tab Navigation */}
+        <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1.5 mb-8 shadow-md border border-gray-200/50">
+          <div className="flex gap-1">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex-1 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+              className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                 activeTab === 'overview'
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/25'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  ? 'bg-blue-500 text-white shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
               }`}
             >
               <div className="flex items-center gap-2 justify-center">
@@ -394,10 +394,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             </button>
             <button
               onClick={() => setActiveTab('vouch-intel')}
-              className={`flex-1 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+              className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                 activeTab === 'vouch-intel'
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  ? 'bg-blue-500 text-white shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
               }`}
             >
               <div className="flex items-center gap-2 justify-center">
@@ -407,10 +407,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             </button>
             <button
               onClick={() => setActiveTab('r4r-analysis')}
-              className={`flex-1 px-6 py-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+              className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                 activeTab === 'r4r-analysis'
-                  ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/25'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  ? 'bg-blue-500 text-white shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
               }`}
             >
               <div className="flex items-center gap-2 justify-center">
