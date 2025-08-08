@@ -113,7 +113,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
   if (!nextTier) {
     // Max tier reached
     return (
-      <div className={`bg-gray-100/90 rounded-2xl p-3 shadow-md border-0 ${className}`}>
+      <div className={`bg-gray-100/90 rounded-2xl p-2.5 shadow-md border-0 ${className}`}>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center">
             <Crown className="w-4 h-4 text-white" />
@@ -145,16 +145,16 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
   const NextIcon = nextTier.icon;
   
   return (
-    <div className={`bg-gray-100/90 rounded-2xl p-3 shadow-md border-0 ${className}`}>
+    <div className={`bg-gray-100/90 rounded-2xl p-2.5 shadow-md border-0 ${className}`}>
       {/* Header Row */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center gap-1.5">
           <div className="text-purple-500">
-            <TrendingUp className="w-4 h-4" />
+            <TrendingUp className="w-3.5 h-3.5" />
           </div>
-          <span className="text-sm font-semibold text-gray-700">NEXT RANK</span>
+          <span className="text-xs font-semibold text-gray-700">NEXT RANK</span>
         </div>
-        <span className="text-sm text-green-500 font-medium">
+        <span className="text-xs text-green-500 font-medium">
           {scoreNeeded} points needed
         </span>
       </div>
@@ -162,7 +162,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       {/* Weekly Score Change - Only show if there's data */}
       {weeklyScoreChange !== 0 && (
         <div className="flex items-center justify-center mb-1">
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium ${
             weeklyScoreChange > 0 
               ? 'bg-green-100 text-green-700' 
               : weeklyScoreChange < 0
@@ -170,11 +170,11 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
               : 'bg-gray-100 text-gray-700'
           }`}>
             {weeklyScoreChange > 0 ? (
-              <ArrowUp className="w-3 h-3" />
+              <ArrowUp className="w-2.5 h-2.5" />
             ) : weeklyScoreChange < 0 ? (
-              <ArrowDown className="w-3 h-3" />
+              <ArrowDown className="w-2.5 h-2.5" />
             ) : (
-              <Minus className="w-3 h-3" />
+              <Minus className="w-2.5 h-2.5" />
             )}
             <span>
               {weeklyScoreChange > 0 ? '+' : ''}{weeklyScoreChange} this week
@@ -184,8 +184,8 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       )}
       
       {/* Progress Bar */}
-      <div className="mb-2">
-        <div className="h-3 bg-gray-300/60 rounded-full overflow-hidden">
+      <div className="mb-1.5">
+        <div className="h-2.5 bg-gray-300/60 rounded-full overflow-hidden">
           <motion.div 
             className={`h-full bg-gradient-to-r ${currentTier.progressColors} rounded-full relative`}
             initial={{ width: "0%" }}
@@ -194,14 +194,14 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
           >
             {/* Progress indicator dot */}
             {animatedProgress > 8 && (
-              <div className="absolute right-1 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
+              <div className="absolute right-0.5 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-sm"></div>
             )}
           </motion.div>
         </div>
         
         {/* Progress percentage centered */}
-        <div className="text-center mt-2">
-          <span className={`text-lg font-bold ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')}`}>
+        <div className="text-center mt-1">
+          <span className={`text-base font-bold ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')}`}>
             {animatedProgress.toFixed(0)}%
           </span>
         </div>
@@ -209,31 +209,31 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       
       {/* Bottom Row - Current and Next Tier */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className={`w-6 h-6 rounded-md ${currentTier.bgColor} flex items-center justify-center`}>
-            <CurrentIcon className="w-3 h-3 text-white" />
+        <div className="flex items-center gap-1.5">
+          <div className={`w-5 h-5 rounded-md ${currentTier.bgColor} flex items-center justify-center`}>
+            <CurrentIcon className="w-2.5 h-2.5 text-white" />
           </div>
           <div className="text-xs">
-            <div className="font-medium text-gray-600">{currentTier.tier}</div>
-            <div className="text-gray-500">{currentScore} pts</div>
+            <div className="font-medium text-gray-600 leading-tight">{currentTier.tier}</div>
+            <div className="text-gray-500 text-xs">{currentScore} pts</div>
           </div>
         </div>
         
         <div className="text-gray-400 text-xs">→</div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <div className="text-xs text-right">
-            <div className="font-medium text-gray-600">{nextTier.tier}</div>
-            <div className="text-gray-500">{nextTier.threshold} pts</div>
+            <div className="font-medium text-gray-600 leading-tight">{nextTier.tier}</div>
+            <div className="text-gray-500 text-xs">{nextTier.threshold} pts</div>
           </div>
-          <div className={`w-6 h-6 rounded-md ${nextTier.bgColor} flex items-center justify-center`}>
-            <NextIcon className="w-3 h-3 text-white" />
+          <div className={`w-5 h-5 rounded-md ${nextTier.bgColor} flex items-center justify-center`}>
+            <NextIcon className="w-2.5 h-2.5 text-white" />
           </div>
         </div>
       </div>
       
       {/* Progress Status */}
-      <div className="text-center mt-1">
+      <div className="text-center mt-0.5">
         <span className={`text-xs ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')} font-medium`}>
           Progress: {animatedProgress.toFixed(1)}%
         </span>
