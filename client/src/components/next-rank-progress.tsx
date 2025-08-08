@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { TrendingUp, Crown, Award, Zap, AlertTriangle, Shield } from "lucide-react";
+import { TrendingUp, Crown, Award, Zap, AlertTriangle, Shield, ArrowUp, ArrowDown, Minus } from "lucide-react";
 import { motion } from "framer-motion";
+import { useWeeklyActivities } from "@/hooks/use-weekly-activities";
 
 interface NextRankProgressProps {
   currentScore: number;
+  userkey?: string;
   className?: string;
 }
 
@@ -17,9 +19,13 @@ const getTierThresholds = () => [
   { threshold: 0, tier: 'Untrusted', icon: Shield, colors: 'from-gray-500 to-gray-300', textColor: 'text-gray-400', nextLabel: 'Questionable' }
 ];
 
-export function NextRankProgress({ currentScore, className = '' }: NextRankProgressProps) {
+export function NextRankProgress({ currentScore, userkey, className = '' }: NextRankProgressProps) {
   const [progress, setProgress] = useState(0);
   const [animatedProgress, setAnimatedProgress] = useState(0);
+  
+  // Get weekly activities data
+  const { data: weeklyData } = useWeeklyActivities(userkey);
+  const weeklyScoreChange = weeklyData?.success ? weeklyData.data.summary?.scoreChange || 0 : 0;
   
   const tiers = getTierThresholds();
   const currentTierIndex = tiers.findIndex(tier => currentScore >= tier.threshold);
@@ -98,6 +104,30 @@ export function NextRankProgress({ currentScore, className = '' }: NextRankProgr
           {scoreNeeded} points needed
         </span>
       </div>
+
+      {/* Weekly Score Change - Only show if there's data */}
+      {weeklyScoreChange !== 0 && (
+        <div className="flex items-center justify-center mb-2">
+          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+            weeklyScoreChange > 0 
+              ? 'bg-green-100 text-green-700' 
+              : weeklyScoreChange < 0
+              ? 'bg-red-100 text-red-700'
+              : 'bg-gray-100 text-gray-700'
+          }`}>
+            {weeklyScoreChange > 0 ? (
+              <ArrowUp className="w-3 h-3" />
+            ) : weeklyScoreChange < 0 ? (
+              <ArrowDown className="w-3 h-3" />
+            ) : (
+              <Minus className="w-3 h-3" />
+            )}
+            <span>
+              {weeklyScoreChange > 0 ? '+' : ''}{weeklyScoreChange} this week
+            </span>
+          </div>
+        </div>
+      )}
       
       {/* Progress Bar */}
       <div className="mb-3">

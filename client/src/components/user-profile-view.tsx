@@ -406,7 +406,11 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Next Rank Progress Bar */}
         {score > 0 && (
           <div className="max-w-80 mx-auto mb-6">
-            <NextRankProgress currentScore={score} className="bg-gray-100/80 backdrop-blur-lg border-0 shadow-md" />
+            <NextRankProgress 
+              currentScore={score} 
+              userkey={user?.userkeys?.[0]} 
+              className="bg-gray-100/80 backdrop-blur-lg border-0 shadow-md" 
+            />
           </div>
         )}
 
