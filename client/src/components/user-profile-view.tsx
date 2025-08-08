@@ -287,8 +287,10 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center bg-white/80 ${
                   user.status === 'ACTIVE' 
                     ? 'border-green-400 ring-2 ring-green-200' 
-                    : user.status === 'INACTIVE'
-                    ? 'border-gray-300 ring-2 ring-gray-200'
+                    : user.status === 'INACTIVE' && user.profileId === null
+                    ? 'border-red-400 ring-2 ring-red-200'
+                    : user.status === 'INACTIVE' && user.profileId !== null
+                    ? 'border-orange-400 ring-2 ring-orange-200'
                     : 'border-gray-200'
                 }`}>
                   <Avatar className="h-14 w-14">
@@ -307,9 +309,11 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className={`absolute -bottom-0.5 -right-0.5 rounded-full w-4 h-4 border-2 border-white ${
                   user.status === 'ACTIVE' 
                     ? 'bg-green-500' 
-                    : user.status === 'INACTIVE'
-                    ? 'bg-gray-400'
-                    : 'bg-green-500'
+                    : user.status === 'INACTIVE' && user.profileId === null
+                    ? 'bg-red-500'
+                    : user.status === 'INACTIVE' && user.profileId !== null
+                    ? 'bg-orange-500'
+                    : 'bg-gray-400'
                 }`}>
                   <div className={`w-1 h-1 rounded-full mx-auto mt-1 ${
                     user.status === 'ACTIVE' 
