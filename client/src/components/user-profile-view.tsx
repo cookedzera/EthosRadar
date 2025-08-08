@@ -10,7 +10,6 @@ import { useAttestations, type SocialAttestation } from "@/hooks/use-attestation
 import { useWeeklyActivities } from "@/hooks/use-weekly-activities";
 import { R4RDataSection } from "./r4r-data-section";
 import { NextRankProgress } from "./next-rank-progress";
-import { SpiderChart } from "./spider-chart";
 
 
 import { FarcasterShareButton } from "./farcaster-share-button";
@@ -495,11 +494,6 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             </div>
 
-            {/* Spider Chart Analysis */}
-            <SpiderChart 
-              userkey={user?.userkeys?.[0] || ''}
-              className=""
-            />
           </div>
         )}
 
