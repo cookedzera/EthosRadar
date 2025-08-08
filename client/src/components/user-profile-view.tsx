@@ -415,7 +415,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         )}
 
         {/* Modern Tab Navigation */}
-        <div className="bg-gray-100/90 rounded-2xl p-1 mb-6 shadow-md border-0 max-w-sm mx-auto">
+        <div className="bg-gray-100/90 rounded-2xl p-1 mb-6 shadow-md border-0 max-w-80 mx-auto">
           <div className="flex gap-0">
             <button
               onClick={() => setActiveTab('overview')}
@@ -463,7 +463,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {activeTab === 'overview' && (
           <div className="space-y-8">
             {/* Minimal Stats Cards */}
-            <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
+            <div className="grid grid-cols-3 gap-4 max-w-80 mx-auto">
               <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
                 <div className="text-lg font-bold text-orange-600 mb-1">
                   {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
