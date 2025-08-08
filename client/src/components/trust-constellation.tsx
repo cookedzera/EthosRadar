@@ -102,22 +102,21 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, r4rData, c
       const newConnections: ConstellationConnection[] = [];
       const centerX = 150;
       const centerY = 150;
-      const maxRadius = 120;
 
-      // Enhanced main user node with risk analysis
+      // Enhanced main user node with actual user data
       const mainUserTier = getTierInfo(user.score || 0);
-      const userRisk = r4rData?.riskLevel || 'low';
+      const userRisk = r4rData?.riskLevel?.toLowerCase() || 'low';
       
       const mainNode: ConstellationNode = {
         id: user.userkeys?.[0] || 'main',
         x: centerX,
         y: centerY,
-        radius: 10,
+        radius: 12,
         brightness: mainUserTier.brightness,
         color: mainUserTier.color,
         user: {
           userkey: user.userkeys?.[0] || '',
-          displayName: user.displayName || 'You',
+          displayName: user.displayName || user.username || 'User',
           username: user.username || '',
           avatarUrl: user.avatarUrl || '',
           score: user.score || 0,
@@ -126,124 +125,122 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, r4rData, c
         connections: [],
         isMainUser: true,
         pulse: 0,
-        riskLevel: userRisk.toLowerCase(),
+        riskLevel: userRisk,
         mutualConnections: 0,
         trustIndex: user.score || 0
       };
       newNodes.push(mainNode);
 
-      // Enhanced user connection analysis
+      // Process REAL vouch data - only if we have actual connections
+      if (!vouchData.data.received?.length && !vouchData.data.given?.length) {
+        console.log('🌌 No vouch connections found for constellation');
+        setNetworkInsights({
+          totalNodes: 1,
+          mutualConnections: 0,
+          riskConnections: 0,
+          trustIndex: user.score || 0,
+          networkHealth: 'isolated'
+        });
+        setNodes(newNodes);
+        setConnections(newConnections);
+        setIsAnalyzing(false);
+        return;
+      }
+
+      // Build authentic connection map from real vouch data
       const connectedUsers = new Map<string, any>();
-      const userInteractions = new Map<string, {
-        vouches: any[];
-        reviews: any[];
-        mutualCount: number;
-        riskScore: number;
-        trustLevel: number;
-      }>();
+      const mutualConnections = new Set<string>();
       
-      // Process received vouches with enhanced analysis
+      // Process received vouches (people who vouched FOR this user)
       const receivedVouches = vouchData.data.received || [];
       receivedVouches.forEach((vouch: any) => {
-        if (vouch.voucherInfo && vouch.voucherInfo.userkey) {
+        if (vouch.voucherInfo?.userkey && vouch.voucherInfo.displayName) {
           const userkey = vouch.voucherInfo.userkey;
           connectedUsers.set(userkey, {
             ...vouch.voucherInfo,
             vouchAmount: parseFloat(vouch.amountEth || vouch.amount || '0'),
             relationship: 'received',
-            vouchData: vouch,
+            vouchTimestamp: vouch.createdAt,
+            displayName: vouch.voucherInfo.displayName || vouch.voucherInfo.username || 'Unknown',
             trustScore: vouch.voucherInfo.score || 1200
           });
-          
-          // Track interactions
-          if (!userInteractions.has(userkey)) {
-            userInteractions.set(userkey, {
-              vouches: [vouch],
-              reviews: [],
-              mutualCount: 0,
-              riskScore: 0,
-              trustLevel: vouch.voucherInfo.score || 1200
-            });
-          } else {
-            userInteractions.get(userkey)!.vouches.push(vouch);
-          }
         }
       });
 
-      // Process given vouches with mutual detection
+      // Process given vouches (people this user vouched FOR) and detect mutual relationships
       const givenVouches = vouchData.data.given || [];
       givenVouches.forEach((vouch: any) => {
-        if (vouch.voucheeInfo && vouch.voucheeInfo.userkey) {
+        if (vouch.voucheeInfo?.userkey && vouch.voucheeInfo.displayName) {
           const userkey = vouch.voucheeInfo.userkey;
           const existing = connectedUsers.get(userkey);
           
-          connectedUsers.set(userkey, {
-            ...(existing || vouch.voucheeInfo),
-            vouchAmount: (existing?.vouchAmount || 0) + parseFloat(vouch.amountEth || vouch.amount || '0'),
-            relationship: existing ? 'mutual' : 'given',
-            vouchData: vouch,
-            trustScore: vouch.voucheeInfo.score || 1200
-          });
-          
-          // Update interactions for mutual detection
-          if (!userInteractions.has(userkey)) {
-            userInteractions.set(userkey, {
-              vouches: [vouch],
-              reviews: [],
-              mutualCount: existing ? 1 : 0,
-              riskScore: 0,
-              trustLevel: vouch.voucheeInfo.score || 1200
-            });
+          if (existing) {
+            // This is a MUTUAL connection - both vouched for each other
+            existing.relationship = 'mutual';
+            existing.vouchAmount += parseFloat(vouch.amountEth || vouch.amount || '0');
+            mutualConnections.add(userkey);
           } else {
-            const interaction = userInteractions.get(userkey)!;
-            interaction.vouches.push(vouch);
-            if (existing) interaction.mutualCount = 1;
+            // One-way vouch (this user vouched for them)
+            connectedUsers.set(userkey, {
+              ...vouch.voucheeInfo,
+              vouchAmount: parseFloat(vouch.amountEth || vouch.amount || '0'),
+              relationship: 'given',
+              vouchTimestamp: vouch.createdAt,
+              displayName: vouch.voucheeInfo.displayName || vouch.voucheeInfo.username || 'Unknown',
+              trustScore: vouch.voucheeInfo.score || 1200
+            });
           }
         }
       });
 
-      // Add R4R analysis data if available
-      if (r4rData && r4rData.networkConnections) {
+      console.log(`🔗 Found ${connectedUsers.size} total connections, ${mutualConnections.size} mutual`);
+
+      // Add R4R risk scores if available
+      const riskMap = new Map<string, number>();
+      if (r4rData?.networkConnections) {
         r4rData.networkConnections.forEach((connection: any) => {
-          const userkey = connection.userkey;
-          const interaction = userInteractions.get(userkey);
-          if (interaction) {
-            interaction.riskScore = connection.suspiciousScore || 0;
+          if (connection.userkey && typeof connection.suspiciousScore === 'number') {
+            riskMap.set(connection.userkey, connection.suspiciousScore);
           }
         });
       }
 
-      // Enhanced user ranking with multiple factors
+      if (connectedUsers.size === 0) {
+        console.log('🌌 No connections processed for constellation');
+        setNetworkInsights({
+          totalNodes: 1,
+          mutualConnections: 0,
+          riskConnections: 0,
+          trustIndex: user.score || 0,
+          networkHealth: 'isolated'
+        });
+        setNodes(newNodes);
+        setConnections(newConnections);
+        setIsAnalyzing(false);
+        return;
+      }
+
+      // Sort connections by importance: mutual first, then by trust score and vouch amount
       const userArray = Array.from(connectedUsers.values());
-      
-      // Advanced sorting with trust and risk factors
       const sortedUsers = userArray.sort((a, b) => {
-        const aInteraction = userInteractions.get(a.userkey);
-        const bInteraction = userInteractions.get(b.userkey);
-        
-        // Priority 1: Mutual connections (highest trust)
+        // Priority 1: Mutual connections first
         if (a.relationship === 'mutual' && b.relationship !== 'mutual') return -1;
         if (b.relationship === 'mutual' && a.relationship !== 'mutual') return 1;
         
-        // Priority 2: Lower risk score (more trustworthy)
-        if (aInteraction && bInteraction) {
-          const riskDiff = aInteraction.riskScore - bInteraction.riskScore;
-          if (Math.abs(riskDiff) > 10) return riskDiff;
-        }
-        
-        // Priority 3: Higher trust score
+        // Priority 2: Higher trust score
         const scoreDiff = (b.trustScore || 0) - (a.trustScore || 0);
-        if (Math.abs(scoreDiff) > 100) return scoreDiff;
+        if (Math.abs(scoreDiff) > 50) return scoreDiff;
         
-        // Priority 4: Higher vouch amount
+        // Priority 3: Higher vouch amount
         return (b.vouchAmount || 0) - (a.vouchAmount || 0);
       });
 
-      // Show top 8 connections with diverse risk levels
-      const topConnections = sortedUsers.slice(0, 8);
+      // Show significant connections (limit to prevent clutter)
+      const maxConnections = Math.min(sortedUsers.length, 10);
+      const topConnections = sortedUsers.slice(0, maxConnections);
     
       if (topConnections.length === 0) {
-        console.log('🌌 Constellation: No meaningful connections to display');
+        // User has no vouch connections
         setNetworkInsights({
           totalNodes: 1,
           mutualConnections: 0,
@@ -252,91 +249,102 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, r4rData, c
           networkHealth: 'isolated'
         });
       } else {
-        let mutualCount = 0;
         let riskCount = 0;
         
-        // Process connections with enhanced analysis
+        // Create nodes for real connections with safe validation
         topConnections.forEach((connectedUser, index) => {
-          const interaction = userInteractions.get(connectedUser.userkey);
-          const angle = (2 * Math.PI * index) / topConnections.length;
+          try {
+            if (!connectedUser || !connectedUser.userkey || !connectedUser.displayName) {
+              console.warn('Invalid connection data, skipping:', connectedUser);
+              return;
+            }
+
+            const angle = (2 * Math.PI * index) / topConnections.length;
+            const tier = getTierInfo(connectedUser.trustScore || 1200);
+            
+            // Dynamic positioning - mutual connections closer, higher trust scores closer
+            let baseDistance = 70;
+            if (connectedUser.relationship === 'mutual') {
+              baseDistance = 55; // Closer for mutual connections
+            } else if (connectedUser.trustScore > 1800) {
+              baseDistance = 60; // Closer for high trust
+            } else if (connectedUser.trustScore < 1000) {
+              baseDistance = 85; // Further for low trust
+            }
+            
+            // Apply risk factor if available
+            const riskScore = riskMap.get(connectedUser.userkey) || 0;
+            let nodeColor = tier.color;
+            let nodeRadius = connectedUser.relationship === 'mutual' ? 8 : 6;
+            
+            if (riskScore > 70) {
+              nodeColor = '#ef4444'; // High risk - red
+              riskCount++;
+            } else if (riskScore > 40) {
+              nodeColor = '#f59e0b'; // Moderate risk - orange
+            }
+            
+            // Add slight randomness to prevent perfect overlap
+            const offsetAngle = angle + (Math.random() - 0.5) * 0.2;
+            const offsetDistance = baseDistance + (Math.random() - 0.5) * 8;
           
-          // Dynamic positioning based on trust level
-          const trustFactor = Math.min(1, (connectedUser.trustScore || 1200) / 2000);
-          const riskFactor = interaction ? Math.min(1, interaction.riskScore / 100) : 0;
-          const baseDistance = 60 + (trustFactor * 40) - (riskFactor * 20);
-          
-          const tier = getTierInfo(connectedUser.trustScore || 1200);
-          
-          // Risk-based styling
-          let nodeColor = tier.color;
-          let nodeRadius = 6 + (tier.brightness * 2);
-          
-          if (riskFactor > 0.7) {
-            nodeColor = '#ef4444'; // Red for high risk
-            riskCount++;
-          } else if (riskFactor > 0.4) {
-            nodeColor = '#f59e0b'; // Orange for moderate risk
+            const node: ConstellationNode = {
+              id: connectedUser.userkey,
+              x: centerX + Math.cos(offsetAngle) * offsetDistance,
+              y: centerY + Math.sin(offsetAngle) * offsetDistance,
+              radius: nodeRadius,
+              brightness: tier.brightness,
+              color: nodeColor,
+              user: {
+                userkey: connectedUser.userkey,
+                displayName: connectedUser.displayName,
+                username: connectedUser.username || '',
+                avatarUrl: connectedUser.avatarUrl || '',
+                score: connectedUser.trustScore || 1200,
+                tier: tier.tier
+              },
+              connections: [mainNode.id],
+              isMainUser: false,
+              pulse: Math.random() * Math.PI * 2,
+              riskLevel: riskScore > 70 ? 'high' : riskScore > 40 ? 'moderate' : 'low',
+              mutualConnections: connectedUser.relationship === 'mutual' ? 1 : 0,
+              trustIndex: connectedUser.trustScore || 1200
+            };
+            
+            newNodes.push(node);
+            
+            // Create connection line
+            const connection: ConstellationConnection = {
+              from: mainNode.id,
+              to: node.id,
+              strength: connectedUser.relationship === 'mutual' ? 0.8 : 0.5,
+              amount: connectedUser.vouchAmount || 0,
+              type: connectedUser.relationship === 'mutual' ? 'mutual' : connectedUser.relationship || 'vouch',
+              color: nodeColor,
+              animated: connectedUser.relationship === 'mutual',
+              bidirectional: connectedUser.relationship === 'mutual',
+              riskScore: riskScore
+            };
+            
+            newConnections.push(connection);
+            mainNode.connections.push(node.id);
+          } catch (nodeError) {
+            console.warn('Error creating node for connection:', connectedUser, nodeError);
           }
-          
-          if (connectedUser.relationship === 'mutual') {
-            mutualCount++;
-            nodeRadius += 2; // Larger for mutual connections
-          }
-          
-          const node: ConstellationNode = {
-            id: connectedUser.userkey,
-            x: centerX + Math.cos(angle) * baseDistance,
-            y: centerY + Math.sin(angle) * baseDistance,
-            radius: nodeRadius,
-            brightness: Math.max(0.3, tier.brightness - riskFactor * 0.5),
-            color: nodeColor,
-            user: {
-              userkey: connectedUser.userkey,
-              displayName: connectedUser.displayName || connectedUser.username || 'Unknown',
-              username: connectedUser.username || '',
-              avatarUrl: connectedUser.avatarUrl || '',
-              score: connectedUser.trustScore || 1200,
-              tier: tier.tier
-            },
-            connections: [mainNode.id],
-            isMainUser: false,
-            pulse: Math.random() * Math.PI * 2,
-            riskLevel: riskFactor > 0.7 ? 'high' : riskFactor > 0.4 ? 'moderate' : 'low',
-            mutualConnections: interaction?.mutualCount || 0,
-            trustIndex: connectedUser.trustScore || 1200
-          };
-          
-          newNodes.push(node);
-          
-          // Enhanced connection styling
-          const connection: ConstellationConnection = {
-            from: mainNode.id,
-            to: node.id,
-            strength: Math.max(0.3, tier.brightness - riskFactor * 0.3),
-            amount: connectedUser.vouchAmount || 0,
-            type: connectedUser.relationship === 'mutual' ? 'mutual' : 'vouch',
-            color: nodeColor,
-            animated: connectedUser.relationship === 'mutual',
-            bidirectional: connectedUser.relationship === 'mutual',
-            riskScore: interaction?.riskScore || 0
-          };
-          
-          newConnections.push(connection);
-          mainNode.connections.push(node.id);
         });
         
-        // Update main node mutual connections
+        // Calculate actual network metrics
+        const mutualCount = mutualConnections.size;
         mainNode.mutualConnections = mutualCount;
         
-        // Network health analysis
         const networkHealth = riskCount > topConnections.length * 0.5 ? 'risky' :
-                             mutualCount > topConnections.length * 0.3 ? 'healthy' : 'developing';
+                             mutualCount > 2 ? 'healthy' : 'developing';
         
         setNetworkInsights({
           totalNodes: topConnections.length + 1,
           mutualConnections: mutualCount,
           riskConnections: riskCount,
-          trustIndex: (user.score || 0) + (mutualCount * 50) - (riskCount * 100),
+          trustIndex: user.score || 0,
           networkHealth
         });
       }
