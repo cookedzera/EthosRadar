@@ -12,6 +12,8 @@ import { R4RDataSection } from "./r4r-data-section";
 import { NextRankProgress } from "./next-rank-progress";
 import { ScoreHistoryChart } from "./score-history-chart";
 import { EnhancedTrustMetrics } from "./enhanced-trust-metrics";
+import { AttestationVerification } from "./attestation-verification";
+import { EnhancedDataInsights } from "./enhanced-data-insights";
 import { RealTimeRefreshButton } from "./real-time-refresh-button";
 
 
@@ -490,6 +492,20 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             {/* Enhanced Trust Metrics */}
             <div className="max-w-lg mx-auto">
               <EnhancedTrustMetrics user={user} currentScore={score} />
+            </div>
+
+            {/* Attestation Verification */}
+            <div className="max-w-lg mx-auto">
+              <AttestationVerification user={user} userkey={user?.userkeys?.[0] || ''} />
+            </div>
+
+            {/* Enhanced Data Insights */}
+            <div className="max-w-lg mx-auto">
+              <EnhancedDataInsights 
+                user={user} 
+                userkey={user?.userkeys?.[0] || ''} 
+                r4rData={r4rData?.success ? r4rData.data : null}
+              />
             </div>
 
             {/* Stats Cards */}
