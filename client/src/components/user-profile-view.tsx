@@ -182,13 +182,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
   const leaderboardPosition = enhancedProfile?.leaderboardPosition ?? null;
   const weeklyXpGain = enhancedProfile?.weeklyXpGain || 0;
 
-  // Debug enhanced profile loading
-  console.log('Enhanced profile data:', {
-    hasEnhancedData: !!enhancedData?.success,
-    enhancedProfile: enhancedProfile,
-    xpTotal,
-    userXpTotal: user?.xpTotal
-  });
+
 
   // Status-based ring colors for profile avatar (dark mode only)
   const getStatusRingColor = (status: string, profileId: any) => {
@@ -362,7 +356,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-1.5">
                   <Star className="w-4 h-4 text-purple-600" />
                 </div>
-                <div className="text-lg font-black text-gray-900 leading-none">{formatNumber(user?.xpTotal || 0)}</div>
+                <div className="text-lg font-black text-gray-900 leading-none">{formatNumber(xpTotal)}</div>
                 <div className="text-xs text-gray-500 font-medium mt-0.5">XP Total</div>
               </div>
               
@@ -505,7 +499,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   </div>
                 </div>
                 <div className="text-3xl font-black text-gray-900 mb-2">
-                  {formatNumber(user?.xpTotal || 0)}
+                  {formatNumber(xpTotal)}
                 </div>
                 <div className="text-sm text-gray-600">
                   Network contribution
