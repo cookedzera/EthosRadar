@@ -356,42 +356,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </div>
             )}
 
-            {/* Stats Grid - 2x2 Compact */}
-            <div className="grid grid-cols-2 gap-2 mb-3">
-              <div className="bg-white/70 rounded-xl p-2.5 text-center border border-gray-100">
-                <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-1.5">
-                  <Star className="w-4 h-4 text-purple-600" />
-                </div>
-                <div className="text-lg font-black text-gray-900 leading-none">{formatNumber(xpTotal)}</div>
-                <div className="text-xs text-gray-500 font-medium mt-0.5">XP Total</div>
-              </div>
-              
-              <div className="bg-white/70 rounded-xl p-2.5 text-center border border-gray-100">
-                <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-1.5">
-                  <Network className="w-4 h-4 text-orange-600" />
-                </div>
-                <div className="text-lg font-black text-gray-900 leading-none">
-                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
-                </div>
-                <div className="text-xs text-gray-500 font-medium mt-0.5">Rank</div>
-              </div>
-              
-              <div className="bg-white/70 rounded-xl p-2.5 text-center border border-gray-100">
-                <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-1.5">
-                  <Users className="w-4 h-4 text-blue-600" />
-                </div>
-                <div className="text-lg font-black text-gray-900 leading-none">{vouchesReceived}</div>
-                <div className="text-xs text-gray-500 font-medium mt-0.5">Vouches</div>
-              </div>
-              
-              <div className="bg-white/70 rounded-xl p-2.5 text-center border border-gray-100">
-                <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-1.5">
-                  <MessageSquare className="w-4 h-4 text-green-600" />
-                </div>
-                <div className="text-lg font-black text-gray-900 leading-none">{totalReviews}</div>
-                <div className="text-xs text-gray-500 font-medium mt-0.5">Reviews</div>
-              </div>
-            </div>
+
 
             {/* Footer */}
             <div className="text-center pt-2 border-t border-gray-200/60">
@@ -456,7 +421,42 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            {/* Overview content - to be replaced with new content */}
+            {/* Stats Grid - moved from main profile card */}
+            <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
+                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                  <Star className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="text-xl font-black text-gray-900 leading-none">{formatNumber(xpTotal)}</div>
+                <div className="text-xs text-gray-500 font-medium mt-1">XP Total</div>
+              </div>
+              
+              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
+                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
+                  <Network className="w-5 h-5 text-orange-600" />
+                </div>
+                <div className="text-xl font-black text-gray-900 leading-none">
+                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+                </div>
+                <div className="text-xs text-gray-500 font-medium mt-1">Rank</div>
+              </div>
+              
+              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="text-xl font-black text-gray-900 leading-none">{vouchesReceived}</div>
+                <div className="text-xs text-gray-500 font-medium mt-1">Vouches</div>
+              </div>
+              
+              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                  <MessageSquare className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="text-xl font-black text-gray-900 leading-none">{totalReviews}</div>
+                <div className="text-xs text-gray-500 font-medium mt-1">Reviews</div>
+              </div>
+            </div>
 
             {/* Enhanced Recent Activity */}
             {weeklyActivitiesData && (weeklyActivitiesData as any).success && (weeklyActivitiesData as any).data && (
