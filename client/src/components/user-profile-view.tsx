@@ -260,16 +260,16 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         </div>
 
         {/* Compact Shareable Card */}
-        <div className="w-80 mx-auto bg-white/95 backdrop-blur-xl rounded-2xl p-4 mb-8 shadow-[0_8px_24px_-4px_rgba(0,0,0,0.12)] border border-gray-200/60 relative overflow-hidden">
+        <div className="w-80 mx-auto bg-gray-100/90 backdrop-blur-xl rounded-3xl p-6 mb-8 shadow-md border-0 relative overflow-hidden">
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50/60 via-white/40 to-gray-100/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-100/80 via-gray-50/60 to-gray-200/40"></div>
           
           <div className="relative z-10">
             {/* Header */}
             <div className="flex justify-between items-center mb-3">
               <button
                 onClick={onBackToSearch}
-                className="flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 transition-all text-xs"
+                className="flex items-center gap-1 px-3 py-2 rounded-full bg-gray-200/60 text-gray-700 hover:bg-gray-300/80 transition-all text-xs"
                 data-testid="button-back"
               >
                 <ArrowLeft className="w-3 h-3" />
@@ -279,7 +279,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               <div className="flex items-center gap-1">
                 <button
                   onClick={handleViewOnEthos}
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all text-xs"
+                  className="flex items-center gap-1 px-3 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all text-xs"
                 >
                   <ExternalLink className="w-3 h-3" />
                   <span>Ethos</span>
@@ -418,46 +418,46 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            {/* Stats Grid - moved from main profile card */}
-            <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
-                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+            {/* Stats Grid - redesigned for better harmony */}
+            <div className="grid grid-cols-2 gap-5 max-w-md mx-auto">
+              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-6 text-center border-0 shadow-md hover:shadow-lg transition-all">
+                <div className="w-10 h-10 rounded-full bg-purple-100/80 flex items-center justify-center mx-auto mb-3">
                   <Star className="w-5 h-5 text-purple-600" />
                 </div>
-                <div className="text-xl font-black text-gray-900 leading-none">{formatNumber(xpTotal)}</div>
-                <div className="text-xs text-gray-500 font-medium mt-1">XP Total</div>
+                <div className="text-2xl font-black text-gray-900 leading-none">{formatNumber(xpTotal)}</div>
+                <div className="text-xs text-gray-600 font-medium mt-2">XP Total</div>
               </div>
               
-              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
-                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-2">
+              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-6 text-center border-0 shadow-md hover:shadow-lg transition-all">
+                <div className="w-10 h-10 rounded-full bg-orange-100/80 flex items-center justify-center mx-auto mb-3">
                   <Network className="w-5 h-5 text-orange-600" />
                 </div>
-                <div className="text-xl font-black text-gray-900 leading-none">
+                <div className="text-2xl font-black text-gray-900 leading-none">
                   {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
                 </div>
-                <div className="text-xs text-gray-500 font-medium mt-1">Rank</div>
+                <div className="text-xs text-gray-600 font-medium mt-2">Rank</div>
               </div>
               
-              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-6 text-center border-0 shadow-md hover:shadow-lg transition-all">
+                <div className="w-10 h-10 rounded-full bg-blue-100/80 flex items-center justify-center mx-auto mb-3">
                   <Users className="w-5 h-5 text-blue-600" />
                 </div>
-                <div className="text-xl font-black text-gray-900 leading-none">{vouchesReceived}</div>
-                <div className="text-xs text-gray-500 font-medium mt-1">Vouches</div>
+                <div className="text-2xl font-black text-gray-900 leading-none">{vouchesReceived}</div>
+                <div className="text-xs text-gray-600 font-medium mt-2">Vouches</div>
               </div>
               
-              <div className="bg-white/70 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-200/40 shadow-sm hover:shadow-md transition-all">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-6 text-center border-0 shadow-md hover:shadow-lg transition-all">
+                <div className="w-10 h-10 rounded-full bg-green-100/80 flex items-center justify-center mx-auto mb-3">
                   <MessageSquare className="w-5 h-5 text-green-600" />
                 </div>
-                <div className="text-xl font-black text-gray-900 leading-none">{totalReviews}</div>
-                <div className="text-xs text-gray-500 font-medium mt-1">Reviews</div>
+                <div className="text-2xl font-black text-gray-900 leading-none">{totalReviews}</div>
+                <div className="text-xs text-gray-600 font-medium mt-2">Reviews</div>
               </div>
             </div>
 
             {/* Enhanced Recent Activity */}
             {weeklyActivitiesData && (weeklyActivitiesData as any).success && (weeklyActivitiesData as any).data && (
-              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/30">
+              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
                     <Activity className="w-5 h-5 text-white" />
@@ -466,7 +466,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 </div>
                 <div className="space-y-4">
                   {(Array.isArray((weeklyActivitiesData as any).data) ? (weeklyActivitiesData as any).data.slice(0, 5) : []).map((activity: any, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-white/60 rounded-2xl border border-white/30 hover:bg-white/80 transition-colors">
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-200/60 rounded-2xl border-0 hover:bg-gray-200/80 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg"></div>
                         <span className="font-medium text-gray-900">{activity.type || 'Network Activity'}</span>
@@ -489,7 +489,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         )}
 
         {activeTab === 'vouch-intel' && (
-          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/30">
+          <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
                 <Users className="w-5 h-5 text-white" />
@@ -500,7 +500,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             <div className="space-y-6">
               {/* Enhanced Vouch Summary */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200/50 shadow-lg hover:shadow-xl transition-all">
+                <div className="bg-gray-100/80 rounded-3xl p-6 border-0 shadow-lg hover:shadow-xl transition-all">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <TrendingUp className="w-6 h-6 text-white" />
@@ -521,7 +521,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200/50 shadow-lg hover:shadow-xl transition-all">
+                <div className="bg-gray-100/80 rounded-3xl p-6 border-0 shadow-lg hover:shadow-xl transition-all">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <ArrowUpRight className="w-6 h-6 text-white" />
@@ -545,7 +545,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
               {/* Recent Vouch Activities */}
               {vouchData && (vouchData as any).success && (vouchData as any).data && (
-                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/40 shadow-lg">
+                <div className="bg-gray-100/60 backdrop-blur-sm rounded-3xl p-6 border-0 shadow-lg">
                   <h4 className="font-bold text-gray-900 mb-6">Recent Vouch Activities</h4>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
                     {/* Received Vouches */}
@@ -556,7 +556,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       const usdAmount = ((vouchData as any).data.ethUsdRate || 3400) * ethAmount;
                       
                       return (
-                        <div key={`received-${index}`} className="flex items-center justify-between p-4 bg-white/80 rounded-xl border border-white/60 hover:bg-white transition-all shadow-md">
+                        <div key={`received-${index}`} className="flex items-center justify-between p-4 bg-gray-200/60 rounded-2xl border-0 hover:bg-gray-200/80 transition-all shadow-md">
                           <div className="flex items-center gap-4">
                             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg"></div>
                             <div>
@@ -645,7 +645,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         )}
 
         {activeTab === 'r4r-analysis' && (
-          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/30">
+          <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-white" />
@@ -672,7 +672,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
             {r4rData && !isR4RLoading && (
               <div className="space-y-6">
                 {/* R4R Score */}
-                <div className="bg-gray-50 rounded-xl p-6 border">
+                <div className="bg-gray-100/60 rounded-3xl p-6 border-0 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-gray-900">R4R Risk Score</h4>
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -693,25 +693,25 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
                 {/* Key Metrics */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 rounded-xl p-4 border">
+                  <div className="bg-gray-100/60 rounded-2xl p-4 border-0 shadow-sm">
                     <div className="text-sm text-gray-500">Reviews Received</div>
                     <div className="text-xl font-bold text-gray-900">
                       {r4rData.totalReviewsReceived || 0}
                     </div>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-4 border">
+                  <div className="bg-gray-100/60 rounded-2xl p-4 border-0 shadow-sm">
                     <div className="text-sm text-gray-500">Reciprocal Reviews</div>
                     <div className="text-xl font-bold text-gray-900">
                       {r4rData.reciprocalReviews || 0}
                     </div>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-4 border">
+                  <div className="bg-gray-100/60 rounded-2xl p-4 border-0 shadow-sm">
                     <div className="text-sm text-gray-500">Positive Reviews</div>
                     <div className="text-xl font-bold text-green-600">
                       {realStats?.review?.received?.positive || 0}
                     </div>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-4 border">
+                  <div className="bg-gray-100/60 rounded-2xl p-4 border-0 shadow-sm">
                     <div className="text-sm text-gray-500">Quick Reciprocals</div>
                     <div className="text-xl font-bold text-orange-600">
                       {r4rData.quickReciprocalCount || 0}
@@ -721,7 +721,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
                 {/* Risk Breakdown */}
                 {r4rData.scoreBreakdown && (
-                  <div className="bg-gray-50 rounded-xl p-6 border">
+                  <div className="bg-gray-100/60 rounded-3xl p-6 border-0 shadow-sm">
                     <h4 className="font-semibold text-gray-900 mb-4">Score Breakdown</h4>
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
