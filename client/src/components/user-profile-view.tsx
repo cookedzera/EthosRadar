@@ -462,40 +462,38 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            {/* Modern Compact Stats Row */}
-            <div className="flex gap-2 max-w-2xl mx-auto">
-              <div className="flex-1 bg-gray-100/90 backdrop-blur-lg rounded-2xl p-3 text-center border-0 shadow-md hover:shadow-lg transition-all">
-                <div className="w-6 h-6 rounded-lg bg-purple-500 flex items-center justify-center mx-auto mb-2">
-                  <Star className="w-3 h-3 text-white" />
+            {/* Fresh Modern Stats Row */}
+            <div className="flex gap-3 max-w-lg mx-auto">
+              <div className="flex-1 bg-gradient-to-br from-white to-gray-50 rounded-3xl p-4 border border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
+                    <Network className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-xl font-black text-gray-900">
+                    {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+                  </div>
+                  <div className="text-xs text-gray-500 font-semibold tracking-wide">RANK</div>
                 </div>
-                <div className="text-lg font-bold text-gray-900 leading-none">{formatNumber(xpTotal)}</div>
-                <div className="text-xs text-gray-600 font-medium mt-1">XP Total</div>
               </div>
               
-              <div className="flex-1 bg-gray-100/90 backdrop-blur-lg rounded-2xl p-3 text-center border-0 shadow-md hover:shadow-lg transition-all">
-                <div className="w-6 h-6 rounded-lg bg-orange-500 flex items-center justify-center mx-auto mb-2">
-                  <Network className="w-3 h-3 text-white" />
+              <div className="flex-1 bg-gradient-to-br from-white to-gray-50 rounded-3xl p-4 border border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-md">
+                    <Users className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-xl font-black text-gray-900">{vouchesReceived}</div>
+                  <div className="text-xs text-gray-500 font-semibold tracking-wide">VOUCHES</div>
                 </div>
-                <div className="text-lg font-bold text-gray-900 leading-none">
-                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
-                </div>
-                <div className="text-xs text-gray-600 font-medium mt-1">Rank</div>
               </div>
               
-              <div className="flex-1 bg-gray-100/90 backdrop-blur-lg rounded-2xl p-3 text-center border-0 shadow-md hover:shadow-lg transition-all">
-                <div className="w-6 h-6 rounded-lg bg-blue-500 flex items-center justify-center mx-auto mb-2">
-                  <Users className="w-3 h-3 text-white" />
+              <div className="flex-1 bg-gradient-to-br from-white to-gray-50 rounded-3xl p-4 border border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md">
+                    <MessageSquare className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-xl font-black text-gray-900">{totalReviews}</div>
+                  <div className="text-xs text-gray-500 font-semibold tracking-wide">REVIEWS</div>
                 </div>
-                <div className="text-lg font-bold text-gray-900 leading-none">{vouchesReceived}</div>
-                <div className="text-xs text-gray-600 font-medium mt-1">Vouches</div>
-              </div>
-              
-              <div className="flex-1 bg-gray-100/90 backdrop-blur-lg rounded-2xl p-3 text-center border-0 shadow-md hover:shadow-lg transition-all">
-                <div className="w-6 h-6 rounded-lg bg-green-500 flex items-center justify-center mx-auto mb-2">
-                  <MessageSquare className="w-3 h-3 text-white" />
-                </div>
-                <div className="text-lg font-bold text-gray-900 leading-none">{totalReviews}</div>
-                <div className="text-xs text-gray-600 font-medium mt-1">Reviews</div>
               </div>
             </div>
 
