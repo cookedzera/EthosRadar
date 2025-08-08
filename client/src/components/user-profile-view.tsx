@@ -414,106 +414,108 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </div>
         )}
 
-        {/* Unified Content - No Navigation */}
-        <div className="space-y-6">
-          {/* Minimal Stats Cards */}
-          <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-            <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
-              <div className="text-lg font-bold text-orange-600 mb-1">
-                {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+        {/* Modern Tab Navigation */}
+        <div className="bg-gray-100/90 rounded-2xl p-1 mb-6 shadow-md border-0 max-w-sm mx-auto">
+          <div className="flex gap-0">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`flex-1 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                activeTab === 'overview'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+              }`}
+            >
+              <div className="flex items-center gap-1 justify-center">
+                <BarChart3 className="w-3 h-3" />
+                <span>Overview</span>
               </div>
-              <div className="text-xs text-gray-600">Rank</div>
-            </div>
-            
-            <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
-              <div className="text-lg font-bold text-blue-600 mb-1">{vouchesReceived}</div>
-              <div className="text-xs text-gray-600">Vouches</div>
-            </div>
-            
-            <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
-              <div className="text-lg font-bold text-emerald-600 mb-1">{totalReviews}</div>
-              <div className="text-xs text-gray-600">Reviews</div>
-            </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('vouch-intel')}
+              className={`flex-1 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                activeTab === 'vouch-intel'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+              }`}
+            >
+              <div className="flex items-center gap-1 justify-center">
+                <Users className="w-3 h-3" />
+                <span>Vouch Intel</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('r4r-analysis')}
+              className={`flex-1 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                activeTab === 'r4r-analysis'
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+              }`}
+            >
+              <div className="flex items-center gap-1 justify-center">
+                <AlertTriangle className="w-3 h-3" />
+                <span>R4R Analysis</span>
+              </div>
+            </button>
           </div>
-
-          {/* Vouch Summary */}
-          <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-center">
-                <div className="text-xs text-gray-500 mb-1">Vouches Received</div>
-                <div className="text-xl font-bold text-emerald-600">{vouchesReceived}</div>
-                <div className="text-xs text-gray-600 mt-1">
-                  {realStats?.vouch?.received?.amountWeiTotal ? 
-                    `${(parseInt(realStats.vouch.received.amountWeiTotal) / 1e18).toFixed(3)} ETH` : 
-                    '0 ETH'
-                  }
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-center">
-                <div className="text-xs text-gray-500 mb-1">Vouches Given</div>
-                <div className="text-xl font-bold text-blue-600">{realStats?.vouch?.given?.count || 0}</div>
-                <div className="text-xs text-gray-600 mt-1">
-                  {realStats?.vouch?.given?.amountWeiTotal ? 
-                    `${(parseInt(realStats.vouch.given.amountWeiTotal) / 1e18).toFixed(3)} ETH` : 
-                    '0 ETH'
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Recent Activity */}
-          {weeklyActivitiesData && (weeklyActivitiesData as any).success && (weeklyActivitiesData as any).data && (
-            <div className="bg-gray-50 rounded-xl p-4 max-w-lg mx-auto">
-              <div className="text-sm font-semibold text-gray-700 mb-3">Recent Activity</div>
-              <div className="space-y-2">
-                {(Array.isArray((weeklyActivitiesData as any).data) ? (weeklyActivitiesData as any).data.slice(0, 3) : []).map((activity: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-white rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm text-gray-700">{activity.type || 'Network Activity'}</span>
-                    </div>
-                    <span className="text-xs text-gray-500">
-                      {activity.timestamp ? new Date(activity.timestamp * 1000).toLocaleDateString() : 'Recent'}
-                    </span>
-                  </div>
-                ))}
-                {(!Array.isArray((weeklyActivitiesData as any).data) || (weeklyActivitiesData as any).data.length === 0) && (
-                  <div className="text-center py-4 text-gray-500">
-                    <p className="text-sm">No recent activity</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* R4R Risk Assessment */}
-          {r4rData && (r4rData as any).success && (
-            <div className="bg-gray-50 rounded-xl p-4 max-w-lg mx-auto">
-              <div className="text-sm font-semibold text-gray-700 mb-3">Trust Analysis</div>
-              <div className="grid grid-cols-2 gap-3 text-center">
-                <div>
-                  <div className="text-lg font-bold text-gray-900">
-                    {(r4rData as any).data?.riskScore ? `${((r4rData as any).data.riskScore * 100).toFixed(0)}%` : 'Low'}
-                  </div>
-                  <div className="text-xs text-gray-600">Risk Score</div>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-gray-900">
-                    {(r4rData as any).data?.suspiciousConnections || 0}
-                  </div>
-                  <div className="text-xs text-gray-600">Flagged Connections</div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
+                
+        {/* Enhanced Tab Content */}
+        {activeTab === 'overview' && (
+          <div className="space-y-8">
+            {/* Minimal Stats Cards */}
+            <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
+              <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
+                <div className="text-lg font-bold text-orange-600 mb-1">
+                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
+                </div>
+                <div className="text-xs text-gray-600">Rank</div>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
+                <div className="text-lg font-bold text-blue-600 mb-1">{vouchesReceived}</div>
+                <div className="text-xs text-gray-600">Vouches</div>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
+                <div className="text-lg font-bold text-emerald-600 mb-1">{totalReviews}</div>
+                <div className="text-xs text-gray-600">Reviews</div>
+              </div>
+            </div>
 
-        {/* Removed old tab content - now using unified view above */}
-        {false && (
+            {/* Enhanced Recent Activity */}
+            {weeklyActivitiesData && (weeklyActivitiesData as any).success && (weeklyActivitiesData as any).data && (
+              <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                    <Activity className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
+                </div>
+                <div className="space-y-4">
+                  {(Array.isArray((weeklyActivitiesData as any).data) ? (weeklyActivitiesData as any).data.slice(0, 5) : []).map((activity: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-200/60 rounded-2xl border-0 hover:bg-gray-200/80 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg"></div>
+                        <span className="font-medium text-gray-900">{activity.type || 'Network Activity'}</span>
+                      </div>
+                      <span className="text-sm text-gray-500 font-medium">
+                        {activity.timestamp ? new Date(activity.timestamp * 1000).toLocaleDateString() : 'Recent'}
+                      </span>
+                    </div>
+                  ))}
+                  {(!Array.isArray((weeklyActivitiesData as any).data) || (weeklyActivitiesData as any).data.length === 0) && (
+                    <div className="text-center py-8 text-gray-500">
+                      <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p className="font-medium">No recent activity found</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'vouch-intel' && (
           <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
@@ -669,7 +671,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
           </div>
         )}
 
-        {false && (
+        {activeTab === 'r4r-analysis' && (
           <div className="bg-gray-100/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border-0">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center">
