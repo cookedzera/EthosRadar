@@ -376,45 +376,45 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
 
 
 
-        {/* Clean Tab Navigation */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1.5 mb-8 shadow-md border border-gray-200/50">
-          <div className="flex gap-1">
+        {/* Compact Tab Navigation */}
+        <div className="bg-white/85 backdrop-blur-lg rounded-xl p-1 mb-6 shadow-sm border border-gray-200/40 max-w-md mx-auto">
+          <div className="flex gap-0.5">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                 activeTab === 'overview'
                   ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
               }`}
             >
-              <div className="flex items-center gap-2 justify-center">
-                <BarChart3 className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 justify-center">
+                <BarChart3 className="w-3.5 h-3.5" />
                 Overview
               </div>
             </button>
             <button
               onClick={() => setActiveTab('vouch-intel')}
-              className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                 activeTab === 'vouch-intel'
                   ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
               }`}
             >
-              <div className="flex items-center gap-2 justify-center">
-                <Users className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 justify-center">
+                <Users className="w-3.5 h-3.5" />
                 Vouch Intel
               </div>
             </button>
             <button
               onClick={() => setActiveTab('r4r-analysis')}
-              className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                 activeTab === 'r4r-analysis'
                   ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
               }`}
             >
-              <div className="flex items-center gap-2 justify-center">
-                <AlertTriangle className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 justify-center">
+                <AlertTriangle className="w-3.5 h-3.5" />
                 R4R Analysis
               </div>
             </button>
