@@ -337,12 +337,9 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="text-3xl font-black text-gray-900 leading-none mb-2">
                   {animatedScore}
                 </div>
-                <h1 className="text-lg font-bold text-gray-900 truncate mb-0.5">
+                <h1 className="text-lg font-bold text-gray-900 truncate">
                   {user.displayName}
                 </h1>
-                <p className="text-xs text-gray-500 truncate">
-                  {formatAddress(user?.userkeys?.[0] || '')}
-                </p>
               </div>
             </div>
 
