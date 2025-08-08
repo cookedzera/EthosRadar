@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
 import { SiFarcaster } from 'react-icons/si';
+import { LazyImage } from '@/components/lazy-image';
 import { apiRequest } from '@/lib/queryClient';
 
 interface Suggestion {
@@ -208,19 +209,33 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
                 onClick={() => handleSuggestionSelect(suggestion)}
                 className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
               >
-                {suggestion.pfp_url ? (
-                <img
-                  src={suggestion.pfp_url}
-                  alt={suggestion.display_name}
-                  className="w-8 h-8 rounded-full"
-                />
-              ) : (
-                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-gray-500">
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {suggestion.pfp_url ? (
+                    <img
+                      src={suggestion.pfp_url}
+                      alt={suggestion.display_name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.log('Avatar failed to load:', suggestion.pfp_url);
+                        // Hide the broken image and show fallback
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                      onLoad={(e) => {
+                        // Hide fallback when image loads successfully
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'none';
+                      }}
+                    />
+                  ) : null}
+                  <span 
+                    className="text-xs text-gray-500 font-medium w-full h-full flex items-center justify-center"
+                    style={{ display: suggestion.pfp_url ? 'none' : 'flex' }}
+                  >
                     {suggestion.display_name?.charAt(0)?.toUpperCase() || '?'}
                   </span>
                 </div>
-                )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">
                     {suggestion.display_name || suggestion.username}
