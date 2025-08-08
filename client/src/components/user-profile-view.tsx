@@ -337,52 +337,55 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="text-3xl font-black text-gray-900 leading-none mb-2">
                   {animatedScore}
                 </div>
-                <h1 className="text-lg font-bold text-gray-900 truncate">
+                <h1 className="text-lg font-bold text-gray-900 truncate mb-1">
                   {user.displayName}
                 </h1>
               </div>
             </div>
 
-            {/* Compact Stats Section - Ethos Style */}
-            <div className="space-y-2 mb-4">
-              {/* Reviews */}
+            {/* EthosRadar Style Stats Grid */}
+            <div className="grid grid-cols-2 gap-2 mb-4 mt-4">
+              {/* Reviews Card */}
               {realStats?.review?.received && (
-                <div className="flex items-center gap-2 text-xs">
-                  <div className="w-3 h-3 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  </div>
-                  <span className="text-gray-700 font-medium">
+                <div className="bg-gray-200/50 rounded-2xl p-3 text-center">
+                  <div className="text-xs text-gray-500 mb-1">Reviews</div>
+                  <div className="text-sm font-bold text-gray-800">
                     {realStats.review.received.positive > 0 
-                      ? `${Math.round((realStats.review.received.positive / (realStats.review.received.positive + realStats.review.received.neutral + realStats.review.received.negative)) * 100)}% positive`
-                      : '0% positive'
-                    } ({totalReviews} reviews)
-                  </span>
+                      ? `${Math.round((realStats.review.received.positive / (realStats.review.received.positive + realStats.review.received.neutral + realStats.review.received.negative)) * 100)}%`
+                      : '0%'
+                    }
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {totalReviews} total
+                  </div>
                 </div>
               )}
               
-              {/* Vouches */}
+              {/* Vouches Card */}
               {realStats?.vouch?.received && (
-                <div className="flex items-center gap-2 text-xs">
-                  <div className="w-3 h-3 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  </div>
-                  <span className="text-gray-700 font-medium">
+                <div className="bg-gray-200/50 rounded-2xl p-3 text-center">
+                  <div className="text-xs text-gray-500 mb-1">Vouched</div>
+                  <div className="text-sm font-bold text-gray-800">
                     ${realStats.vouch.received.amountWeiTotal 
                       ? (parseInt(realStats.vouch.received.amountWeiTotal) / 1e18 * 3400).toFixed(0)
                       : '0'
-                    } vouched ({vouchesReceived} vouches)
-                  </span>
+                    }
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {vouchesReceived} vouches
+                  </div>
                 </div>
               )}
               
-              {/* XP */}
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-3 h-3 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+              {/* XP Card - spans both columns if only 1 other card */}
+              <div className={`bg-gray-200/50 rounded-2xl p-3 text-center ${(!realStats?.review?.received || !realStats?.vouch?.received) ? 'col-span-2' : ''}`}>
+                <div className="text-xs text-gray-500 mb-1">Experience</div>
+                <div className="text-sm font-bold text-gray-800">
+                  {formatNumber(xpTotal)}
                 </div>
-                <span className="text-gray-700 font-medium">
-                  {formatNumber(xpTotal)} Contributor XP
-                </span>
+                <div className="text-xs text-gray-600">
+                  XP
+                </div>
               </div>
             </div>
 
