@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
+import { SiFarcaster } from 'react-icons/si';
 import { apiRequest } from '@/lib/queryClient';
 
 interface Suggestion {
@@ -22,6 +24,7 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [farcasterMode, setFarcasterMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
@@ -43,12 +46,22 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   // Search mutation
   const searchMutation = useMutation({
     mutationFn: async (searchQuery: string) => {
-      const response = await fetch(`/api/search/${encodeURIComponent(searchQuery)}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!response.ok) throw new Error('Search failed');
-      return await response.json();
+      if (farcasterMode) {
+        const response = await fetch('/api/search-user-farcaster', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ farcasterUsername: searchQuery })
+        });
+        if (!response.ok) throw new Error('Farcaster search failed');
+        return await response.json();
+      } else {
+        const response = await fetch(`/api/search/${encodeURIComponent(searchQuery)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!response.ok) throw new Error('Search failed');
+        return await response.json();
+      }
     },
     onSuccess: (data) => {
       console.log('Search result received:', data);
@@ -58,8 +71,9 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
         // Clear all caches completely to force fresh data
         queryClient.clear();
         
-        // Call onUserFound with the new user data
-        onUserFound(data.data, 'global');
+        // Call onUserFound with the appropriate mode
+        const mode = farcasterMode ? 'farcaster' : 'global';
+        onUserFound(data.data, mode);
       } else if (data && !data.success) {
         console.error('Search failed:', data.error);
       }
@@ -115,14 +129,41 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
     inputRef.current?.focus();
   };
 
+  const toggleFarcasterMode = () => {
+    const newMode = !farcasterMode;
+    setFarcasterMode(newMode);
+    setQuery('');
+    setShowSuggestions(false);
+    inputRef.current?.focus();
+  };
+
   return (
     <div className="w-full relative">
+      {/* Farcaster Mode Toggle */}
+      <div className="flex justify-center mb-4">
+        <Button
+          onClick={toggleFarcasterMode}
+          variant={farcasterMode ? "default" : "outline"}
+          size="sm"
+          className={`
+            rounded-full px-4 py-2 text-sm font-medium transition-all duration-200
+            ${farcasterMode 
+              ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-md' 
+              : 'bg-white hover:bg-purple-50 text-purple-600 border-purple-200'
+            }
+          `}
+        >
+          <SiFarcaster className="w-4 h-4 mr-2" />
+          {farcasterMode ? 'Farcaster Mode' : 'Enable Farcaster'}
+        </Button>
+      </div>
+
       {/* Clean search input - no background, just border */}
       <div className="relative">
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Enter wallet address or ENS"
+          placeholder={farcasterMode ? "Enter Farcaster username..." : "Enter wallet address or ENS"}
           value={query}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
