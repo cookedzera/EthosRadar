@@ -337,52 +337,52 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                 <div className="text-3xl font-black text-gray-900 leading-none mb-2">
                   {animatedScore}
                 </div>
-                <h1 className="text-lg font-bold text-gray-900 truncate mb-3">
+                <h1 className="text-lg font-bold text-gray-900 truncate">
                   {user.displayName}
                 </h1>
-                
-                {/* Additional Details */}
-                <div className="space-y-1 text-xs">
-                  {/* Reviews */}
-                  {realStats?.review?.received && (
-                    <div className="flex items-center gap-1.5 text-gray-600">
-                      <div className="w-3 h-3 rounded-sm bg-green-100 flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                      </div>
-                      <span className="font-medium">
-                        {realStats.review.received.positive > 0 
-                          ? `${Math.round((realStats.review.received.positive / (realStats.review.received.positive + realStats.review.received.neutral + realStats.review.received.negative)) * 100)}% positive`
-                          : '0% positive'
-                        } ({totalReviews} reviews)
-                      </span>
-                    </div>
-                  )}
-                  
-                  {/* Vouches */}
-                  {realStats?.vouch?.received && (
-                    <div className="flex items-center gap-1.5 text-gray-600">
-                      <div className="w-3 h-3 rounded-sm bg-blue-100 flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                      </div>
-                      <span className="font-medium">
-                        ${realStats.vouch.received.amountWeiTotal 
-                          ? (parseInt(realStats.vouch.received.amountWeiTotal) / 1e18 * 3400).toFixed(0)
-                          : '0'
-                        } vouched ({vouchesReceived} vouches)
-                      </span>
-                    </div>
-                  )}
-                  
-                  {/* XP */}
-                  <div className="flex items-center gap-1.5 text-gray-600">
-                    <div className="w-3 h-3 rounded-sm bg-purple-100 flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                    </div>
-                    <span className="font-medium">
-                      {formatNumber(xpTotal)} Contributor XP
-                    </span>
+              </div>
+            </div>
+
+            {/* Compact Stats Section - Ethos Style */}
+            <div className="space-y-2 mb-4">
+              {/* Reviews */}
+              {realStats?.review?.received && (
+                <div className="flex items-center gap-2 text-xs">
+                  <div className="w-3 h-3 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
                   </div>
+                  <span className="text-gray-700 font-medium">
+                    {realStats.review.received.positive > 0 
+                      ? `${Math.round((realStats.review.received.positive / (realStats.review.received.positive + realStats.review.received.neutral + realStats.review.received.negative)) * 100)}% positive`
+                      : '0% positive'
+                    } ({totalReviews} reviews)
+                  </span>
                 </div>
+              )}
+              
+              {/* Vouches */}
+              {realStats?.vouch?.received && (
+                <div className="flex items-center gap-2 text-xs">
+                  <div className="w-3 h-3 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                  </div>
+                  <span className="text-gray-700 font-medium">
+                    ${realStats.vouch.received.amountWeiTotal 
+                      ? (parseInt(realStats.vouch.received.amountWeiTotal) / 1e18 * 3400).toFixed(0)
+                      : '0'
+                    } vouched ({vouchesReceived} vouches)
+                  </span>
+                </div>
+              )}
+              
+              {/* XP */}
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                </div>
+                <span className="text-gray-700 font-medium">
+                  {formatNumber(xpTotal)} Contributor XP
+                </span>
               </div>
             </div>
 
