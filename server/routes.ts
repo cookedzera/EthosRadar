@@ -822,32 +822,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
       } else {
-        // For other types, use general V1 search
-        const searchResult = await ethosApi.searchUsersV1(query, 10);
-        
-        if (searchResult.success && searchResult.data?.ok && searchResult.data.data.values.length > 0) {
-          const v1Result = searchResult.data.data.values[0];
-          const convertedUser = {
-            id: v1Result.profileId,
-            profileId: v1Result.profileId,
-            displayName: v1Result.name,
-            username: v1Result.username,
-            avatarUrl: v1Result.avatar,
-            description: v1Result.description,
-            score: v1Result.score,
-            status: null, // V1 API doesn't provide status
-            userkeys: [v1Result.userkey],
-            xpTotal: null,
-            xpStreakDays: null,
-            links: {
-              profile: `https://app.ethos.network/profile/${v1Result.userkey}`,
-              scoreBreakdown: `https://app.ethos.network/profile/${v1Result.userkey}/score`
-            },
-            stats: null
-          };
-          result = { success: true, data: convertedUser };
+        // For profileId queries (like profileId:7626), search specifically
+        if (query.startsWith('profileId:')) {
+          const profileId = query.replace('profileId:', '');
+          const searchResult = await ethosApi.searchUsersV1(query, 50);
+          
+          if (searchResult.success && searchResult.data?.ok && searchResult.data.data.values.length > 0) {
+            // Find exact profileId match
+            let v1Result = searchResult.data.data.values.find(user => 
+              user.profileId?.toString() === profileId
+            );
+            
+            // If no exact match, take the first result
+            if (!v1Result) {
+              v1Result = searchResult.data.data.values[0];
+            }
+            
+            const convertedUser = {
+              id: v1Result.profileId,
+              profileId: v1Result.profileId,
+              displayName: v1Result.name,
+              username: v1Result.username,
+              avatarUrl: v1Result.avatar,
+              description: v1Result.description,
+              score: v1Result.score,
+              status: null, // V1 API doesn't provide status
+              userkeys: [v1Result.userkey],
+              xpTotal: null,
+              xpStreakDays: null,
+              links: {
+                profile: `https://app.ethos.network/profile/${v1Result.userkey}`,
+                scoreBreakdown: `https://app.ethos.network/profile/${v1Result.userkey}/score`
+              },
+              stats: null
+            };
+            result = { success: true, data: convertedUser };
+          } else {
+            result = { success: false, error: 'Profile not found' };
+          }
         } else {
-          result = { success: false, error: 'User not found' };
+          // For other types, use general V1 search but prioritize exact userkey matches
+          const searchResult = await ethosApi.searchUsersV1(query, 50);
+          
+          if (searchResult.success && searchResult.data?.ok && searchResult.data.data.values.length > 0) {
+            // First try to find an exact userkey match
+            let v1Result = searchResult.data.data.values.find(user => 
+              user.userkey === query
+            );
+            
+            // If no exact userkey match, take the first result
+            if (!v1Result) {
+              v1Result = searchResult.data.data.values[0];
+            }
+            
+            const convertedUser = {
+              id: v1Result.profileId,
+              profileId: v1Result.profileId,
+              displayName: v1Result.name,
+              username: v1Result.username,
+              avatarUrl: v1Result.avatar,
+              description: v1Result.description,
+              score: v1Result.score,
+              status: null, // V1 API doesn't provide status
+              userkeys: [v1Result.userkey],
+              xpTotal: null,
+              xpStreakDays: null,
+              links: {
+                profile: `https://app.ethos.network/profile/${v1Result.userkey}`,
+                scoreBreakdown: `https://app.ethos.network/profile/${v1Result.userkey}/score`
+              },
+              stats: null
+            };
+            result = { success: true, data: convertedUser };
+          } else {
+            result = { success: false, error: 'User not found' };
+          }
         }
       }
 
