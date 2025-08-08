@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Progress } from "@/components/ui/progress";
 import { TrendingUp, Crown, Award, Zap, AlertTriangle, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -54,28 +53,28 @@ export function NextRankProgress({ currentScore, className = '' }: NextRankProgr
   if (!nextTier) {
     // Max tier reached
     return (
-      <div className={`backdrop-blur-xl bg-gradient-to-br from-purple-500/15 to-purple-600/10 border border-purple-400/20 rounded-2xl p-5 shadow-xl shadow-purple-400/20 hover:shadow-purple-400/30 transition-all duration-500 ${className}`}>
+      <div className={`bg-gray-100/90 rounded-2xl p-4 shadow-md border-0 ${className}`}>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center">
             <Crown className="w-4 h-4 text-white" />
           </div>
           <div>
-            <div className="text-sm font-medium text-white/90">Maximum Tier Achieved</div>
-            <div className="text-xs text-white/60">You've reached the highest Ethos Protocol tier</div>
+            <div className="text-sm font-medium text-gray-700">Maximum Tier Achieved</div>
+            <div className="text-xs text-gray-500">You've reached the highest Ethos Protocol tier</div>
           </div>
         </div>
         
-        <div className="relative">
-          <Progress 
-            value={100} 
-            className="h-2 bg-white/10"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full opacity-80" />
+        <div className="mb-3">
+          <div className="h-3 bg-gray-300/60 rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-purple-400 to-purple-500 rounded-full" />
+          </div>
+          <div className="text-center mt-2">
+            <span className="text-lg font-bold text-purple-500">100%</span>
+          </div>
         </div>
         
-        <div className="mt-2 flex items-center justify-between text-xs">
-          <span className="text-purple-300 font-medium">{currentTier.tier}</span>
-          <span className="text-white/60">🏆 LEGENDARY STATUS</span>
+        <div className="text-center">
+          <span className="text-xs text-purple-500 font-medium">🏆 LEGENDARY STATUS</span>
         </div>
       </div>
     );
@@ -86,101 +85,74 @@ export function NextRankProgress({ currentScore, className = '' }: NextRankProgr
   const NextIcon = nextTier.icon;
   
   return (
-    <div className={`backdrop-blur-md bg-gray-900/15 rounded-xl p-4 hover:bg-gray-900/20 transition-all duration-300 shadow-lg shadow-purple-400/20 hover:shadow-purple-400/30 ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2">
+    <div className={`bg-gray-100/90 rounded-2xl p-4 shadow-md border-0 ${className}`}>
+      {/* Header Row */}
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-purple-400" />
-          <span className="text-xs text-white/60 font-medium uppercase tracking-wide">Next Rank</span>
+          <div className="text-purple-500">
+            <TrendingUp className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-semibold text-gray-700">NEXT RANK</span>
         </div>
-        
-        <div className="text-xs text-white/60">
-          <span className={`${nextTier.textColor} font-medium`}>{scoreNeeded}</span> points needed
-        </div>
+        <span className="text-sm text-green-500 font-medium">
+          {scoreNeeded} points needed
+        </span>
       </div>
       
-      {/* Enhanced Progress Bar with Better Visual Indicators */}
-      <div className="relative mb-3">
-        <div className="h-4 bg-white/8 rounded-full overflow-hidden border border-white/10">
+      {/* Progress Bar */}
+      <div className="mb-3">
+        <div className="h-3 bg-gray-300/60 rounded-full overflow-hidden">
           <motion.div 
-            className={`h-full bg-gradient-to-r ${nextTier.colors} rounded-full relative overflow-hidden`}
+            className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full relative"
             initial={{ width: "0%" }}
             animate={{ width: `${animatedProgress}%` }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           >
-            {/* Shimmer effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
             {/* Progress indicator dot */}
-            {animatedProgress > 5 && (
-              <div className="absolute right-1 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-lg"></div>
+            {animatedProgress > 8 && (
+              <div className="absolute right-1 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
             )}
           </motion.div>
         </div>
         
-        {/* Enhanced Glow effect */}
-        <motion.div 
-          className={`absolute top-0 left-0 h-4 bg-gradient-to-r ${nextTier.colors} rounded-full opacity-40 blur-md -z-10`}
-          initial={{ width: "0%" }}
-          animate={{ width: `${animatedProgress}%` }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        />
-        
-        {/* Progress percentage overlay */}
-        {animatedProgress > 20 && (
-          <motion.div 
-            className="absolute inset-0 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.4 }}
-          >
-            <span className="text-xs font-bold text-white drop-shadow-lg">
-              {animatedProgress.toFixed(0)}%
-            </span>
-          </motion.div>
-        )}
+        {/* Progress percentage centered */}
+        <div className="text-center mt-2">
+          <span className="text-lg font-bold text-green-500">
+            {animatedProgress.toFixed(0)}%
+          </span>
+        </div>
       </div>
       
-      {/* Tier Information */}
+      {/* Bottom Row - Current and Next Tier */}
       <div className="flex items-center justify-between">
-        {/* Current Tier */}
         <div className="flex items-center gap-2">
-          <div className={`w-6 h-6 rounded-lg bg-gradient-to-br ${currentTier.colors} flex items-center justify-center`}>
+          <div className="w-6 h-6 rounded-md bg-blue-500 flex items-center justify-center">
             <CurrentIcon className="w-3 h-3 text-white" />
           </div>
           <div className="text-xs">
-            <div className={`${currentTier.textColor} font-medium`}>{currentTier.tier}</div>
-            <div className="text-white/50">{currentScore} pts</div>
+            <div className="font-medium text-gray-600">{currentTier.tier}</div>
+            <div className="text-gray-500">{currentScore} pts</div>
           </div>
         </div>
         
-        {/* Arrow */}
-        <div className="flex-1 flex items-center justify-center">
-          <motion.div 
-            className="text-white/40"
-            animate={{ x: [0, 4, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          >
-            →
-          </motion.div>
-        </div>
+        <div className="text-gray-400 text-xs">→</div>
         
-        {/* Next Tier */}
         <div className="flex items-center gap-2">
           <div className="text-xs text-right">
-            <div className={`${nextTier.textColor} font-medium`}>{nextTier.tier}</div>
-            <div className="text-white/50">{nextTier.threshold} pts</div>
+            <div className="font-medium text-green-600">{nextTier.tier}</div>
+            <div className="text-gray-500">{nextTier.threshold} pts</div>
           </div>
-          <div className={`w-6 h-6 rounded-lg bg-gradient-to-br ${nextTier.colors} flex items-center justify-center opacity-60`}>
+          <div className="w-6 h-6 rounded-md bg-green-500 flex items-center justify-center">
             <NextIcon className="w-3 h-3 text-white" />
           </div>
         </div>
       </div>
       
-      {/* Progress Percentage */}
-      <div className="mt-3 text-center">
-        <div className="text-xs text-white/60">
-          Progress: <span className={`${nextTier.textColor} font-medium`}>{animatedProgress.toFixed(1)}%</span>
-        </div>
+      {/* Progress Status */}
+      <div className="text-center mt-2">
+        <span className="text-xs text-green-500 font-medium">
+          Progress: {animatedProgress.toFixed(1)}%
+        </span>
       </div>
     </div>
   );
