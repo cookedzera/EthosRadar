@@ -113,7 +113,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
   if (!nextTier) {
     // Max tier reached
     return (
-      <div className={`bg-gray-100/90 rounded-2xl p-4 shadow-md border-0 ${className}`}>
+      <div className={`bg-gray-100/90 rounded-2xl p-3 shadow-md border-0 ${className}`}>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center">
             <Crown className="w-4 h-4 text-white" />
@@ -145,9 +145,9 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
   const NextIcon = nextTier.icon;
   
   return (
-    <div className={`bg-gray-100/90 rounded-2xl p-4 shadow-md border-0 ${className}`}>
+    <div className={`bg-gray-100/90 rounded-2xl p-3 shadow-md border-0 ${className}`}>
       {/* Header Row */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <div className="text-purple-500">
             <TrendingUp className="w-4 h-4" />
@@ -161,7 +161,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
 
       {/* Weekly Score Change - Only show if there's data */}
       {weeklyScoreChange !== 0 && (
-        <div className="flex items-center justify-center mb-2">
+        <div className="flex items-center justify-center mb-1">
           <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
             weeklyScoreChange > 0 
               ? 'bg-green-100 text-green-700' 
@@ -184,7 +184,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       )}
       
       {/* Progress Bar */}
-      <div className="mb-3">
+      <div className="mb-2">
         <div className="h-3 bg-gray-300/60 rounded-full overflow-hidden">
           <motion.div 
             className={`h-full bg-gradient-to-r ${currentTier.progressColors} rounded-full relative`}
@@ -233,7 +233,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       </div>
       
       {/* Progress Status */}
-      <div className="text-center mt-2">
+      <div className="text-center mt-1">
         <span className={`text-xs ${currentTier.textColor.replace('text-', 'text-').replace('-300', '-500')} font-medium`}>
           Progress: {animatedProgress.toFixed(1)}%
         </span>
