@@ -462,38 +462,23 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            {/* Fresh Modern Stats Row */}
-            <div className="flex gap-3 max-w-lg mx-auto">
-              <div className="flex-1 bg-gradient-to-br from-white to-gray-50 rounded-3xl p-4 border border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
-                    <Network className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">
-                    {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
-                  </div>
-                  <div className="text-xs text-gray-500 font-semibold tracking-wide">RANK</div>
+            {/* Minimal Stats Cards */}
+            <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
+              <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
+                <div className="text-lg font-bold text-orange-600 mb-1">
+                  {enhancedProfile?.leaderboardPosition ? `#${enhancedProfile.leaderboardPosition}` : '—'}
                 </div>
+                <div className="text-xs text-gray-600">Rank</div>
               </div>
               
-              <div className="flex-1 bg-gradient-to-br from-white to-gray-50 rounded-3xl p-4 border border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-md">
-                    <Users className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{vouchesReceived}</div>
-                  <div className="text-xs text-gray-500 font-semibold tracking-wide">VOUCHES</div>
-                </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
+                <div className="text-lg font-bold text-blue-600 mb-1">{vouchesReceived}</div>
+                <div className="text-xs text-gray-600">Vouches</div>
               </div>
               
-              <div className="flex-1 bg-gradient-to-br from-white to-gray-50 rounded-3xl p-4 border border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md">
-                    <MessageSquare className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="text-xl font-black text-gray-900">{totalReviews}</div>
-                  <div className="text-xs text-gray-500 font-semibold tracking-wide">REVIEWS</div>
-                </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">
+                <div className="text-lg font-bold text-emerald-600 mb-1">{totalReviews}</div>
+                <div className="text-xs text-gray-600">Reviews</div>
               </div>
             </div>
 
