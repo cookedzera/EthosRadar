@@ -284,14 +284,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // The actual Ethos API returns: {"ok": true, "data": {"values": [...]}}
       if (data.ok && data.data && data.data.values) {
-        const suggestions = data.data.values.slice(0, 8).map((user: any) => ({
-          userkey: user.userkey || '',
-          display_name: user.name || user.username || 'Unknown User',
-          username: user.username || 'unknown',
-          pfp_url: user.avatar || '',
-          score: user.score || 0,
-          description: user.description || ''
-        }));
+        const suggestions = data.data.values.slice(0, 8).map((user: any) => {
+          // For consistent search, prefer service userkeys over profileId format
+          let userkey = user.userkey || '';
+          
+          // If we have a profileId-format userkey but also Twitter data, use the Twitter userkey
+          if (userkey.startsWith('profileId:') && user.username && user.avatar && user.avatar.includes('twimg.com')) {
+            // Try to extract Twitter ID from avatar URL or use display name for search
+            userkey = user.name || user.username || userkey;
+          }
+          
+          return {
+            userkey: userkey,
+            display_name: user.name || user.username || 'Unknown User',
+            username: user.username || 'unknown',
+            pfp_url: user.avatar || '',
+            score: user.score || 0,
+            description: user.description || ''
+          };
+        });
         
         return res.json(suggestions);
       }
@@ -736,7 +747,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Parse the userkey to determine search strategy
       const parsed = ethosApi.parseUserkey(query);
       
-      console.log('Searching for:', query, 'Parsed as:', parsed);
+      console.log('=== SEARCH DEBUG ===');
+      console.log('Original query:', query);
+      console.log('Parsed as:', parsed);
+      console.log('==================');
       
       if (parsed.type === 'address') {
         // For addresses, search using V1 API which can find Ethereum addresses
@@ -822,20 +836,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
       } else {
-        // For profileId queries (like profileId:7626), search specifically
+        // For profileId queries (like profileId:7626), search specifically by profileId
         if (query.startsWith('profileId:')) {
           const profileId = query.replace('profileId:', '');
-          const searchResult = await ethosApi.searchUsersV1(query, 50);
+          console.log('ProfileId search - looking for profileId:', profileId);
+          
+          // Search for the specific profileId
+          const searchResult = await ethosApi.searchUsersV1(profileId, 50);
           
           if (searchResult.success && searchResult.data?.ok && searchResult.data.data.values.length > 0) {
+            console.log('ProfileId search - found', searchResult.data.data.values.length, 'results');
+            console.log('All profileIds found:', searchResult.data.data.values.map(u => u.profileId));
+            
             // Find exact profileId match
             let v1Result = searchResult.data.data.values.find(user => 
               user.profileId?.toString() === profileId
             );
             
+            console.log('Exact profileId match found:', v1Result ? v1Result.name : 'No match');
+            
             // If no exact match, take the first result
             if (!v1Result) {
               v1Result = searchResult.data.data.values[0];
+              console.log('Using first result instead:', v1Result.name);
             }
             
             const convertedUser = {
