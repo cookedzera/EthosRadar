@@ -36,22 +36,61 @@ export function EnhancedTrustMetrics({ user, currentScore }: EnhancedTrustMetric
 
   const tierInfo = getTierProgress(currentScore);
   
-  // Calculate trust network strength
+  // Calculate trust network strength based on real data
   const networkStrength = () => {
     const vouchCount = user.stats?.vouch?.received?.count || 0;
     const reviewCount = (user.stats?.review?.received?.positive || 0) + 
                        (user.stats?.review?.received?.neutral || 0) + 
                        (user.stats?.review?.received?.negative || 0);
     
-    const strength = Math.min(100, (vouchCount * 10) + (reviewCount * 5));
-    return Math.round(strength);
+    // For users with high scores but incomplete stats, use score-based estimation
+    if (vouchCount === 0 && reviewCount === 0 && currentScore > 1000) {
+      // High scores indicate network activity even if stats aren't loaded
+      const scoreBasedStrength = Math.min(75, (currentScore / 2500) * 75);
+      return Math.round(scoreBasedStrength);
+    }
+    
+    // For users with actual stats data
+    if (vouchCount === 0 && reviewCount === 0) return 0;
+    
+    // Base strength from vouches (more valuable)
+    const vouchStrength = Math.min(50, vouchCount * 8);
+    // Additional strength from reviews
+    const reviewStrength = Math.min(30, reviewCount * 3);
+    // Score bonus for high trust scores
+    const scoreBonus = Math.min(20, (currentScore / 2500) * 20);
+    
+    return Math.round(vouchStrength + reviewStrength + scoreBonus);
   };
 
-  // Calculate trust velocity (recent activity indicator)
+  // Calculate trust velocity based on real score and activity
   const trustVelocity = () => {
-    // Simulate based on score level - higher scores tend to have more stable velocity
-    const baseVelocity = currentScore > 1500 ? 85 : currentScore > 1000 ? 65 : 45;
-    return Math.round(baseVelocity + (Math.random() * 20) - 10);
+    const vouchCount = user.stats?.vouch?.received?.count || 0;
+    const reviewCount = (user.stats?.review?.received?.positive || 0) + 
+                       (user.stats?.review?.received?.neutral || 0) + 
+                       (user.stats?.review?.received?.negative || 0);
+    
+    // For users with high scores but no visible activity (incomplete data)
+    if (currentScore > 1000 && vouchCount === 0 && reviewCount === 0) {
+      // Use score-based velocity estimation
+      const scoreVelocity = currentScore > 2000 ? 65 : 
+                           currentScore > 1500 ? 50 : 
+                           currentScore > 1000 ? 35 : 0;
+      return Math.round(scoreVelocity);
+    }
+    
+    // Use actual activity data when available
+    const hasRecentActivity = vouchCount > 0 || reviewCount > 0;
+    if (!hasRecentActivity) return 0;
+    
+    // Base velocity on score tier and activity level
+    const scoreVelocity = currentScore > 2000 ? 75 : 
+                         currentScore > 1500 ? 60 : 
+                         currentScore > 1000 ? 45 : 30;
+    
+    const activityBonus = Math.min(25, vouchCount * 5 + (reviewCount * 2));
+    
+    return Math.round(scoreVelocity + activityBonus);
   };
 
   // Calculate percentile ranking
@@ -191,21 +230,21 @@ export function EnhancedTrustMetrics({ user, currentScore }: EnhancedTrustMetric
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold">
-                {formatNumber(user.stats?.vouch?.received?.count || 0)}
+                {user.stats?.vouch?.received?.count || 0}
               </div>
               <div className="text-xs text-muted-foreground">Vouches Received</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">
-                {formatNumber((user.stats?.review?.received?.positive || 0) + 
-                             (user.stats?.review?.received?.neutral || 0) + 
-                             (user.stats?.review?.received?.negative || 0))}
+                {(user.stats?.review?.received?.positive || 0) + 
+                 (user.stats?.review?.received?.neutral || 0) + 
+                 (user.stats?.review?.received?.negative || 0)}
               </div>
               <div className="text-xs text-muted-foreground">Total Reviews</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">
-                {formatNumber(user.xpTotal || 0)}
+                {user.xpTotal || 0}
               </div>
               <div className="text-xs text-muted-foreground">Total XP</div>
             </div>
