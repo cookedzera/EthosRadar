@@ -65,7 +65,7 @@ export function LazyImage({ src, alt, className, fallback, onLoad, onError }: La
           onError={handleError}
           loading="lazy"
           decoding="async"
-
+          crossOrigin="anonymous"
         />
       )}
       {!isLoaded && imageSrc && (
