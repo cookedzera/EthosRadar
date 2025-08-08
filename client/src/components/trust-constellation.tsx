@@ -142,8 +142,7 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
       }
     });
 
-    // Debug logging
-    console.log('🌌 Constellation: Generated network with', connectedUsers.size, 'unique connections');
+    // Successfully processed unique connections for this user
 
     // Create nodes for connected users - LIMIT TO TOP CONNECTIONS ONLY
     const userArray = Array.from(connectedUsers.values());
@@ -231,26 +230,26 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw background
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      // Draw light background to match theme
+      ctx.fillStyle = 'rgba(249, 250, 251, 0.5)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw connections first
+      // Draw connections with light theme styling
       connections.forEach(conn => {
         const fromNode = nodes.find(n => n.id === conn.from);
         const toNode = nodes.find(n => n.id === conn.to);
         
         if (fromNode && toNode) {
-          ctx.strokeStyle = conn.color + '40';
-          ctx.lineWidth = 1 + conn.strength * 2;
+          ctx.strokeStyle = conn.animated ? conn.color + '80' : conn.color + '60';
+          ctx.lineWidth = conn.animated ? 2 : 1;
           
           if (conn.animated) {
             // Animated dashed line for mutual vouches
-            const dashOffset = time * 20;
-            ctx.setLineDash([5, 5]);
+            const dashOffset = time * 15;
+            ctx.setLineDash([4, 4]);
             ctx.lineDashOffset = dashOffset;
           } else {
-            ctx.setLineDash([]);
+            ctx.setLineDash([2, 3]);
           }
           
           ctx.beginPath();
@@ -268,34 +267,48 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
         
         const radius = node.radius * pulseScale;
         
-        // Outer glow
+        // Subtle outer glow for light theme
         const gradient = ctx.createRadialGradient(
           node.x, node.y, 0,
-          node.x, node.y, radius * 2
+          node.x, node.y, radius * 1.5
         );
-        gradient.addColorStop(0, node.color + '80');
+        gradient.addColorStop(0, node.color + '40');
         gradient.addColorStop(1, node.color + '00');
         
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, radius * 2, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, radius * 1.5, 0, Math.PI * 2);
         ctx.fill();
         
-        // Main star
+        // Main star with border for light theme
         ctx.fillStyle = node.color;
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
         ctx.fill();
         
-        // Bright center
-        ctx.fillStyle = '#ffffff' + Math.floor(node.brightness * 255).toString(16).padStart(2, '0');
+        // White border for contrast
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, radius * 0.3, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Subtle center highlight
+        ctx.fillStyle = '#ffffff80';
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius * 0.4, 0, Math.PI * 2);
         ctx.fill();
         
-        // Highlight main user
+        // Highlight main user with ring
         if (node.isMainUser) {
-          ctx.strokeStyle = '#ffffff80';
+          ctx.strokeStyle = node.color;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, radius + 4, 0, Math.PI * 2);
+          ctx.stroke();
+          
+          // Inner white ring
+          ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 2;
           ctx.beginPath();
           ctx.arc(node.x, node.y, radius + 2, 0, Math.PI * 2);
@@ -369,7 +382,7 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
           ref={canvasRef}
           width={300}
           height={300}
-          className="w-full h-auto bg-gradient-to-br from-slate-900 to-blue-900 rounded-2xl border border-gray-200"
+          className="w-full h-auto bg-gray-50/80 rounded-2xl border border-gray-200/50"
           onMouseMove={handleMouseMove}
           onClick={handleClick}
           data-testid="constellation-canvas"
@@ -377,10 +390,10 @@ export const TrustConstellation = memo(({ user, vouchData, realStats, className 
         
         {/* Hover tooltip */}
         {hoveredNode && !hoveredNode.isMainUser && (
-          <div className="absolute top-2 left-2 bg-black/80 text-white text-xs p-2 rounded-lg pointer-events-none">
-            <div className="font-semibold">{hoveredNode.user.displayName}</div>
-            <div className="text-gray-300">Score: {hoveredNode.user.score}</div>
-            <div className="text-gray-300">Tier: {hoveredNode.user.tier}</div>
+          <div className="absolute top-2 left-2 bg-white/95 text-gray-800 text-xs p-3 rounded-xl border border-gray-200 shadow-lg pointer-events-none backdrop-blur-sm">
+            <div className="font-bold text-gray-900">{hoveredNode.user.displayName}</div>
+            <div className="text-gray-600">Score: {hoveredNode.user.score}</div>
+            <div className="text-gray-600">Tier: {hoveredNode.user.tier}</div>
           </div>
         )}
       </div>
