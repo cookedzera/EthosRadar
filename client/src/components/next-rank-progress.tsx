@@ -185,18 +185,26 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
       
       {/* Progress Bar */}
       <div className="mb-1">
-        <div className="h-2 bg-gray-300/60 rounded-full overflow-hidden">
-          <motion.div 
-            className={`h-full bg-gradient-to-r ${currentTier.progressColors} rounded-full relative`}
-            initial={{ width: "0%" }}
-            animate={{ width: `${animatedProgress}%` }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-          >
-            {/* Progress indicator dot */}
-            {animatedProgress > 10 && (
-              <div className="absolute right-0.5 top-1/2 transform -translate-y-1/2 w-1 h-1 bg-white rounded-full"></div>
-            )}
-          </motion.div>
+        <div className="relative">
+          <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+            <motion.div 
+              className={`h-full bg-gradient-to-r ${currentTier.progressColors} rounded-full relative`}
+              initial={{ width: "0%" }}
+              animate={{ width: `${animatedProgress}%` }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            />
+          </div>
+          
+          {/* Progress slider handle */}
+          {animatedProgress > 5 && (
+            <motion.div 
+              className={`absolute top-1/2 transform -translate-y-1/2 w-3 h-3 ${currentTier.bgColor} rounded-full border-2 border-white shadow-lg`}
+              style={{ left: `calc(${animatedProgress}% - 6px)` }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.3, ease: "easeOut" }}
+            />
+          )}
         </div>
         
         {/* Progress percentage centered */}
