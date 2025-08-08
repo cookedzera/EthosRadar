@@ -10,6 +10,9 @@ import { useAttestations, type SocialAttestation } from "@/hooks/use-attestation
 import { useWeeklyActivities } from "@/hooks/use-weekly-activities";
 import { R4RDataSection } from "./r4r-data-section";
 import { NextRankProgress } from "./next-rank-progress";
+import { ScoreHistoryChart } from "./score-history-chart";
+import { EnhancedTrustMetrics } from "./enhanced-trust-metrics";
+import { RealTimeRefreshButton } from "./real-time-refresh-button";
 
 
 import { FarcasterShareButton } from "./farcaster-share-button";
@@ -277,6 +280,11 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
               </button>
               
               <div className="flex items-center gap-1">
+                <RealTimeRefreshButton 
+                  userkey={user?.userkeys?.[0]} 
+                  size="sm"
+                  className="px-3 py-2 rounded-full text-xs"
+                />
                 <button
                   onClick={handleViewOnEthos}
                   className="flex items-center gap-1 px-3 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all text-xs"
@@ -474,6 +482,16 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
         {/* Enhanced Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {/* Score History Chart */}
+            <div className="max-w-lg mx-auto">
+              <ScoreHistoryChart userkey={user?.userkeys?.[0] || ''} currentScore={score} />
+            </div>
+
+            {/* Enhanced Trust Metrics */}
+            <div className="max-w-lg mx-auto">
+              <EnhancedTrustMetrics user={user} currentScore={score} />
+            </div>
+
             {/* Stats Cards */}
             <div className="grid grid-cols-3 gap-4 max-w-80 mx-auto">
               <div className="bg-gray-50 rounded-xl p-3 text-center hover:bg-gray-100 transition-colors">

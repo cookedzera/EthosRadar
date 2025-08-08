@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MinimalWalletScanner } from '@/components/minimal-wallet-scanner';
 import { UserProfileView } from '@/components/user-profile-view';
+import { SearchSuggestionsBelow } from '@/components/search-suggestions-below';
 
 export function HomePage() {
   const [user, setUser] = useState<any>(null);
@@ -54,28 +55,19 @@ export function HomePage() {
           <MinimalWalletScanner onUserFound={handleUserFound} />
         </div>
         
-        {/* Example Names - As pills like reference */}
-        <div className="space-y-4">
-          <p className="text-xs text-gray-400 font-normal">Try searching:</p>
-          <div className="flex flex-wrap gap-3">
-            {['vitalik.eth', 'cookedzera', 'dwr.eth', 'balajis.eth'].map((name) => (
-              <button
-                key={name}
-                onClick={() => {
-                  // Auto-fill search with example name
-                  const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
-                  if (searchInput) {
-                    searchInput.value = name;
-                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-                  }
-                }}
-                className="bg-white rounded-full px-5 py-3 text-sm text-gray-700 hover:shadow-lg transition-all shadow-md border-0"
-              >
-                {name}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Enhanced Search Suggestions */}
+        <SearchSuggestionsBelow 
+          onSearch={(query) => {
+            const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
+            if (searchInput) {
+              searchInput.value = query;
+              searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+              // Trigger search
+              const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
+              searchInput.dispatchEvent(event);
+            }
+          }}
+        />
         
         {/* Features Grid - Clean cards like reference */}
         <div className="mt-20 space-y-5">

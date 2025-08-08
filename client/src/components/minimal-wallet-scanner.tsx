@@ -29,20 +29,55 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
-  // Search suggestions
+  // Enhanced search suggestions with search history
+  const [searchHistory, setSearchHistory] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('ethosradar-search-history') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  // Smart search suggestions combining API results and local history
   const { data: suggestions = [], isLoading: suggestionsLoading } = useQuery<Suggestion[]>({
     queryKey: ['/api/search-suggestions', query],
     queryFn: async () => {
-      console.log('Fetching suggestions for:', query);
-      const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`);
-      if (!response.ok) throw new Error('Failed to fetch suggestions');
-      const data = await response.json();
-      console.log('Suggestions received:', data.length, 'items');
-      return data;
+      if (query.length < 2) return [];
+      
+      // Detect search type automatically
+      const searchType = detectSearchType(query);
+      
+      try {
+        const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}&type=${searchType}`);
+        if (!response.ok) throw new Error('Failed to fetch suggestions');
+        const data = await response.json();
+        
+        // Combine API suggestions with relevant search history
+        const historySuggestions = searchHistory
+          .filter(h => h.toLowerCase().includes(query.toLowerCase()))
+          .slice(0, 3)
+          .map(h => ({ userkey: h, username: h, display_name: h, isHistory: true }));
+        
+        return [...data, ...historySuggestions];
+      } catch (error) {
+        // Fallback to search history only if API fails
+        return searchHistory
+          .filter(h => h.toLowerCase().includes(query.toLowerCase()))
+          .slice(0, 5)
+          .map(h => ({ userkey: h, username: h, display_name: h, isHistory: true }));
+      }
     },
-    enabled: query.length >= 2 && showSuggestions,
+    enabled: query.length >= 1,
     staleTime: 30000,
   });
+
+  // Smart search type detection
+  const detectSearchType = (input: string) => {
+    if (input.startsWith('0x') && input.length === 42) return 'address';
+    if (input.endsWith('.eth')) return 'ens';
+    if (input.includes('@') || input.match(/^[a-zA-Z0-9_]+$/)) return 'username';
+    return 'general';
+  };
 
   // Search mutation
   const searchMutation = useMutation({
@@ -83,14 +118,26 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
 
   const handleSearch = () => {
     if (query.trim()) {
+      // Add to search history
+      const newHistory = [query.trim(), ...searchHistory.filter(h => h !== query.trim())].slice(0, 10);
+      setSearchHistory(newHistory);
+      localStorage.setItem('ethosradar-search-history', JSON.stringify(newHistory));
+      
       searchMutation.mutate(query.trim());
       setShowSuggestions(false);
     }
   };
 
   const handleSuggestionSelect = (suggestion: Suggestion) => {
-    setQuery(suggestion.display_name || suggestion.username);
+    const searchTerm = suggestion.display_name || suggestion.username;
+    setQuery(searchTerm);
     setShowSuggestions(false);
+    
+    // Add to search history
+    const newHistory = [searchTerm, ...searchHistory.filter(h => h !== searchTerm)].slice(0, 10);
+    setSearchHistory(newHistory);
+    localStorage.setItem('ethosradar-search-history', JSON.stringify(newHistory));
+    
     // Use the userkey for accurate search
     searchMutation.mutate(suggestion.userkey);
   };
@@ -237,10 +284,19 @@ export function MinimalWalletScanner({ onUserFound }: MinimalWalletScannerProps)
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {suggestion.display_name || suggestion.username}
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {suggestion.display_name || suggestion.username}
+                    </p>
+                    {(suggestion as any).isHistory && (
+                      <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full">
+                        Recent
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 truncate">
+                    {(suggestion as any).isHistory ? 'Search history' : `@${suggestion.username}`}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">@{suggestion.username}</p>
                 </div>
               </button>
             ))
