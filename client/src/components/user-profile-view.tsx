@@ -380,7 +380,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                       {formatNumber(xpTotal)}
                     </div>
                     {weeklyXpGain !== 0 && (
-                      <div className={`flex items-center ${
+                      <div className={`flex items-center gap-0.5 text-xs font-medium ${
                         weeklyXpGain > 0 ? 'text-green-600' : 'text-red-600'
                       }`}>
                         {weeklyXpGain > 0 ? (
@@ -388,6 +388,7 @@ export function UserProfileView({ user, onBackToSearch, onUserSearch, searchMode
                         ) : (
                           <ArrowDown className="w-2.5 h-2.5" />
                         )}
+                        <span>{weeklyXpGain > 0 ? '+' : ''}{weeklyXpGain}</span>
                       </div>
                     )}
                   </div>
