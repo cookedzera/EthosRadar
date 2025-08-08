@@ -188,7 +188,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
         <div className="relative">
           <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
             <motion.div 
-              className="h-full bg-gradient-to-r from-gray-400 to-gray-500 rounded-full relative"
+              className="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full relative"
               initial={{ width: "0%" }}
               animate={{ width: `${animatedProgress}%` }}
               transition={{ duration: 1.2, ease: "easeOut" }}
@@ -198,7 +198,7 @@ export function NextRankProgress({ currentScore, userkey, className = '' }: Next
           {/* Progress slider handle */}
           {animatedProgress > 5 && (
             <motion.div 
-              className="absolute top-1/2 transform -translate-y-1/2 w-3 h-3 bg-gray-500 rounded-full border-2 border-white shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow-lg"
               style={{ left: `calc(${animatedProgress}% - 6px)` }}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
